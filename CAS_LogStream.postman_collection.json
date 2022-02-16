@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "63a79b7e-26a5-4bb1-97a1-83de6b9be6dc",
+		"name": "CAS_LogStream",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Declare",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"cas\": {\n        \"api_key\": \"TESTKEY\"\n    },\n    \"logcollector\": {\n        \"syslog\": [\n            {\n                \"id\": \"127.100.0.11:5140\"\n            }\n        ]\n    }\n}"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/declare",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"declare"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2. Declare",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"f5cs\": {\n    \"password\": \"{{PASSWORD}}\",\n    \"username\": \"{{USERNAME}}\"\n  },\n  \"logcollector\": {\n    \"syslog\": [\n      {\n        \"ip_address\": \"1.1.1.1\",\n        \"port\": 514\n      },\n      {\n        \"ip_address\": \"2.2.2.2\",\n        \"port\": 500\n      }\n    ]\n  }\n}"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/declare",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"declare"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "3. Start",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"thread_number\": 1,\n  \"action\": \"start\"\n}"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/engine",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "4. Stop",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"action\": \"stop\"\n}"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/engine",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "5. Restart",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"thread_number\": 1,\n  \"action\": \"restart\"\n}"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/engine",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"engine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "6. Forward",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Set TOKENs into global variables\", function () {",
+							"    var jsonData = pm.response.json()",
+							"    pm.globals.set(\"ACCESS_TOKEN\", jsonData.access_token);",
+							"    pm.globals.set(\"REFRESH_TOKEN\", jsonData.refresh_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "User-Agent",
+						"value": "fasthttp",
+						"type": "text"
+					},
+					{
+						"key": "Host",
+						"value": "10.100.0.52:80",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Content-Length",
+						"value": "1540",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Splunk TESTKEY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\"time\":1611177810,\"source\":\"nginx-controller\",\"sourcetype\":\"security\",\"host\":\"10.0.0.43\",\"event\":{\"signature_ids\":\"200001475,200000098\",\"version\":\"1.0\",\"description\":\"Request rejected from 52.247.48.116 to app_f5-bigip-api.f5app.dev/adc_main.  Attack types: Non-browser Client,Abuse of Functionality,Cross Site Scripting (XSS)\",\"http.remote_addr\":\"52.247.48.116\",\"http.server_port\":\"443\",\"violation_rating\":\"MOST_LIKELY_ATTACK\",\"is_truncated\":\"false\",\"signature_names\":\"XSS script tag end (Parameter) (2),XSS script tag (Parameter)\",\"component\":\"adc_main\",\"request_outcome\":\"REJECTED\",\"signature_cves\":\"\",\"http.request_method\":\"GET\",\"correlation_id\":\"547d419559df7cd2a98682405fce8d6d\",\"request\":\"GET /v1/mgmt/tm/asm/policies?=fullPath%20eq%20/test1/app1/waf_policy-app1%3Cscript%3E HTTP/1.1\\\\r\\\\nUser-Agent: fasthttp\\\\r\\\\nHost: f5-bigip-api.f5app.dev:443\\\\r\\\\n\\\\r\\\\n\",\"level\":\"INFO\",\"app\":\"app_f5-bigip-api.f5app.dev\",\"gateway\":\"gw_f5-bigip-api\",\"http.uri\":\"/v1/mgmt/tm/asm/policies\",\"http.response_code\":\"0\",\"http.hostname\":\"nginxwaf000000\",\"type\":\"security violation\",\"http.server_addr\":\"0.0.0.0\",\"support_id\":\"12058970043145809587\",\"policy_name\":\"/Common/NAPBlockingDefaultPolicy\",\"violations\":\"Illegal meta character in value,Attack signature detected,Violation Rating Threat detected\",\"environment\":\"env_north_f5\",\"request_outcome_reason\":\"SECURITY_WAF_VIOLATION\",\"http.remote_port\":\"42622\",\"attack_types\":\"Non-browser Client,Abuse of Functionality,Cross Site Scripting (XSS)\",\"sub_violations\":\"\",\"x_forwarded_for_header_value\":\"\"}}]"
+				},
+				"url": {
+					"raw": "{{logstream_server}}/forward",
+					"host": [
+						"{{logstream_server}}"
+					],
+					"path": [
+						"forward"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "6. Forward - OK",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "User-Agent",
+								"value": "fasthttp",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "10.100.0.52:80",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Length",
+								"value": "1540",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Splunk TESTKEY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[{\"time\":1611177810,\"source\":\"nginx-controller\",\"sourcetype\":\"security\",\"host\":\"10.0.0.43\",\"event\":{\"signature_ids\":\"200001475,200000098\",\"version\":\"1.0\",\"description\":\"Request rejected from 52.247.48.116 to app_f5-bigip-api.f5app.dev/adc_main.  Attack types: Non-browser Client,Abuse of Functionality,Cross Site Scripting (XSS)\",\"http.remote_addr\":\"52.247.48.116\",\"http.server_port\":\"443\",\"violation_rating\":\"MOST_LIKELY_ATTACK\",\"is_truncated\":\"false\",\"signature_names\":\"XSS script tag end (Parameter) (2),XSS script tag (Parameter)\",\"component\":\"adc_main\",\"request_outcome\":\"REJECTED\",\"signature_cves\":\"\",\"http.request_method\":\"GET\",\"correlation_id\":\"547d419559df7cd2a98682405fce8d6d\",\"request\":\"GET /v1/mgmt/tm/asm/policies?=fullPath%20eq%20/test1/app1/waf_policy-app1%3Cscript%3E HTTP/1.1\\\\r\\\\nUser-Agent: fasthttp\\\\r\\\\nHost: f5-bigip-api.f5app.dev:443\\\\r\\\\n\\\\r\\\\n\",\"level\":\"INFO\",\"app\":\"app_f5-bigip-api.f5app.dev\",\"gateway\":\"gw_f5-bigip-api\",\"http.uri\":\"/v1/mgmt/tm/asm/policies\",\"http.response_code\":\"0\",\"http.hostname\":\"nginxwaf000000\",\"type\":\"security violation\",\"http.server_addr\":\"0.0.0.0\",\"support_id\":\"12058970043145809587\",\"policy_name\":\"/Common/NAPBlockingDefaultPolicy\",\"violations\":\"Illegal meta character in value,Attack signature detected,Violation Rating Threat detected\",\"environment\":\"env_north_f5\",\"request_outcome_reason\":\"SECURITY_WAF_VIOLATION\",\"http.remote_port\":\"42622\",\"attack_types\":\"Non-browser Client,Abuse of Functionality,Cross Site Scripting (XSS)\",\"sub_violations\":\"\",\"x_forwarded_for_header_value\":\"\"}}]"
+						},
+						"url": {
+							"raw": "{{logstream_server}}/forward",
+							"host": [
+								"{{logstream_server}}"
+							],
+							"path": [
+								"forward"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "29"
+						},
+						{
+							"key": "Server",
+							"value": "Unit/1.21.0"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 20 Jan 2021 21:49:15 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"msg\": \"security event OK\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "logstream_server",
+			"value": "http://127.0.0.1:3001"
+		},
+		{
+			"key": "gg",
+			"value": "http://127.100.0.52:80"
+		}
+	]
+}

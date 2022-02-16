@@ -1,0 +1,25 @@
+---
+- hosts: localhost
+  gather_facts: no
+  tasks:
+  - name: CREATE ansible-playbook in-memory inventory
+    add_host:
+      groups: "tmp-group"
+      hostname: "{{ extra_vm_name | default(extra_vm.name) }}"
+      ansible_host: "{{ extra_vm_ip_mgt | default(extra_vm.ip) }}"
+      ansible_port: 22
+
+- hosts: tmp-group
+  gather_facts: no
+  become: true
+  roles:
+    - role: poc-nginx
+
+
+
+
+
+
+
+
+

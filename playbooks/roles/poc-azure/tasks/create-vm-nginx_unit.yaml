@@ -1,0 +1,72 @@
+---
+- name: CREATE Network Security Group for {{ extra_vm.name }} access
+  delegate_to: localhost
+  azure.azcollection.azure_rm_securitygroup:
+    resource_group: "rg-{{ extra_platform_name }}"
+    name: "nsg-{{ extra_platform_name }}-{{ extra_vm.name }}"
+    location: "{{ extra_vm.location }}"
+    tags: "{{ extra_platform_tags }} Name=nsg-{{ extra_platform_name }}-{{ extra_vm.name }} owner={{ owner }}"
+    rules:
+      - name: in_allow_mgt_from_cmp
+        direction: Inbound
+        priority: 100
+        source_address_prefix:
+          - '{{ extra_subnet_mgt_on_premise }}'
+        access: Allow
+      - name: out_allow_all
+        direction: Outbound
+        priority: 999
+        access: Allow
+
+- name: CREATE vNIC Management
+  delegate_to: localhost
+  azure.azcollection.azure_rm_networkinterface:
+    resource_group: "rg-{{ extra_platform_name }}"
+    name: "nic-{{ extra_platform_name }}-{{ extra_vm.name }}-management"
+    location: "{{ extra_vm.location }}"
+    virtual_network: "vnet-{{ extra_platform_name }}"
+    subnet_name: "net-{{ extra_platform_name }}-management"
+    create_with_security_group: false
+    security_group: "nsg-{{ extra_platform_name }}-{{ extra_vm.name }}"
+    tags: "{{ extra_platform_tags }}
+    Name=nic-{{ extra_platform_name }}-{{ extra_vm.name }}-management"
+    ip_configurations:
+      - name: mgt
+        private_ip_address: "{{ extra_vm.ip }}"
+        private_ip_allocation_method: 'Static'
+        primary: true
+
+- name: CREATE VM
+  delegate_to: localhost
+  azure.azcollection.azure_rm_virtualmachine:
+    resource_group: "rg-{{ extra_platform_name }}"
+    name: "{{ extra_vm.name }}"
+    location: "{{ extra_vm.location }}"
+    short_hostname: "{{ extra_vm.name }}"
+    vm_size: "{{ extra_vm.size }}"
+    os_disk_size_gb: 128
+    tags: "{{ extra_platform_tags }}
+              Name={{ extra_vm.name }}"
+    admin_username: "{{ infra_admin_username }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: "/home/{{ infra_admin_username }}/.ssh/authorized_keys"
+        key_data: "{{ extra_vm.key_data }}"
+    image:
+      offer: "UbuntuServer"
+      publisher: "Canonical"
+      sku: "18.04-LTS"
+      version: "latest"
+    managed_disk_type: Premium_LRS
+    os_type: Linux
+    network_interface_names:
+      - "nic-{{ extra_platform_name }}-{{ extra_vm.name }}-management"
+    zones: '{{ extra_vm.availability_zone }}'
+
+
+
+
+
+
+
+...

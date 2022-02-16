@@ -1,0 +1,205 @@
+---
+# https://unit.nginx.org/installation/#ubuntu
+
+- name: DOWNLOAD NGINX’s signing key
+  uri:
+    url: "https://nginx.org/keys/nginx_signing.key"
+    return_content: yes
+  register: nginx_signing_key
+
+- name: ADD NGINX’s signing key to apt’s keyring
+  apt_key:
+    data: "{{ nginx_signing_key.content }}"
+
+- name: To configure Unit repository, create the following file named
+  apt_repository:
+    repo: "{{ item }}"
+    filename: unit
+  loop:
+    - "deb https://packages.nginx.org/unit/ubuntu/ bionic unit"
+    - "deb-src https://packages.nginx.org/unit/ubuntu/ bionic unit"
+
+- name: UPDATE apt
+  apt:
+    name: "*"
+    state: latest
+
+- name: INSTALL package
+  package:
+    name:
+      - git
+      - unit
+      - unit-python3.7
+      - build-essential
+      - zlib1g-dev
+      - libncurses5-dev
+      - libgdbm-dev
+      - libnss3-dev
+      - libssl-dev
+      - libsqlite3-dev
+      - libreadline-dev
+      - libffi-dev
+      - libbz2-dev
+    state: present
+
+- name: Unarchive Python3.7
+  unarchive:
+    src: https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
+    dest: /usr/src
+    remote_src: yes
+
+- name: Configure install Python3.7
+  command: ./configure --enable-optimizations
+  args:
+    chdir: /usr/src/Python-3.7.9
+
+- name: Install Python3.7
+  make:
+    chdir: /usr/src/Python-3.7.9
+    target: altinstall
+
+- name: Start service NGINX Unit, if not started
+  service:
+    name: unit
+    state: started
+    enabled: yes
+
+- name: CREATE apps directoty
+  file:
+    path: /etc/faas-apps
+    state: directory
+
+- name: CREATE log directory
+  file:
+    path: /var/log/unit/
+    state: directory
+
+- name: CREATE access log file
+  file:
+    path: /var/log/unit/access.log
+    state: touch
+
+- name: CREATE app directoty
+  file:
+    path: "/etc/faas-apps/{{ faas_app.name }}/"
+    state: directory
+
+- name: FETCH app project
+  git:
+    repo: "{{ faas_app.repo }}"
+    dest: "/etc/faas-apps/{{ faas_app.name }}/"
+    force: yes
+
+- name: SET write permission directory
+  file:
+    path: "/etc/faas-apps/{{ faas_app.name }}"
+    state: directory
+    mode: '0777'
+
+- name: SET write permission declaration.json
+  file:
+    path: "/etc/faas-apps/{{ faas_app.name }}/declaration.json"
+    mode: '0777'
+
+- name: SET write permission logstream.log
+  file:
+    path: "/etc/faas-apps/{{ faas_app.name }}/logstream.log"
+    mode: '0777'
+
+- name: INSTALL virtualenv
+  pip:
+    name:
+      - pip
+      - virtualenv
+    state: forcereinstall
+    executable: pip3.7
+
+- name: INSTALL requirements
+  pip:
+    requirements: "/etc/faas-apps/{{ faas_app.name }}/requirements.txt"
+    virtualenv: /etc/faas-apps/venv
+    virtualenv_python: python3.7
+    virtualenv_command: /usr/local/bin/virtualenv
+
+- name: SET var_bundle
+  set_fact:
+    var_bundle: "{{ lookup('template', 'bundle.pem') }}"
+
+# https://unit.nginx.org/configuration/#ssl-tls-and-certificates
+- name: CREATE a new TLS bundle in Unit TLS store
+  uri:
+    unix_socket: /var/run/control.unit.sock
+    url: "http://localhost/certificates/bundle_{{ faas_app.name }}"
+    method: PUT
+    body: "{{ var_bundle }}"
+    body_format: json
+    timeout: 60
+    status_code: 200, 202
+    validate_certs: false
+  ignore_errors: yes
+
+- name: GET current TLS bundle in Unit TLS store
+  uri:
+    unix_socket: /var/run/control.unit.sock
+    url: "http://localhost/certificates/bundle_{{ faas_app.name }}/chain/0/"
+    method: GET
+    return_content: yes
+    status_code: 200
+    validate_certs: false
+  register: crt_json
+
+- name: GET current Unit configuration
+  uri:
+    unix_socket: /var/run/control.unit.sock
+    url: "http://localhost/config/"
+    method: GET
+    return_content: yes
+    status_code: 200
+    validate_certs: false
+  register: config_json
+
+# https://unit.nginx.org/configuration/#python
+- name: UPDATE Unit configuration
+  uri:
+    unix_socket: /var/run/control.unit.sock
+    url: "http://localhost/config/"
+    method: PUT
+    headers:
+        Content-Type: application/json
+    body: "{{ lookup('template', 'nginx_unit_faas_app.json') }}"
+    body_format: json
+    timeout: 60
+    status_code: 200, 202
+    validate_certs: false
+  register: config_json
+
+- name: ReStart service NGINX Unit
+  service:
+    name: unit
+    state: restarted
+
+- name: GET current Unit configuration
+  uri:
+    unix_socket: /var/run/control.unit.sock
+    url: "http://localhost/config/"
+    method: GET
+    return_content: yes
+    status_code: 200
+    validate_certs: false
+  register: config_json
+
+- name: INSTALL package
+  package:
+    name:
+      - build-essential
+      - zlib1g-dev
+      - libncurses5-dev
+      - libgdbm-dev
+      - libnss3-dev
+      - libssl-dev
+      - libsqlite3-dev
+      - libreadline-dev
+      - libffi-dev
+      - libbz2-dev
+    state: absent
+...

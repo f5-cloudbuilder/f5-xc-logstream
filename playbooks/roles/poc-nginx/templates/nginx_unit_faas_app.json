@@ -1,0 +1,26 @@
+{
+    "listeners": {
+        "*:80": {
+            "pass": "applications/flask_app"
+        },
+        "*:443": {
+            "pass": "applications/flask_app",
+            "tls": {
+                "certificate": "bundle_{{ faas_app.name }}"
+            }
+        }
+    },
+    "applications": {
+        "flask_app": {
+            "type": "python 3.7",
+            "working_directory": "/etc/faas-apps/{{ faas_app.name }}",
+            "home": "/etc/faas-apps/venv",
+            "path": "/etc/faas-apps/{{ faas_app.name }}",
+            "module": "wsgi",
+            "environment": {
+                "version": "{{ '%Y-%m-%d_%H:%M:%S' | strftime }}"
+            }
+        }
+    },
+    "access_log": "/var/log/unit/access.log"
+}

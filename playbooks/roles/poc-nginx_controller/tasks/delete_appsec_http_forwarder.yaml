@@ -1,0 +1,33 @@
+- name: Retrieve the NGINX Controller auth token
+  include_role:
+    name: nginxinc.nginx_controller_generate_token
+  vars:
+    nginx_controller_fqdn: "{{extra_nginx_controller.ip}}"
+    nginx_controller_user_email: "{{extra_nginx_controller.api_key}}"
+    nginx_controller_user_password: "{{extra_nginx_controller.password}}"
+
+- name: DELETE a forwarder
+  uri:
+    url: "https://{{ extra_nginx_controller.ip }}/api/v1/analytics/forwarders/{{ extra_log_collector.name }}"
+    method: DELETE
+    headers:
+      "Cookie": "session={{ nginx_controller_auth_token }}"
+    validate_certs: no
+    status_code: 200, 201, 202
+
+- name: DELETE an integration
+  uri:
+    url: "https://{{ extra_nginx_controller.ip }}/api/v1/platform/integrations/{{ extra_log_collector.name }}"
+    method: DELETE
+    headers:
+      "Cookie": "session={{ nginx_controller_auth_token }}"
+    validate_certs: no
+    status_code: 204
+
+
+
+
+
+
+
+
