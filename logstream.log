@@ -273,3 +273,186 @@
    WARNING: This is a development server. Do not use it in a production deployment.
 2022-02-16 21:03:58,802 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
 2022-02-16 21:04:16,557 INFO 127.0.0.1 - - [16/Feb/2022 21:04:16] "POST /engine HTTP/1.1" 200 -
+2022-02-17 11:07:51,698 INFO  * Restarting with stat
+2022-02-17 11:07:54,663 WARNING  * Debugger is active!
+2022-02-17 11:07:54,680 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:07:55,102 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:07:55,103 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:08:14,808 INFO 127.0.0.1 - - [17/Feb/2022 11:08:14] "POST /engine HTTP/1.1" 200 -
+2022-02-17 11:08:53,731 INFO  * Restarting with stat
+2022-02-17 11:08:56,578 WARNING  * Debugger is active!
+2022-02-17 11:08:56,592 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:08:56,853 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:08:56,853 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:09:03,760 INFO 127.0.0.1 - - [17/Feb/2022 11:09:03] "POST /engine HTTP/1.1" 200 -
+2022-02-17 11:09:05,858 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u00126Query duration (end_time - start_time) cannot be \u003e 24h\u001a\u003c2022-02-17 10:09:17.564898774 +0000 UTC m=+1221294.157230486"}],"message":"There was a server error in processing request"}
+2022-02-17 11:09:51,569 INFO  * Restarting with stat
+2022-02-17 11:09:54,426 WARNING  * Debugger is active!
+2022-02-17 11:09:54,446 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:09:54,753 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:09:54,754 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:09:58,106 INFO 127.0.0.1 - - [17/Feb/2022 11:09:58] "POST /engine HTTP/1.1" 200 -
+2022-02-17 11:10:50,990 INFO  * Detected change in 'C:\\data\\adacosta\\SE\\96_POC\\f5-xc-logstream\\LogStream\\input.py', reloading
+2022-02-17 11:10:51,447 INFO  * Restarting with stat
+2022-02-17 11:10:54,451 WARNING  * Debugger is active!
+2022-02-17 11:10:54,462 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:10:54,681 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:10:54,682 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:11:05,295 INFO  * Detected change in 'C:\\data\\adacosta\\SE\\96_POC\\f5-xc-logstream\\LogStream\\input.py', reloading
+2022-02-17 11:11:05,403 INFO  * Restarting with stat
+2022-02-17 11:11:07,661 WARNING  * Debugger is active!
+2022-02-17 11:11:07,673 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:11:07,967 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:11:07,969 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:40:27,901 INFO  * Restarting with stat
+2022-02-17 11:40:29,637 WARNING  * Debugger is active!
+2022-02-17 11:40:29,647 INFO  * Debugger PIN: 231-216-068
+2022-02-17 11:40:29,739 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-17 11:40:29,740 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-17 11:40:30,362 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "GET /apidocs/ HTTP/1.1" 200 -
+2022-02-17 11:40:30,400 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "[36mGET /flasgger_static/swagger-ui.css HTTP/1.1[0m" 304 -
+2022-02-17 11:40:30,404 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "[36mGET /flasgger_static/swagger-ui-bundle.js HTTP/1.1[0m" 304 -
+2022-02-17 11:40:30,406 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "[36mGET /flasgger_static/swagger-ui-standalone-preset.js HTTP/1.1[0m" 304 -
+2022-02-17 11:40:30,410 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "[36mGET /flasgger_static/lib/jquery.min.js HTTP/1.1[0m" 304 -
+2022-02-17 11:40:30,763 INFO 127.0.0.1 - - [17/Feb/2022 11:40:30] "GET /apispec_1.json HTTP/1.1" 200 -
+2022-02-20 22:17:40,176 INFO  * Restarting with stat
+2022-02-20 22:17:41,011 WARNING  * Debugger is active!
+2022-02-20 22:17:41,019 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:17:41,078 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:17:41,078 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:17:44,288 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /apidocs/ HTTP/1.1" 200 -
+2022-02-20 22:17:44,320 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /flasgger_static/swagger-ui.css HTTP/1.1" 200 -
+2022-02-20 22:17:44,324 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /flasgger_static/swagger-ui-bundle.js HTTP/1.1" 200 -
+2022-02-20 22:17:44,324 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /flasgger_static/swagger-ui-standalone-preset.js HTTP/1.1" 200 -
+2022-02-20 22:17:44,325 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /flasgger_static/lib/jquery.min.js HTTP/1.1" 200 -
+2022-02-20 22:17:44,551 INFO 127.0.0.1 - - [20/Feb/2022 22:17:44] "GET /apispec_1.json HTTP/1.1" 200 -
+2022-02-20 22:32:33,044 INFO  * Restarting with stat
+2022-02-20 22:32:33,886 WARNING  * Debugger is active!
+2022-02-20 22:32:33,892 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:32:33,961 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:32:33,962 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:32:35,597 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "GET /apidocs/ HTTP/1.1" 200 -
+2022-02-20 22:32:35,626 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "[36mGET /flasgger_static/swagger-ui.css HTTP/1.1[0m" 304 -
+2022-02-20 22:32:35,628 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "[36mGET /flasgger_static/swagger-ui-bundle.js HTTP/1.1[0m" 304 -
+2022-02-20 22:32:35,634 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "[36mGET /flasgger_static/lib/jquery.min.js HTTP/1.1[0m" 304 -
+2022-02-20 22:32:35,635 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "[36mGET /flasgger_static/swagger-ui-standalone-preset.js HTTP/1.1[0m" 304 -
+2022-02-20 22:32:35,818 INFO 127.0.0.1 - - [20/Feb/2022 22:32:35] "GET /apispec_1.json HTTP/1.1" 200 -
+2022-02-20 22:37:08,785 INFO  * Restarting with stat
+2022-02-20 22:37:09,609 WARNING  * Debugger is active!
+2022-02-20 22:37:09,615 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:37:09,672 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:37:09,672 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:37:31,870 INFO 127.0.0.1 - - [20/Feb/2022 22:37:31] "GET /declare HTTP/1.1" 200 -
+2022-02-20 22:37:52,649 INFO  * Restarting with stat
+2022-02-20 22:37:53,493 WARNING  * Debugger is active!
+2022-02-20 22:37:53,498 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:37:53,556 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:37:53,557 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:38:14,819 INFO  * Detected change in 'C:\\data\\adacosta\\SE\\96_POC\\f5-xc-logstream\\wsgi.py', reloading
+2022-02-20 22:38:14,855 INFO  * Restarting with stat
+2022-02-20 22:38:15,707 WARNING  * Debugger is active!
+2022-02-20 22:38:15,714 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:38:15,771 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:38:15,772 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:38:18,662 INFO  * Restarting with stat
+2022-02-20 22:38:19,513 WARNING  * Debugger is active!
+2022-02-20 22:38:19,519 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:38:19,578 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:38:19,578 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:38:24,787 INFO 127.0.0.1 - - [20/Feb/2022 22:38:24] "GET /declare HTTP/1.1" 200 -
+2022-02-20 22:38:33,088 INFO 127.0.0.1 - - [20/Feb/2022 22:38:33] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:38:37,382 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u0012Cstart_time (2022-02-20T22:00:00Z) \u003e end_time (2022-02-20T21:38:33Z)\u001a\u003c2022-02-20 21:38:50.549152534 +0000 UTC m=+1521867.141484220"}],"message":"There was a server error in processing request"}
+2022-02-20 22:39:33,682 INFO  * Restarting with stat
+2022-02-20 22:39:35,337 WARNING  * Debugger is active!
+2022-02-20 22:39:35,346 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:39:35,558 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:39:35,559 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:39:37,577 INFO 127.0.0.1 - - [20/Feb/2022 22:39:37] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:43:21,545 INFO  * Restarting with stat
+2022-02-20 22:43:22,404 WARNING  * Debugger is active!
+2022-02-20 22:43:22,410 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:43:22,473 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:43:22,474 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:43:27,475 INFO 127.0.0.1 - - [20/Feb/2022 22:43:27] "GET /declare HTTP/1.1" 200 -
+2022-02-20 22:44:29,381 INFO  * Restarting with stat
+2022-02-20 22:44:31,079 WARNING  * Debugger is active!
+2022-02-20 22:44:31,088 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:44:31,269 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:44:31,270 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:44:33,692 INFO 127.0.0.1 - - [20/Feb/2022 22:44:33] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:45:19,972 INFO  * Restarting with stat
+2022-02-20 22:45:21,590 WARNING  * Debugger is active!
+2022-02-20 22:45:21,598 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:45:21,760 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:45:21,760 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:45:32,702 INFO 127.0.0.1 - - [20/Feb/2022 22:45:32] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:46:20,277 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u0012Cstart_time (2022-02-20T22:00:00Z) \u003e end_time (2022-02-20T21:46:03Z)\u001a\u003c2022-02-20 21:46:33.447024188 +0000 UTC m=+1522330.039355910"}],"message":"There was a server error in processing request"}
+2022-02-20 22:47:57,617 INFO  * Restarting with stat
+2022-02-20 22:47:58,447 WARNING  * Debugger is active!
+2022-02-20 22:47:58,452 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:47:58,510 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:47:58,510 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:48:07,323 INFO 127.0.0.1 - - [20/Feb/2022 22:48:07] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:48:11,630 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u0012Cstart_time (2022-02-20T22:00:00Z) \u003e end_time (2022-02-20T21:48:07Z)\u001a\u003c2022-02-20 21:48:24.800149438 +0000 UTC m=+1522441.392481136"}],"message":"There was a server error in processing request"}
+2022-02-20 22:50:40,723 INFO  * Restarting with stat
+2022-02-20 22:50:41,551 WARNING  * Debugger is active!
+2022-02-20 22:50:41,557 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:50:41,614 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:50:41,614 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:50:51,349 INFO  * Restarting with stat
+2022-02-20 22:50:52,177 WARNING  * Debugger is active!
+2022-02-20 22:50:52,182 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:50:52,241 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:50:52,241 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:50:58,543 INFO 127.0.0.1 - - [20/Feb/2022 22:50:58] "POST /engine HTTP/1.1" 200 -
+2022-02-20 22:53:02,383 INFO  * Restarting with stat
+2022-02-20 22:53:03,211 WARNING  * Debugger is active!
+2022-02-20 22:53:03,217 INFO  * Debugger PIN: 979-932-548
+2022-02-20 22:53:03,275 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 22:53:03,275 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 22:53:11,805 INFO 127.0.0.1 - - [20/Feb/2022 22:53:11] "POST /engine HTTP/1.1" 200 -
+2022-02-20 23:01:17,869 INFO  * Restarting with stat
+2022-02-20 23:01:18,706 WARNING  * Debugger is active!
+2022-02-20 23:01:18,713 INFO  * Debugger PIN: 979-932-548
+2022-02-20 23:01:18,785 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 23:01:18,785 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 23:01:22,216 INFO 127.0.0.1 - - [20/Feb/2022 23:01:22] "POST /engine HTTP/1.1" 200 -
+2022-02-20 23:01:22,790 ERROR F5XCGeneric::LogStream.input: code 401; credential validation error: requested with expired cred : API_TOKEN S8V0JHJMf6W/9gDnzeCQuaMRT7w=
+2022-02-20 23:01:22,815 ERROR F5XCGeneric::LogStream.input: code 401; credential validation error: requested with expired cred : API_TOKEN S8V0JHJMf6W/9gDnzeCQuaMRT7w=
+2022-02-20 23:01:45,707 INFO  * Restarting with stat
+2022-02-20 23:01:46,543 WARNING  * Debugger is active!
+2022-02-20 23:01:46,550 INFO  * Debugger PIN: 979-932-548
+2022-02-20 23:01:46,608 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 23:01:46,609 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 23:01:48,974 INFO 127.0.0.1 - - [20/Feb/2022 23:01:48] "POST /engine HTTP/1.1" 200 -
+2022-02-20 23:01:49,503 ERROR F5XCGeneric::LogStream.input: code 401; "credential validation error: requested with expired cred : API_TOKEN S8V0JHJMf6W/9gDnzeCQuaMRT7w="
+2022-02-20 23:01:49,543 ERROR F5XCGeneric::LogStream.input: code 401; "credential validation error: requested with expired cred : API_TOKEN S8V0JHJMf6W/9gDnzeCQuaMRT7w="
+2022-02-20 23:02:19,855 INFO  * Restarting with stat
+2022-02-20 23:02:20,697 WARNING  * Debugger is active!
+2022-02-20 23:02:20,704 INFO  * Debugger PIN: 979-932-548
+2022-02-20 23:02:20,775 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-20 23:02:20,775 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-20 23:02:23,608 INFO 127.0.0.1 - - [20/Feb/2022 23:02:23] "POST /engine HTTP/1.1" 200 -

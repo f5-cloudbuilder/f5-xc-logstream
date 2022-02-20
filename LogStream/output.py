@@ -13,7 +13,10 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
         # Primary key
         self.id = ip_address + ':' + str(port)
         self.ip_address = ip_address
-        self.port = port
+        if port is None:
+            self.port = 514
+        else:
+            self.port = port
         self.handler = logging.handlers.SysLogHandler(address=(ip_address, port), socktype=socket.SOCK_STREAM)
         self.handler.append_nul = False
 

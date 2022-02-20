@@ -52,47 +52,25 @@ class ConfigF5XCTenant:
     """
 
     @staticmethod
-    def prepare(data_json):
+    def sanity_check(data_json):
         evaluation = {}
         declaration = {}
 
-        # tenant
-        key = 'name'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration[key] = data_json[key]
-        else:
-            evaluation[key] = {
-                'code': 400,
-                'message': 'key must be set',
-                'key': key
-            }
-
-        # api_key
-        key = 'api_key'
-        api_key = None
-        if key in data_json:
-            api_key = data_json[key]
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-        declaration[key] = api_key
-
-        # start_time
-        key = 'start_time'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration[key] = data_json[key]
+        # unknown key
+        for key in data_json.keys():
+            if key in ('name', 'api_key'):
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'unknown key',
+                    'key': key
+                }
 
         # namespaces
         key = 'namespaces'
@@ -103,7 +81,7 @@ class ConfigF5XCTenant:
                 'code': 0
             }
             for namespace in data_json[key]:
-                (tmp_evaluation, tmp_declaration) = ConfigF5XCNamespace.prepare(namespace, api_key)
+                (tmp_evaluation, tmp_declaration) = ConfigF5XCNamespace.sanity_check(namespace)
                 evaluation[key]['code'] = max(evaluation[key]['code'], tmp_evaluation['code'])
                 evaluation[key]['list'].append(tmp_evaluation)
                 declaration[key].append(tmp_declaration)
@@ -122,8 +100,8 @@ class ConfigF5XCTenant:
         return evaluation, declaration
 
     @staticmethod
-    def set(data_json):
-        f5xc_tenant.set(data_json)
+    def update(data_json):
+        f5xc_tenant.update(data_json)
 
     @staticmethod
     def get():
@@ -131,6 +109,99 @@ class ConfigF5XCTenant:
             return f5xc_tenant.get_json()
         else:
             return None
+
+
+@swagger.definition('f5xc_event_filter', tags=['v2_model'])
+class ConfigF5XCEventFilter:
+    """
+    EventFilter
+    ---
+    tags:
+      - Input
+    required:
+      - sec_event_filter
+    properties:
+      sec_event_filter:
+        type: string
+        description: "filter on security event type"
+        enum: [waf_sec_event, malicious_user_sec_event]
+      src_ip:
+        type: string
+        description: "filter on source IP"
+    """
+
+
+@swagger.definition('f5xc_event_start_time', tags=['v2_model'])
+class ConfigF5XCEventStartTime:
+    """
+    EventStartTime
+    ---
+    tags:
+      - Input
+    required:
+      - year
+      - month
+      - day
+    properties:
+      year:
+        type: integer
+      month:
+        type: integer
+      day:
+        type: integer
+      hour:
+        type: integer
+        description: timezone='Europe/London'
+        default: 0
+      minute:
+        type: integer
+        default: 0
+
+    """
+
+    @staticmethod
+    def sanity_check(data_json):
+        evaluation = {}
+        declaration = {}
+
+        # Unknown key
+        for key in data_json.keys():
+            if key in ('year', 'month', 'day', 'hour', 'minute'):
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'unknown key',
+                    'key': key
+                }
+
+        # Required keys
+        for key in ('year', 'month', 'day'):
+            if key in data_json.keys():
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'key must be set',
+                    'key': key
+                }
+
+        # response
+        code = 0
+        for result in evaluation.values():
+            code = max(code, result['code'])
+        evaluation['code'] = code
+        return evaluation, declaration
 
 
 @swagger.definition('f5xc_namespace', tags=['v2_model'])
@@ -153,46 +224,44 @@ class ConfigF5XCNamespace:
             If no api_key set by default, api_key must be set for each namespace.
             If api_key is set in a namespace, it overrides default api_key."
         default: None
+      event_start_time:
+        type: object
+        description: starting time of event timestamps to be fetch from F5XC
+        schema:
+        $ref: '#/definitions/f5xc_event_start_time'
+      event_filter:
+        type: object
+        description: filter to apply before fetching events
+        schema:
+        $ref: '#/definitions/f5xc_event_filter'
     """
 
     @staticmethod
-    def prepare(data_json, api_key):
+    def sanity_check(data_json):
         evaluation = {}
         declaration = {}
 
-        # namespace
-        key = 'name'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration['name'] = data_json[key]
-        else:
-            evaluation[key] = {
-                'code': 400,
-                'message': 'key must be set',
-                'key': key
-            }
+        # Unknown key
+        for key in data_json.keys():
+            if key in ('name', 'api_key', 'event_filter', 'event_start_time'):
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'unknown key',
+                    'key': key
+                }
 
-        # api_key
-        key = 'api_key'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration[key] = data_json[key]
-        elif api_key is not None:
-            declaration[key] = api_key
-        else:
-            evaluation[key] = {
-                'code': 400,
-                'message': 'key must be set',
-                'key': key
-            }
+        # Unknown key
+        key = 'event_start_time'
+        if key in data_json.keys():
+            (evaluation[key], declaration[key]) = ConfigF5XCEventStartTime.sanity_check(data_json['event_start_time'])
+
 
         # response
         code = 0
@@ -230,7 +299,7 @@ class ConfigLogCollector:
     """
 
     @staticmethod
-    def prepare(data_json):
+    def sanity_check(data_json):
         evaluation = {}
         declaration = {}
 
@@ -243,7 +312,7 @@ class ConfigLogCollector:
                 'code': 0
             }
             for instance in data_json[key]:
-                (tmp_evaluation, tmp_declaration) = ConfigSyslogServer.prepare(instance)
+                (tmp_evaluation, tmp_declaration) = ConfigSyslogServer.sanity_check(instance)
                 evaluation[key]['code'] = max(evaluation[key]['code'], tmp_evaluation['code'])
                 evaluation[key]['list'].append(tmp_evaluation)
                 declaration[key].append(tmp_declaration)
@@ -262,9 +331,9 @@ class ConfigLogCollector:
         return evaluation, declaration
 
     @staticmethod
-    def set(data_json):
+    def update(data_json):
         for instance in data_json['syslog']:
-            ConfigSyslogServer.set(instance)
+            ConfigSyslogServer.update(instance)
 
     @staticmethod
     def get():
@@ -293,37 +362,25 @@ class ConfigSyslogServer:
     """
 
     @staticmethod
-    def prepare(data_json):
+    def sanity_check(data_json):
         evaluation = {}
         declaration = {}
 
-        # ip_address
-        key = 'ip_address'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration[key] = data_json[key]
-        else:
-            evaluation[key] = {
-                'code': 400,
-                'message': 'key must be set',
-                'key': key
-            }
-
-        # port
-        key = 'port'
-        if key in data_json:
-            evaluation[key] = {
-                'code': 200,
-                'message': 'OK',
-                'value': data_json[key]
-            }
-            declaration[key] = data_json[key]
-        else:
-            declaration[key] = 514
+        # Sanity check
+        for key in data_json.keys():
+            if key in ('ip_address', 'port'):
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'unknown key',
+                    'key': key
+                }
 
         # response
         code = 0
@@ -333,10 +390,16 @@ class ConfigSyslogServer:
         return evaluation, declaration
 
     @staticmethod
-    def set(data_json):
+    def update(data_json):
+        # set default value
+        if 'port' in data_json.keys():
+            port = data_json['port']
+        else:
+            port = None
+
         logcol_db.add(output.RemoteSyslog(
             ip_address=data_json['ip_address'],
-            port=data_json['port'],
+            port=port,
             logger=logger)
         )
 
@@ -398,7 +461,7 @@ class Declare(Resource):
             description: Deployment done
          """
         data_json = request.get_json()
-        clean_data = Declare.prepare(data_json=data_json)
+        clean_data = Declare.sanity_check(data_json=data_json)
 
         # malformed data
         if clean_data['code'] != 200:
@@ -413,14 +476,14 @@ class Declare(Resource):
         return clean_data, clean_data['code']
 
     @staticmethod
-    def prepare(data_json):
+    def sanity_check(data_json):
         evaluation = {}
         declaration = {}
 
         # f5xc_tenant
         key = 'f5xc_tenant'
         if key in data_json.keys():
-            (evaluation[key], declaration[key]) = ConfigF5XCTenant.prepare(data_json[key])
+            (evaluation[key], declaration[key]) = ConfigF5XCTenant.sanity_check(data_json[key])
         else:
             evaluation[key] = {
                 'code': 400,
@@ -431,7 +494,7 @@ class Declare(Resource):
         # logcollector
         key = 'logcollector'
         if key in data_json.keys():
-            (evaluation[key], declaration[key]) = ConfigLogCollector.prepare(data_json[key])
+            (evaluation[key], declaration[key]) = ConfigLogCollector.sanity_check(data_json[key])
         else:
             evaluation[key] = {
                 'code': 400,
@@ -450,11 +513,11 @@ class Declare(Resource):
     def deploy(declaration):
         cur_class = 'f5xc_tenant'
         if cur_class in declaration.keys():
-            ConfigF5XCTenant.set(declaration[cur_class])
+            ConfigF5XCTenant.update(declaration[cur_class])
 
         cur_class = 'logcollector'
         if cur_class in declaration.keys():
-            ConfigLogCollector.set(declaration[cur_class])
+            ConfigLogCollector.update(declaration[cur_class])
 
     @staticmethod
     def save(declaration):
@@ -701,7 +764,7 @@ f5xc_tenant = input.F5XCTenant(
 # load local configuration
 local_config = local_file_manager.Configuration(backup_file='declaration.json')
 if local_config.get_json() is not None:
-    (local_evaluation, local_declaration) = Declare.prepare(data_json=local_config.get_json())
+    (local_evaluation, local_declaration) = Declare.sanity_check(data_json=local_config.get_json())
     if local_evaluation['code'] == 200:
         Declare.deploy(declaration=local_declaration)
     else:

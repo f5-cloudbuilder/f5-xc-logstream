@@ -85,7 +85,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
 
 
 class F5XCNamespace (F5XCGeneric):
-    def __init__(self, name, api_key, logger, start_time=None):
+    def __init__(self, name, api_key, logger):
         super(F5XCNamespace, self).__init__(name, api_key, logger)
         # Table
         self.type = 'f5xc_namespace'
@@ -93,14 +93,26 @@ class F5XCNamespace (F5XCGeneric):
         self.id = name
         # Attribute
         self.name = name
-        if start_time is None:
-            self.time_fetch_security_events = self._update_time_now()
-        else:
-            self.set_event_start_time(date=start_time)
+        self.time_fetch_security_events = self._update_time_now()
         self.events = []
         self.filter = ''
 
-    def set_event_start_time(self, date):
+    def update(self, data_json):
+        # event_start_time
+        key = 'event_start_time'
+        if key in data_json.keys():
+            self._set_event_start_time(data_json[key])
+        else:
+            self.time_fetch_security_events = self._update_time_now()
+
+        # event_filter
+        key = 'event_filter'
+        if key in data_json.keys():
+            self._set_filter(data_json[key])
+        else:
+            self.filter = ''
+
+    def _set_event_start_time(self, date):
         """
         fetch security events whose timestamp >= start_time
 
@@ -138,12 +150,22 @@ class F5XCNamespace (F5XCGeneric):
         # Clean
         for dirty_event in dirty_events:
             event = json.loads(dirty_event)
-            event['req_headers'] = json.loads(event['req_headers'])
-            if event['violation_details'] != '':
+
+            # req_headers
+            if 'req_headers' in event.keys():
+                event['req_headers'] = json.loads(event['req_headers'])
+            else:
+                event['req_headers'] = ''
+
+            # violation_details
+            if 'violation_details' in event.keys() and event['violation_details'] != '':
                 event['violation_details'] = json.loads(json.dumps(xmltodict.parse(event['violation_details'])))
+            else:
+                event['violation_details'] = ''
+
             self.events.append(event)
 
-    def set_filter(self, event_filter):
+    def _set_filter(self, event_filter):
         """
         query is used to specify the list of matchers syntax
 
@@ -177,7 +199,7 @@ class F5XCNamespace (F5XCGeneric):
 
 
 class F5XCTenant (F5XCGeneric):
-    def __init__(self, name, api_key, logger):
+    def __init__(self, name, logger, api_key=None):
         super(F5XCTenant, self).__init__(name, api_key, logger)
         # Table
         self.type = 'f5xc_tenant'
@@ -198,16 +220,11 @@ class F5XCTenant (F5XCGeneric):
         f5xc_namespace = F5XCNamespace(
             name=name,
             api_key=api_key,
-            start_time=start_time,
             logger=self.logger)
         self.create_child(f5xc_namespace)
 
     def _delete_namespace(self, name):
         self.children['f5xc_namespace'][name].delete()
-
-    def set_event_start_time(self, date):
-        for f5xc_namespace in self.f5xc_namespaces:
-            f5xc_namespace.set_event_start_time(date)
 
     def fetch_security_events(self):
         for f5xc_namespace in self.f5xc_namespaces:
@@ -218,13 +235,6 @@ class F5XCTenant (F5XCGeneric):
         for f5xc_namespace in self.f5xc_namespaces:
             events[f5xc_namespace.name] = f5xc_namespace.get_security_events()
         return events
-
-    def set_filter(self, event_filter, namespace=None):
-        if namespace is None:
-            for f5xc_namespace in self.f5xc_namespaces:
-                f5xc_namespace.set_filer(event_filter)
-        else:
-            self.children['f5xc_namespace'][namespace].set_filter(event_filter)
 
     def pop_security_events(self):
         events = []
@@ -245,25 +255,25 @@ class F5XCTenant (F5XCGeneric):
     def get_namespaces(self):
         return self.f5xc_namespaces
 
-    def set(self, data_json):
+    def update(self, data_json):
+        # Update Tenant
         self.id = data_json['name']
         self.name = data_json['name']
         self.host = data_json['name'] + ".console.ves.volterra.io"
-        self.api_key = data_json['api_key']
-
-        # start_time
-        start_time = None
-        if 'start_time' in data_json.keys():
-            start_time = data_json['start_time']
+        if 'api_key' in data_json.keys():
+            self.api_key = data_json['api_key']
 
         declaration_namespace_names = []
-        # Create
+        # Create Namespaces
         for namespace in data_json['namespaces']:
             declaration_namespace_names.append(namespace['name'])
             if namespace['name'] not in self.f5xc_namespace_ids:
-                self._create_namespace(name=namespace['name'], start_time=start_time)
+                self._create_namespace(name=namespace['name'])
 
-        # Delete
+            # Update Namespace
+            self.children['f5xc_namespace'][namespace['name']].update(namespace)
+
+        # Delete Namespaces
         for namespace in self.f5xc_namespaces:
             if namespace.name not in declaration_namespace_names:
                 self._delete_namespace(name=namespace['name'])
@@ -298,22 +308,24 @@ if __name__ == "__main__":
     )
 
     my_tenant = F5XCTenant(
-        name="f5-emea-ent",
-        api_key="DICHuadYFS6qVcHZsEd/Pt6ZsW0=",
+        name="f5-sa",
+        api_key="wHgFogXopVTaBeFMP70bL1AZD7o=",
         logger=logger
     )
 
-    my_tenant._create_namespace(name="al-dacosta")
+    my_namespace = "demo-app"
+    my_tenant._create_namespace(name=my_namespace)
 
     my_tenant.set_event_start_time({
         "year": 2022,
         "month": 2,
-        "day": 16,
+        "day": 17,
         "hour": 0,
         "minute": 0,
         "timezone": "Europe/Paris"
     })
 
+    """
     my_tenant.set_filter(
         namespace="al-dacosta",
         event_filter={
@@ -321,12 +333,13 @@ if __name__ == "__main__":
             "src_ip": "82.66.123.186"
         }
     )
+    """
 
     my_tenant.fetch_security_events()
 
     events = my_tenant.get_security_events()
 
-    pprint.pprint(events['al-dacosta'][0])
+    pprint.pprint(events[my_namespace][0])
 
 
 
