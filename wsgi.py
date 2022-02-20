@@ -460,20 +460,23 @@ class Declare(Resource):
           200:
             description: Deployment done
          """
+        evaluation = {}
+        declaration = {}
+
         data_json = request.get_json()
-        clean_data = Declare.sanity_check(data_json=data_json)
+        (evaluation, declaration) = Declare.sanity_check(data_json=data_json)
 
         # malformed data
-        if clean_data['code'] != 200:
-            clean_data['status'] = "error"
+        if evaluation['code'] != 200:
+            evaluation['status'] = "error"
 
         # clean data
         else:
-            Declare.deploy(declaration=clean_data['declaration'])
-            Declare.save(declaration=clean_data['declaration'])
-            clean_data['status'] = "deployed"
+            Declare.deploy(declaration=declaration)
+            Declare.save(declaration=declaration)
+            evaluation['status'] = "deployed"
 
-        return clean_data, clean_data['code']
+        return evaluation, evaluation['code']
 
     @staticmethod
     def sanity_check(data_json):

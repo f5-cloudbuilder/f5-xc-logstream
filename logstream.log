@@ -456,3 +456,33 @@
    WARNING: This is a development server. Do not use it in a production deployment.
 2022-02-20 23:02:20,775 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
 2022-02-20 23:02:23,608 INFO 127.0.0.1 - - [20/Feb/2022 23:02:23] "POST /engine HTTP/1.1" 200 -
+2022-02-21 00:20:53,398 INFO  * Restarting with stat
+2022-02-21 00:20:54,237 WARNING  * Debugger is active!
+2022-02-21 00:20:54,243 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:20:54,301 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:20:54,302 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:20:57,914 INFO 127.0.0.1 - - [21/Feb/2022 00:20:57] "GET /declare HTTP/1.1" 200 -
+2022-02-21 00:20:59,742 INFO 127.0.0.1 - - [21/Feb/2022 00:20:59] "[35m[1mPOST /declare HTTP/1.1[0m" 500 -
+2022-02-21 00:21:49,788 INFO  * Restarting with stat
+2022-02-21 00:21:51,510 WARNING  * Debugger is active!
+2022-02-21 00:21:51,524 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:21:51,739 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:21:51,740 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:23:55,717 INFO  * Restarting with stat
+2022-02-21 00:23:56,557 WARNING  * Debugger is active!
+2022-02-21 00:23:56,563 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:23:56,622 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:23:56,622 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:24:22,300 INFO 127.0.0.1 - - [21/Feb/2022 00:24:22] "[35m[1mPOST /declare HTTP/1.1[0m" 500 -
+2022-02-21 00:24:42,434 INFO  * Restarting with stat
+2022-02-21 00:24:43,409 WARNING  * Debugger is active!
+2022-02-21 00:24:43,416 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:24:43,480 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:24:43,480 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:24:46,899 INFO 127.0.0.1 - - [21/Feb/2022 00:24:46] "POST /declare HTTP/1.1" 200 -
+2022-02-21 00:25:57,812 INFO  * Detected change in 'C:\\data\\adacosta\\SE\\96_POC\\f5-xc-logstream\\LogStream\\input.py', reloading
+2022-02-21 00:25:57,853 INFO  * Restarting with stat

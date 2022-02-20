@@ -293,55 +293,6 @@ def setup_logging(log_level, log_file):
     return logging.getLogger(__name__)
 
 
-# Start program
-if __name__ == "__main__":
-
-    import pprint
-    """
-    for common_timezone in F5XCGeneric.get_timezones():
-        pprint.pprint(common_timezone)
-    """
-
-    logger = setup_logging(
-        log_level='warning',
-        log_file='logstream.log'
-    )
-
-    my_tenant = F5XCTenant(
-        name="f5-sa",
-        api_key="wHgFogXopVTaBeFMP70bL1AZD7o=",
-        logger=logger
-    )
-
-    my_namespace = "demo-app"
-    my_tenant._create_namespace(name=my_namespace)
-
-    my_tenant.set_event_start_time({
-        "year": 2022,
-        "month": 2,
-        "day": 17,
-        "hour": 0,
-        "minute": 0,
-        "timezone": "Europe/Paris"
-    })
-
-    """
-    my_tenant.set_filter(
-        namespace="al-dacosta",
-        event_filter={
-            "sec_event_type": "waf_sec_event",
-            "src_ip": "82.66.123.186"
-        }
-    )
-    """
-
-    my_tenant.fetch_security_events()
-
-    events = my_tenant.get_security_events()
-
-    pprint.pprint(events[my_namespace][0])
-
-
 
 
 
