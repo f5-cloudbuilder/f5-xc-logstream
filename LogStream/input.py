@@ -97,7 +97,7 @@ class F5XCNamespace (F5XCGeneric):
         self.events = []
         self.filter = ''
 
-    def update(self, data_json):
+    def update(self, data_json, tenant_api_key):
         # event_start_time
         key = 'event_start_time'
         if key in data_json.keys():
@@ -111,6 +111,13 @@ class F5XCNamespace (F5XCGeneric):
             self._set_filter(data_json[key])
         else:
             self.filter = ''
+
+        # api_key
+        key = 'api_key'
+        if key in data_json.keys():
+            self.api_key = data_json[key]
+        else:
+            self.api_key = tenant_api_key
 
     def _set_event_start_time(self, date):
         """
@@ -271,7 +278,7 @@ class F5XCTenant (F5XCGeneric):
                 self._create_namespace(name=namespace['name'])
 
             # Update Namespace
-            self.children['f5xc_namespace'][namespace['name']].update(namespace)
+            self.children['f5xc_namespace'][namespace['name']].update(namespace, tenant_api_key=self.api_key)
 
         # Delete Namespaces
         for namespace in self.f5xc_namespaces:

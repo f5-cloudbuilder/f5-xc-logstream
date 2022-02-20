@@ -486,3 +486,30 @@
 2022-02-21 00:24:46,899 INFO 127.0.0.1 - - [21/Feb/2022 00:24:46] "POST /declare HTTP/1.1" 200 -
 2022-02-21 00:25:57,812 INFO  * Detected change in 'C:\\data\\adacosta\\SE\\96_POC\\f5-xc-logstream\\LogStream\\input.py', reloading
 2022-02-21 00:25:57,853 INFO  * Restarting with stat
+2022-02-21 00:33:34,684 INFO  * Restarting with stat
+2022-02-21 00:33:35,594 WARNING  * Debugger is active!
+2022-02-21 00:33:35,602 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:33:35,673 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:33:35,674 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:34:16,524 INFO  * Restarting with stat
+2022-02-21 00:34:17,376 WARNING  * Debugger is active!
+2022-02-21 00:34:17,382 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:34:17,441 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:34:17,442 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:34:25,361 INFO 127.0.0.1 - - [21/Feb/2022 00:34:25] "GET /declare HTTP/1.1" 200 -
+2022-02-21 00:34:39,962 INFO 127.0.0.1 - - [21/Feb/2022 00:34:39] "POST /declare HTTP/1.1" 200 -
+2022-02-21 00:34:44,683 INFO 127.0.0.1 - - [21/Feb/2022 00:34:44] "GET /declare HTTP/1.1" 200 -
+2022-02-21 00:34:49,494 INFO 127.0.0.1 - - [21/Feb/2022 00:34:49] "POST /engine HTTP/1.1" 200 -
+2022-02-21 00:34:50,022 ERROR F5XCGeneric::LogStream.input: code 401; Invalid API Token
+2022-02-21 00:34:50,038 ERROR F5XCGeneric::LogStream.input: code 401; Invalid API Token
+2022-02-21 00:38:19,274 INFO  * Restarting with stat
+2022-02-21 00:38:20,122 WARNING  * Debugger is active!
+2022-02-21 00:38:20,129 INFO  * Debugger PIN: 979-932-548
+2022-02-21 00:38:20,191 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-02-21 00:38:20,191 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-02-21 00:38:32,808 INFO 127.0.0.1 - - [21/Feb/2022 00:38:32] "GET /declare HTTP/1.1" 200 -
+2022-02-21 00:38:38,999 INFO 127.0.0.1 - - [21/Feb/2022 00:38:38] "POST /declare HTTP/1.1" 200 -
+2022-02-21 00:38:47,391 INFO 127.0.0.1 - - [21/Feb/2022 00:38:47] "POST /engine HTTP/1.1" 200 -
