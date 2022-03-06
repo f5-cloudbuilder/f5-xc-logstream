@@ -513,3 +513,37 @@
 2022-02-21 00:38:32,808 INFO 127.0.0.1 - - [21/Feb/2022 00:38:32] "GET /declare HTTP/1.1" 200 -
 2022-02-21 00:38:38,999 INFO 127.0.0.1 - - [21/Feb/2022 00:38:38] "POST /declare HTTP/1.1" 200 -
 2022-02-21 00:38:47,391 INFO 127.0.0.1 - - [21/Feb/2022 00:38:47] "POST /engine HTTP/1.1" 200 -
+2022-03-06 23:17:37,768 INFO  * Restarting with stat
+2022-03-06 23:17:38,367 WARNING  * Debugger is active!
+2022-03-06 23:17:38,370 INFO  * Debugger PIN: 312-722-114
+2022-03-06 23:17:38,693 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-03-06 23:17:38,694 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-03-06 23:17:40,309 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u00126Query duration (end_time - start_time) cannot be \u003e 24h\u001a\u003c2022-03-06 22:17:35.077092414 +0000 UTC m=+1093760.110873523"}],"message":"There was a server error in processing request"}
+2022-03-06 23:17:42,233 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u00126Query duration (end_time - start_time) cannot be \u003e 24h\u001a\u003c2022-03-06 22:17:36.999695461 +0000 UTC m=+1093762.033476572"}],"message":"There was a server error in processing request"}
+2022-03-06 23:18:49,625 INFO  * Restarting with stat
+2022-03-06 23:18:50,226 WARNING  * Debugger is active!
+2022-03-06 23:18:50,230 INFO  * Debugger PIN: 312-722-114
+2022-03-06 23:18:50,416 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-03-06 23:18:50,417 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-03-06 23:18:54,664 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u00126Query duration (end_time - start_time) cannot be \u003e 24h\u001a\u003c2022-03-06 22:18:49.431250268 +0000 UTC m=+1093834.465031379"}],"message":"There was a server error in processing request"}
+2022-03-06 23:18:55,251 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"\u00126Query duration (end_time - start_time) cannot be \u003e 24h\u001a\u003c2022-03-06 22:18:50.018077846 +0000 UTC m=+1093835.051858943"}],"message":"There was a server error in processing request"}
+2022-03-06 23:19:33,736 INFO  * Restarting with stat
+2022-03-06 23:19:34,336 WARNING  * Debugger is active!
+2022-03-06 23:19:34,338 INFO  * Debugger PIN: 312-722-114
+2022-03-06 23:19:34,526 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-03-06 23:19:34,527 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-03-06 23:56:35,702 INFO  * Restarting with stat
+2022-03-06 23:56:36,300 WARNING  * Debugger is active!
+2022-03-06 23:56:36,303 INFO  * Debugger PIN: 312-722-114
+2022-03-06 23:56:36,533 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-03-06 23:56:36,533 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-03-06 23:57:00,923 INFO  * Restarting with stat
+2022-03-06 23:57:01,535 WARNING  * Debugger is active!
+2022-03-06 23:57:01,539 INFO  * Debugger PIN: 312-722-114
+2022-03-06 23:57:01,728 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-03-06 23:57:01,729 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)

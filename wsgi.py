@@ -7,6 +7,8 @@ import threading
 import uuid
 import time
 import json
+import os
+import base64
 
 application = Flask(__name__)
 api = Api(application)
@@ -764,14 +766,25 @@ f5xc_tenant = input.F5XCTenant(
     logger=logger
 )
 
-# load local configuration
-local_config = local_file_manager.Configuration(backup_file='declaration.json')
-if local_config.get_json() is not None:
-    (local_evaluation, local_declaration) = Declare.sanity_check(data_json=local_config.get_json())
-    if local_evaluation['code'] == 200:
-        Declare.deploy(declaration=local_declaration)
+# load embedded configuration
+declaration = os.getenv('declaration')
+
+# load configuration from environment variable
+if declaration is not None:
+    declaration = json.loads(base64.b64decode(declaration))
+
+# load configuration from local file
+else:
+    declaration = local_file_manager.Configuration(backup_file='declaration.json').get_json()
+
+# Run
+if declaration is not None:
+    (evaluation, declaration) = Declare.sanity_check(declaration)
+    if evaluation['code'] == 200:
+        Declare.deploy(declaration)
+        EngineThreading.start_main()
     else:
-        raise Exception('Local configuration file is malformated', local_evaluation)
+        raise Exception('Local configuration file is malformated', evaluation)
 
 # API
 api.add_resource(Declare, '/declare')

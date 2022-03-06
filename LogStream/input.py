@@ -57,7 +57,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
             url,
             headers=headers,
             json=data,
-            verify=False)
+            verify=True)
 
         if r.status_code not in (200, 201, 202, 204):
             self.generate_error(r)
