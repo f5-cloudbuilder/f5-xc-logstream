@@ -540,7 +540,7 @@ class EngineThreading(Resource):
         if len(thread_manager['thread_queue'].keys()) == 0 and \
                 thread_manager['event'].is_set():
             thread_manager['event'].clear()
-            for cur_index in (1, thread_number):
+            for cur_index in range(thread_number):
                 thread_name = str(uuid.uuid4())
                 t = threading.Thread(
                     target=EngineThreading.task_producer_consumer,
@@ -782,7 +782,7 @@ if declaration is not None:
     (evaluation, declaration) = Declare.sanity_check(declaration)
     if evaluation['code'] == 200:
         Declare.deploy(declaration)
-        EngineThreading.start_main()
+        EngineThreading.restart_main()
     else:
         raise Exception('Local configuration file is malformated', evaluation)
 
