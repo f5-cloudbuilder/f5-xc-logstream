@@ -1,6 +1,6 @@
 {
     "f5xc_tenant": {
-        "api_key": "X=",
+        "api_key": "DICHuadYFS6qVcHZsEd/Pt6ZsW0=",
         "name": "f5-emea-ent",
         "namespaces": [
             {
@@ -8,10 +8,10 @@
                     "sec_event_type": "waf_sec_event"
                 },
                 "event_start_time": {
-                    "day": 20,
+                    "day": 6,
                     "hour": 21,
                     "minute": 0,
-                    "month": 2,
+                    "month": 3,
                     "year": 2022
                 },
                 "name": "al-dacosta"
