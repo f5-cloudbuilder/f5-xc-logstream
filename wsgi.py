@@ -588,24 +588,31 @@ class EngineThreading(Resource):
     def task_producer_consumer(thread_flag, thread_name, cur_index):
         """
         fetch events and send them on remote logging servers
+        after sending all logs, sleep during update_interval
         :param thread_flag:
         :param thread_name:
         :param cur_index: thread ID in pool
         :return:
         """
         while not thread_flag.is_set():
+            print("----------------------------- TASK ------------------------------")
+            print("thread_name: %s" % thread_name)
             f5xc_tenant.fetch_security_events()
             events = f5xc_tenant.pop_security_events()
-            if len(events) == 0:
-                logger.debug("%s::%s: THREAD is sleeping: name=%s;index:%s" %
-                             (__class__.__name__, __name__, thread_name, cur_index))
-                time.sleep(thread_manager['update_interval'])
-                logger.debug("%s::%s: THREAD is awake: name=%s;index:%s" %
-                             (__class__.__name__, __name__, thread_name, cur_index))
-            else:
+
+            # emit logs
+            if len(events) > 0:
                 logcol_db.emit(filter.WAF.filter_example(events))
                 logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
                              (__class__.__name__, __name__, thread_name, cur_index))
+
+            # sleep
+            logger.debug("%s::%s: THREAD is sleeping: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
+            time.sleep(thread_manager['update_interval'])
+            logger.debug("%s::%s: THREAD is awake: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
+
 
         logger.debug("%s::%s: THREAD exited his work: name=%s;index:%s" %
                      (__class__.__name__, __name__, thread_name, cur_index))
@@ -767,24 +774,25 @@ f5xc_tenant = input.F5XCTenant(
 )
 
 # load embedded configuration
-declaration = os.getenv('declaration')
+local_declaration = os.getenv('declaration')
+local_config = local_file_manager.Configuration(backup_file='declaration.json')
 
 # load configuration from environment variable
-if declaration is not None:
-    declaration = json.loads(base64.b64decode(declaration))
+if local_declaration is not None:
+    local_declaration = json.loads(base64.b64decode(local_declaration))
 
 # load configuration from local file
 else:
-    declaration = local_file_manager.Configuration(backup_file='declaration.json').get_json()
+    local_declaration = local_config.get_json()
 
 # Run
-if declaration is not None:
-    (evaluation, declaration) = Declare.sanity_check(declaration)
-    if evaluation['code'] == 200:
-        Declare.deploy(declaration)
-        EngineThreading.restart_main()
+if local_declaration is not None:
+    (local_evaluation, local_declaration) = Declare.sanity_check(local_declaration)
+    if local_evaluation['code'] == 200:
+        Declare.deploy(local_declaration)
+        EngineThreading.start_main()
     else:
-        raise Exception('Local configuration file is malformated', evaluation)
+        raise Exception('Local configuration file is malformated', local_evaluation)
 
 # API
 api.add_resource(Declare, '/declare')
@@ -796,8 +804,8 @@ if __name__ == '__main__':
     print("Dev Portal: http://127.0.0.1:3001/apidocs/")
     application.run(
         host="0.0.0.0",
-        debug=True,
-        use_reloader=True,
+        debug=False,
+        use_reloader=False,
         port=3001
     )
 

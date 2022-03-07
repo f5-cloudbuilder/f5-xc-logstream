@@ -18,6 +18,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
         self.api_key = api_key
         self._update_timezone(timezone)
         self.session = requests.session()
+        self._f5xc_log_idle_timeout = 2
 
     def generate_error(self, r):
         if self.logger:
@@ -81,7 +82,9 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
                            (__class__.__name__, __name__, timezone))
 
     def _update_time_now(self):
-        return datetime.datetime.now(tz=pytz.timezone(self.timezone)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        # now minus the delay for F5XC to generate events logs
+        date = datetime.datetime.now(tz=pytz.timezone(self.timezone)) - datetime.timedelta(minutes=self._f5xc_log_idle_timeout)
+        return date
 
 
 class F5XCNamespace (F5XCGeneric):
@@ -96,20 +99,26 @@ class F5XCNamespace (F5XCGeneric):
         self.time_fetch_security_events = self._update_time_now()
         self.events = []
         self.filter = ''
+        self.event_filter = {}
+        self.event_start_time = {}
 
     def update(self, data_json, tenant_api_key):
         # event_start_time
         key = 'event_start_time'
-        if key in data_json.keys():
+        if key in data_json.keys() and len(data_json[key]) > 0:
+            self.event_start_time = data_json[key]
             self._set_event_start_time(data_json[key])
         else:
-            self.time_fetch_security_events = self._update_time_now()
+            self.event_start_time = {}
+            self.time_fetch_security_events = self._update_time_now() - datetime.timedelta(minutes=self._f5xc_log_idle_timeout)
 
         # event_filter
         key = 'event_filter'
-        if key in data_json.keys():
+        if key in data_json.keys() and len(data_json[key]) > 0:
+            self.event_filter = data_json[key]
             self._set_filter(data_json[key])
         else:
+            self.event_filter = {}
             self.filter = ''
 
         # api_key
@@ -138,21 +147,24 @@ class F5XCNamespace (F5XCGeneric):
 
     def fetch_security_events(self, host):
         # set timer
-        start_time = self.time_fetch_security_events
+        start_time = (self.time_fetch_security_events + datetime.timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
         self.time_fetch_security_events = self._update_time_now()
-        end_time = self.time_fetch_security_events
+        end_time = self.time_fetch_security_events.strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # fetch security events
         path = "/api/data/namespaces/" + self.name + "/app_security/events"
         data = {
                 "namespace": self.name,
-                "scroll": True,
+                "scroll": False,
                 "sort": "ASCENDING",
                 "start_time": start_time,
                 "end_time": end_time,
                 "query": self.filter,
             }
         dirty_events = self._post(host, path, data)['events']
+        import pprint
+        pprint.pprint(data)
+        print("events: %s" % len(dirty_events))
 
         # Clean
         for dirty_event in dirty_events:
@@ -201,7 +213,8 @@ class F5XCNamespace (F5XCGeneric):
     def get_json(self):
         return {
             'name': self.id,
-            'start_time_for_next_fetch_of_security_events': self.time_fetch_security_events,
+            'event_filter': self.event_filter,
+            'event_start_time': self.event_start_time
         }
 
 
