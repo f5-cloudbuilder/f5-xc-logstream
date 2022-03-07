@@ -700,56 +700,6 @@ class Engine(Resource):
                 return "Unknown action", 400
 
 
-class Forward(Resource):
-    def post(self):
-        """
-            Forward event
-            ---
-            tags:
-              - LogStream
-            consumes:
-              - application/json
-            parameters:
-              - in: body
-                name: security_events
-                description: List of security events
-                schema: {}
-            responses:
-              200:
-                description: Event received
-        """
-        # Sanity Check
-        if request.headers['Authorization'].split(' ')[1] != f5xc_tenant.api_key:
-            return {
-                'code': 401,
-                'msg': 'Unauthorized'
-            }
-
-        # Authorization request
-        elif request.headers['Content-Length'] == '0':
-            return {'msg': 'heartbeat OK'}
-
-        # Events
-        else:
-            # WORKAROUND ISSUE - header application/x-www-form-urlencoded generates an empty request.data value in Flask via NGINX UNIT #
-            if request.content_type == 'application/x-www-form-urlencoded':
-                data_form = ''
-                for key, value in request.form.items():
-                    data_form = key + value
-                data_json = json.loads(data_form)
-            else:
-                data_json = request.get_json(force=True, silent=True)
-
-            # JSON format sanity check
-            if data_json is None:
-                return {
-                    'code': 400,
-                    'msg': 'Bad request'
-                }
-            f5xc_tenant.append_events(data_json)
-            return {'msg': 'security event OK'}
-
-
 # Global var
 logger = setup_logging(
     log_level='warning',
@@ -795,7 +745,6 @@ if local_declaration is not None:
 # API
 api.add_resource(Declare, '/declare')
 api.add_resource(Engine, '/engine')
-api.add_resource(Forward, '/forward')
 
 # Start program in developer mode
 if __name__ == '__main__':

@@ -1,32 +1,94 @@
-LogStream for NGINX Controller App Sec
-=======================================================================
+LogStream for F5 Distributed Cloud Security Events
+##################################################
 .. contents:: Table of Contents
 
 Introduction
 ==================================================
 Use Case
-###############
+**************************************************
 
-LogStream forwards http security event logs - received from NGINX Controller App Sec - to remote syslog servers (log collector, SIEM)
+LogStream forwards http security event logs - received from `F5 XC <https://docs.cloud.f5.com/docs/api/app-security>`_ - to remote syslog servers (log collector, SIEM)
 
 .. figure:: _picture/architecture.png
 
 Demo
-###############
+**************************************************
 
 .. raw:: html
 
     <a href="http://www.youtube.com/watch?v=3H9yDHJHSdA"><img src="http://img.youtube.com/vi/3H9yDHJHSdA/0.jpg" width="600" height="400" title="Logstream and CAS" alt="Logstream and CAS"></a>
 
-
 Security consideration
-#########################
+**************************************************
 No logs are stored. LogStream receives logs and then PUSH them directly to remote log collector servers.
 
-Pre requisites
+Specification
+=================================================
+Specification of LogStream are stored as a declaration in JSON format.
+API reference can be downloaded `here <https://www.f5.com/cloud>`_ Access to API Dev Portal with your browser ``http://<extra_vm.ip_mgt>:8080/apidocs/``
+
+
+For example:
+
+.. code:: json
+
+    {
+        "f5xc_tenant": {
+            "api_key": "XXXXXXXXXXX",
+            "name": "XXXXXXXXXXX",
+            "namespaces": [
+                {
+                    "event_filter": {
+                        "sec_event_type": "waf_sec_event"
+                    },
+                    "name": "XXXXXXXXXXX"
+                }
+            ]
+        },
+        "logcollector": {
+            "syslog": [
+                {
+                    "ip_address": "127.100.0.8",
+                    "port": 5140
+                }
+            ]
+        }
+    }
+
+
+
+3 ways to apply configuration:
+
+- **Environment variable**: If a *declaration* environment variable `declaration`` is present, LogStream will start its engine based on it.
+- **Local file**: If a *declaration* file named `declaration.json <https://github.com/nergalex/f5-xc-logstream/blob/master/declaration.json>`_ is present in the main folder, LogStream will start its engine based on it.
+
+API
+***************
+If *declaration* is absent, LogStream will NOT start its engine. Use LogStream API to configure it and then to start its engine.
+
+Use LogStream API in order to:
+- get, create or update configuration
+- start or stop engine
+- get status
+
+Configuration
 ==================================================
-Ansible Tower
-###############
+- Install `Postman <https://www.postman.com/>`_
+- Import collection LogStream_cas.postman_collection.json
+- Use `declare` entry point to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
+- Use `action` entry point to start/stop the engine.
+- Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
+- Note that the last `declaration` is saved locally
+
+
+
+
+Clone this github repository and set ``declaration.json`` with your values
+
+Deployment on a VM
+==================================================
+An example of a deployment on an Azure VM using Ansible Tower.
+
 Virtualenv
 ***************************
 - Create a virtualenv following `this guide <https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html>`_
@@ -44,18 +106,8 @@ REDENTIAL TYPE                                          USERNAME                
 ``Machine``                                             ``my_VM_admin_user``                            ``my_VM_admin_user_key``                        ``my_VM_admin_user_CRT``                        ``sudo``
 =====================================================   =============================================   =============================================   =============================================   =============================================
 
-Role
-***************************
-Clone roles from `NGINX Controller collection <https://github.com/nginxinc/ansible-collection-nginx_controller>`_ in `/etc/ansible/roles/`
-
-- nginxinc.nginx_controller_generate_token
-- nginxinc.nginx_controller_integration
-- nginxinc.nginx_controller_forwarder
-
-Rename generated directory of these roles as listed above
-
 Ansible role structure
-######################
+***************************
 - Deployment is based on ``workflow template``. Example: ``workflow template`` = ``wf-create_create_edge_security_inbound``
 - ``workflow template`` includes multiple ``job template``. Example: ``job template`` = ``poc-azure_create_hub_edge_security_inbound``
 - ``job template`` have an associated ``playbook``. Example: ``playbook`` = ``playbooks/poc-azure.yaml``
@@ -79,8 +131,59 @@ Ansible role structure
 
 - The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
 
-Installation
-==================================================
+Create and launch a workflow template ``wf-create_vm_app_nginx_unit_logstream_cas`` that includes those Job templates in this order:
+
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+``poc-azure_create-vm-nginx_unit``                              Deploy a VM                                         ``playbooks/poc-azure.yaml``                    ``create-vm-nginx_unit``                        ``my_project``                                  ``localhost``                                   ``my_azure_credential``
+``poc-onboarding_nginx_unit_faas_app_logstream``                Install NGINX Unit + App                            ``playbooks/poc-nginx_vm.yaml``                 ``onboarding_nginx_unit_faas_app_logstream``    ``localhost``                                                                                   ``cred_NGINX``
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+
+==============================================  =============================================
+Extra variable                                  Description
+==============================================  =============================================
+``extra_vm``                                    Dict of VM properties
+``extra_vm.ip``                                 VM IP address
+``extra_vm.name``                               VM name
+``extra_vm.size``                               Azure VM type
+``extra_vm.availability_zone``                  Azure AZ
+``extra_vm.location``                           Azure location
+``extra_vm.admin_username``                     admin username
+``extra_vm.key_data``                           admin user's public key
+``extra_platform_name``                         platform name used for Azure resource group
+``extra_platform_tags``                         Azure VM tags
+``extra_subnet_mgt_on_premise``                 Cross management zone via VPN GW
+``faas_app``                                    Dict of Function as a Service
+``faas_app.name``                               App's name
+``faas_app.repo``                               Your cloned Logstream repo
+``faas_app.ca_pem``                             Intermediate CA that signed App's keys
+``faas_app.cert_pem``                           App's certificate
+``faas_app.key_pem``                            App's key
+==============================================  =============================================
+
+.. code:: yaml
+
+    extra_logstream_declaration_b64: ewogICAgImY1eGNfdGVuYW50IjogewogICAgICAgICJhcGlfa2V5IjogWCIsCiAgICAgICAgIm5hbWUiOiAiWCIsCiAgICAgICAgIm5hbWVzcGFjZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJldmVudF9maWx0ZXIiOiB7CiAgICAgICAgICAgICAgICAgICAgInNlY19ldmVudF90eXBlIjogIndhZl9zZWNfZXZlbnQiCiAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgIm5hbWUiOiAiWCIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0sCiAgICAibG9nY29sbGVjdG9yIjogewogICAgICAgICJzeXNsb2ciOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJpcF9hZGRyZXNzIjogIjEwLjEwMC4wLjgiLAogICAgICAgICAgICAgICAgInBvcnQiOiA1MTQwCiAgICAgICAgICAgIH0KICAgICAgICBdCiAgICB9Cn0=
+    extra_platform_name: Demo
+    extra_platform_tags: environment=DMO platform=Demo project=LogStream
+    extra_subnet_mgt_on_premise: 10.0.0.0/24
+    extra_vm:
+      admin_username: cyber
+      availability_zone:
+        - 1
+      ip: 10.100.0.54
+      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
+      location: eastus2
+      name: logstream-xc
+      size: Standard_B2s
+    faas_app:
+      ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
+      name: logstream-xc
+      repo: 'https://github.com/nergalex/f5-xc-logstream.git'
+
 Remote Syslog
 #################
 -  `Optimize the Network Kernel Parameters <https://docs.fluentd.org/installation/before-install#optimize-the-network-kernel-parameters>`_
@@ -145,150 +248,6 @@ Remote Syslog
 
     tail -f -n 1 /var/log/td-agent/td-agent.log &
     curl -X POST -d 'json={"json":"message"}' http://localhost:8888/debug.test
-
-
-
-Logstream
-###############
-Clone this github repository and set ``declaration.json`` with your values
-
-.. code:: json
-
-    {
-        "cas": {
-            "api_key": "MySharedSecretWithNGINXController"
-        },
-        "logcollector": {
-            "syslog": [
-                {
-                    "ip_address": "10.100.0.11",
-                    "port": 5140
-                }
-            ]
-        }
-    }
-
-Create and launch a workflow template ``wf-create_vm_app_nginx_unit_logstream_cas`` that includes those Job templates in this order:
-
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-``poc-azure_create-vm-nginx_unit``                              Deploy a VM                                         ``playbooks/poc-azure.yaml``                    ``create-vm-nginx_unit``                        ``my_project``                                  ``localhost``                                   ``my_azure_credential``
-``poc-onboarding_nginx_unit_faas_app_logstream``                Install NGINX Unit + App                            ``playbooks/poc-nginx_vm.yaml``                 ``onboarding_nginx_unit_faas_app_logstream``    ``localhost``                                                                                   ``cred_NGINX``
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-
-==============================================  =============================================
-Extra variable                                  Description
-==============================================  =============================================
-``extra_vm``                                    Dict of VM properties
-``extra_vm.ip``                                 VM IP address
-``extra_vm.name``                               VM name
-``extra_vm.size``                               Azure VM type
-``extra_vm.availability_zone``                  Azure AZ
-``extra_vm.location``                           Azure location
-``extra_vm.admin_username``                     admin username
-``extra_vm.key_data``                           admin user's public key
-``extra_platform_name``                         platform name used for Azure resource group
-``extra_platform_tags``                         Azure VM tags
-``extra_subnet_mgt_on_premise``                 Cross management zone via VPN GW
-``faas_app``                                    Dict of Function as a Service
-``faas_app.name``                               App's name
-``faas_app.repo``                               Your cloned Logstream repo
-``faas_app.ca_pem``                             Intermediate CA that signed App's keys
-``faas_app.cert_pem``                           App's certificate
-``faas_app.key_pem``                            App's key
-==============================================  =============================================
-
-.. code:: yaml
-
-    extra_vm:
-      ip: 10.100.0.52
-      name: logstream-cas
-      size: Standard_B2s
-      admin_username: myadmin
-      availability_zone:
-        - 1
-      location: eastus2
-      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
-    extra_platform_name: TotalInbound
-    extra_platform_tags: environment=DMO platform=TotalInbound project=CloudBuilderf5
-    extra_subnet_mgt_on_premise: 10.0.0.0/24
-    faas_app:
-      name: logstream-cas
-      repo: https://github.com/nergalex/f5-cas-logstream.git
-      ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
-      cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
-      key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
-
-NGINX Controller
-#################
-
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-``poc-nginx_controller-create_appsec_http_forwarder``           Create/Update Forwarder                             ``playbooks/poc-nginx_controller.yaml``         ``create_appsec_http_forwarder``                ``localhost``
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-
-==============================================  =============================================
-Extra variable                                  Description
-==============================================  =============================================
-``extra_nginx_controller_ip``
-``extra_nginx_controller_password``
-``extra_nginx_controller_username``
-``extra_log_collector.endpointUri``             Listener of remote syslog
-``extra_log_collector.name``                    name of remote syslog
-``extra_log_collector.api_key``                 Shared Key to authenticate Controller
-==============================================  =============================================
-
-.. code:: yaml
-
-    extra_log_collector:
-      endpointUri: 'http://10.0.0.10:3001/forward'
-      name: logstream
-      api_key: TESTKEY
-    extra_nginx_controller:
-      ip: 10.0.0.43
-      password: MyPassword!
-      username: admin@acme.com
-
-Uninstallation
-==================================================
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-``poc-nginx_controller-delete_appsec_http_forwarder``           Create/Update Forwarder                             ``playbooks/poc-nginx_controller.yaml``         ``delete_appsec_http_forwarder``                ``localhost``
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-
-==============================================  =============================================
-Extra variable                                  Description
-==============================================  =============================================
-``extra_nginx_controller_ip``
-``extra_nginx_controller_password``
-``extra_nginx_controller_username``
-``extra_log_collector.name``                    name of remote syslog
-==============================================  =============================================
-
-.. code:: yaml
-
-    extra_log_collector:
-      name: logstream
-    extra_nginx_controller:
-      ip: 10.0.0.43
-      password: MyPassword!
-      username: admin@acme.com
-
-Configuration
-==================================================
-- Install `Postman <https://www.postman.com/>`_
-- Import collection LogStream_cas.postman_collection.json
-- Use `declare` entry point to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
-- Use `action` entry point to start/stop the engine.
-- Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
-- Note that the last `declaration` is saved locally
-
-API reference
-==================================================
-Access to API Dev Portal with your browser ``http://<extra_vm.ip_mgt>:8080/apidocs/``
 
 Troubleshoot
 ==================================================
