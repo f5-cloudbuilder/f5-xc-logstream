@@ -22,13 +22,13 @@ Security consideration
 **************************************************
 No logs are stored. LogStream receives logs and then PUSH them directly to remote log collector servers.
 
-Specification
+Specification format
 =================================================
 Specification of LogStream are stored as a declaration in JSON format.
-API reference can be downloaded `here <https://www.f5.com/cloud>`_ Access to API Dev Portal with your browser ``http://<extra_vm.ip_mgt>:8080/apidocs/``
 
+Reference schema is available in the description of ``/declare`` API endpoint.
 
-For example:
+Example of a declaration:
 
 .. code:: json
 
@@ -55,35 +55,36 @@ For example:
         }
     }
 
-
-
+Configure
+=================================================
 3 ways to apply configuration:
 
-- **Environment variable**: If a *declaration* environment variable `declaration`` is present, LogStream will start its engine based on it.
-- **Local file**: If a *declaration* file named `declaration.json <https://github.com/nergalex/f5-xc-logstream/blob/master/declaration.json>`_ is present in the main folder, LogStream will start its engine based on it.
+Environment variable
+********************
+If a *declaration* environment variable ``declaration`` is present, LogStream will start its engine based on it.
+Value of ``declaration`` environment variable is a JSON declaration b64 encoded
+
+Example using an `online tool <https://www.base64encode.org/>`_: ``ewogICAgImY1eGNfdGVuYW50IjogewogICAgICAgICJhcGlfa2V5IjogWCIsCiAgICAgICAgIm5hbWUiOiAiWCIsCiAgICAgICAgIm5hbWVzcGFjZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJldmVudF9maWx0ZXIiOiB7CiAgICAgICAgICAgICAgICAgICAgInNlY19ldmVudF90eXBlIjogIndhZl9zZWNfZXZlbnQiCiAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgIm5hbWUiOiAiWCIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0sCiAgICAibG9nY29sbGVjdG9yIjogewogICAgICAgICJzeXNsb2ciOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJpcF9hZGRyZXNzIjogIjEwLjEwMC4wLjgiLAogICAgICAgICAgICAgICAgInBvcnQiOiA1MTQwCiAgICAgICAgICAgIH0KICAgICAgICBdCiAgICB9Cn0=``
+
+Local file
+********************
+If a *declaration* file named `declaration.json <https://github.com/nergalex/f5-xc-logstream/blob/master/declaration.json>`_ is present in the main folder, LogStream will start its engine based on it.
 
 API
 ***************
 If *declaration* is absent, LogStream will NOT start its engine. Use LogStream API to configure it and then to start its engine.
 
-Use LogStream API in order to:
-- get, create or update configuration
-- start or stop engine
-- get status
-
-Configuration
-==================================================
-- Install `Postman <https://www.postman.com/>`_
-- Import collection LogStream_cas.postman_collection.json
-- Use `declare` entry point to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
-- Use `action` entry point to start/stop the engine.
-- Use `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
+API allows you to:
+- `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
+- `action` endpoint to start/stop the engine.
+- `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
 - Note that the last `declaration` is saved locally
 
+API Dev Portal is available on your LogStream instance via ``/apidocs/``
 
+API reference can be downloaded `here <https://github.com/nergalex/f5-xc-logstream/blob/master/swagger.json>`_
 
-
-Clone this github repository and set ``declaration.json`` with your values
+A Postman collection is available `here <https://github.com/nergalex/f5-xc-logstream/blob/master/LogStream-F5_XC.postman_collection.json>`_
 
 Deployment on a VM
 ==================================================
