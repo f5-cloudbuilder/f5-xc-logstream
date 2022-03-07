@@ -595,8 +595,6 @@ class EngineThreading(Resource):
         :return:
         """
         while not thread_flag.is_set():
-            print("----------------------------- TASK ------------------------------")
-            print("thread_name: %s" % thread_name)
             f5xc_tenant.fetch_security_events()
             events = f5xc_tenant.pop_security_events()
 

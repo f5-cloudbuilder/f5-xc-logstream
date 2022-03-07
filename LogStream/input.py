@@ -162,9 +162,6 @@ class F5XCNamespace (F5XCGeneric):
                 "query": self.filter,
             }
         dirty_events = self._post(host, path, data)['events']
-        import pprint
-        pprint.pprint(data)
-        print("events: %s" % len(dirty_events))
 
         # Clean
         for dirty_event in dirty_events:

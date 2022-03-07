@@ -22,7 +22,6 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
 
     def emit(self, events):
         for event in events:
-            print("req_id: %s" % str(event['req_id']))
             struct_message = [
                 'app=' + str(event['authority']),
                 'bot_classification=' + str(event['bot_classification']),
