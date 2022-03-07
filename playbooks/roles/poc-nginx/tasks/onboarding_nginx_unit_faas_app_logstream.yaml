@@ -3,33 +3,30 @@
 
 - name: DOWNLOAD NGINX’s signing key
   uri:
-    url: "https://nginx.org/keys/nginx_signing.key"
-    return_content: yes
-  register: nginx_signing_key
+    url: "https://unit.nginx.org/keys/nginx-keyring.gpg"
+    dest: "/usr/share/keyrings/nginx-keyring.gpg"
 
-- name: ADD NGINX’s signing key to apt’s keyring
-  apt_key:
-    data: "{{ nginx_signing_key.content }}"
-
-- name: To configure Unit repository, create the following file named
-  apt_repository:
-    repo: "{{ item }}"
-    filename: unit
-  loop:
-    - "deb https://packages.nginx.org/unit/ubuntu/ bionic unit"
-    - "deb-src https://packages.nginx.org/unit/ubuntu/ bionic unit"
+- name: COPY CA Key
+  copy:
+    content: "{{ lookup('file', 'nginx-unit-ubuntu-repo.txt') }}"
+    dest: /etc/apt/sources.list.d/unit.list
 
 - name: UPDATE apt
   apt:
     name: "*"
     state: latest
 
+##### Issue, maybe use "package" role or "comand" role
 - name: INSTALL package
-  package:
+  apt:
+    name:
+      - unit
+
+- name: INSTALL package
+  apt:
     name:
       - git
-      - unit
-      - unit-python3.7
+      - unit-python3.9
       - build-essential
       - zlib1g-dev
       - libncurses5-dev
@@ -40,28 +37,28 @@
       - libreadline-dev
       - libffi-dev
       - libbz2-dev
-    state: present
+      - python-setuptools
 
-- name: Unarchive Python3.7
+- name: Unarchive Python3.9
   unarchive:
-    src: https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz
+    src: https://www.python.org/ftp/python/3.9.9/Python-3.9.9.tgz
     dest: /usr/src
     remote_src: yes
 
-- name: Configure install Python3.7
+- name: Configure install Python3.9
   command: ./configure --enable-optimizations
   args:
-    chdir: /usr/src/Python-3.7.9
+    chdir: /usr/src/Python-3.9.9
 
-- name: Install Python3.7
+- name: Install Python3.9
   make:
-    chdir: /usr/src/Python-3.7.9
+    chdir: /usr/src/Python-3.9.9
     target: altinstall
 
 - name: Start service NGINX Unit, if not started
   service:
     name: unit
-    state: started
+    state: restarted
     enabled: yes
 
 - name: CREATE apps directoty
@@ -111,14 +108,15 @@
     name:
       - pip
       - virtualenv
+      - setuptools
     state: forcereinstall
-    executable: pip3.7
+    executable: pip3.9
 
 - name: INSTALL requirements
   pip:
     requirements: "/etc/faas-apps/{{ faas_app.name }}/requirements.txt"
     virtualenv: /etc/faas-apps/venv
-    virtualenv_python: python3.7
+    virtualenv_python: python3.9
     virtualenv_command: /usr/local/bin/virtualenv
 
 - name: SET var_bundle
@@ -188,7 +186,7 @@
     validate_certs: false
   register: config_json
 
-- name: INSTALL package
+- name: UNINSTALL package
   package:
     name:
       - build-essential

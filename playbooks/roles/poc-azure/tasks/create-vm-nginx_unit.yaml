@@ -1,4 +1,19 @@
 ---
+- name: CREATE Public IP Address for Management NIC
+  delegate_to: localhost
+  azure.azcollection.azure_rm_publicipaddress:
+    resource_group: "rg-{{ extra_platform_name }}"
+    allocation_method: Static
+    domain_name: "{{ extra_vm.name }}"
+    name: "{{ extra_vm.name }}"
+    location: "{{ extra_vm.location }}"
+    sku: 'Standard'
+    idle_timeout: 30
+    version: 'ipv4'
+    tags:
+      Name: "management-{{ extra_platform_tags }}-{{ extra_vm.name }}"
+  register: output_ip_address
+
 - name: CREATE Network Security Group for {{ extra_vm.name }} access
   delegate_to: localhost
   azure.azcollection.azure_rm_securitygroup:
@@ -7,6 +22,14 @@
     location: "{{ extra_vm.location }}"
     tags: "{{ extra_platform_tags }} Name=nsg-{{ extra_platform_name }}-{{ extra_vm.name }} owner={{ owner }}"
     rules:
+      - name: in_allow_from_internet
+        direction: Inbound
+        priority: 101
+        protocol: Tcp
+        destination_port_range:
+          - 22
+          # - 443
+        access: Allow
       - name: in_allow_mgt_from_cmp
         direction: Inbound
         priority: 100
@@ -35,6 +58,7 @@
         private_ip_address: "{{ extra_vm.ip }}"
         private_ip_allocation_method: 'Static'
         primary: true
+        public_ip_address_name: "{{ extra_vm.name }}"
 
 - name: CREATE VM
   delegate_to: localhost
@@ -53,10 +77,10 @@
       - path: "/home/{{ infra_admin_username }}/.ssh/authorized_keys"
         key_data: "{{ extra_vm.key_data }}"
     image:
-      offer: "UbuntuServer"
-      publisher: "Canonical"
-      sku: "18.04-LTS"
-      version: "latest"
+      publisher: Canonical
+      offer: 0001-com-ubuntu-server-impish
+      sku: 21_10-gen2
+      version: latest
     managed_disk_type: Premium_LRS
     os_type: Linux
     network_interface_names:

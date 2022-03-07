@@ -1,5 +1,5 @@
-LogStream for F5 Distributed Cloud Security Events
-##################################################
+LogStream for F5 Distributed Cloud | Security Events
+####################################################
 .. contents:: Table of Contents
 
 Introduction
@@ -132,7 +132,7 @@ Ansible role structure
 
 - The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
 
-Create and launch a workflow template ``wf-create_vm_app_nginx_unit_logstream_cas`` that includes those Job templates in this order:
+Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
 
 =============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
 Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
@@ -154,10 +154,10 @@ Extra variable                                  Description
 ``extra_vm.key_data``                           admin user's public key
 ``extra_platform_name``                         platform name used for Azure resource group
 ``extra_platform_tags``                         Azure VM tags
-``extra_subnet_mgt_on_premise``                 Cross management zone via VPN GW
+``extra_subnet_mgt_on_premise``                 Cross management zone
 ``faas_app``                                    Dict of Function as a Service
 ``faas_app.name``                               App's name
-``faas_app.repo``                               Your cloned Logstream repo
+``faas_app.repo``                               Logstream repo
 ``faas_app.ca_pem``                             Intermediate CA that signed App's keys
 ``faas_app.cert_pem``                           App's certificate
 ``faas_app.key_pem``                            App's key
@@ -262,8 +262,7 @@ View access log:
 
 View app log:
 
-:kbd:`tail -f /etc/faas-apps/logstream-cas/logstream.log`
-
+:kbd:`tail -f /etc/faas-apps/logstream-xc/logstream.log`
 
 
 

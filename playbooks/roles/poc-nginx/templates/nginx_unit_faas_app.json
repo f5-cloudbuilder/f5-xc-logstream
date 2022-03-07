@@ -12,13 +12,14 @@
     },
     "applications": {
         "flask_app": {
-            "type": "python 3.7",
+            "type": "python 3.9",
             "working_directory": "/etc/faas-apps/{{ faas_app.name }}",
             "home": "/etc/faas-apps/venv",
             "path": "/etc/faas-apps/{{ faas_app.name }}",
             "module": "wsgi",
             "environment": {
-                "version": "{{ '%Y-%m-%d_%H:%M:%S' | strftime }}"
+                "version": "{{ '%Y-%m-%d_%H:%M:%S' | strftime }}",
+                "declaration": "{{ extra_logstream_declaration_b64 }}"
             }
         }
     },

@@ -1,8 +1,8 @@
 ---
 collections:
 - name: azure.azcollection
-- name: nginxinc.nginx_core
-- name: nginxinc.nginx_controller
+
+
 
 
 
