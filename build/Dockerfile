@@ -7,13 +7,16 @@ FROM nginx/unit:1.26.1-python3.10
 EXPOSE 8080
 
 RUN apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y tcpdump git curl \
+	&& apt-get install --no-install-recommends --no-install-suggests -y tcpdump git curl python-setuptools \
     && mkdir -p /var/log/unit/ \
     && touch /var/log/unit/access.log \
     && chown -R unit:0 /var/log/unit/ \
     && mkdir /etc/faas-apps/ \
     && chown -R unit:unit /etc/faas-apps/ \
-    && python3 -m venv /etc/faas-apps/venv
+    && pip3 install virtualenv setuptools \
+    && python3 -m venv /etc/faas-apps/venv \
+    && source /etc/faas-apps/venv/bin/activate \
+    && deactivate
 
 ############################################# Create App's virtual environment #############################################
 ARG FAAS_APP_NAME=logstream-xc
