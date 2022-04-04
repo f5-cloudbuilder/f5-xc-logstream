@@ -110,7 +110,7 @@ class F5XCNamespace (F5XCGeneric):
             self._set_event_start_time(data_json[key])
         else:
             self.event_start_time = {}
-            self.time_fetch_security_events = self._update_time_now() - datetime.timedelta(minutes=self._f5xc_log_idle_timeout)
+            self.time_fetch_security_events = self._update_time_now()
 
         # event_filter
         key = 'event_filter'
@@ -143,13 +143,18 @@ class F5XCNamespace (F5XCGeneric):
             self._update_timezone(date['timezone'])
 
         # set time
-        self.time_fetch_security_events = datetime.datetime(date['year'], date['month'], date['day'], date['hour'], date['minute']).replace(tzinfo=pytz.timezone(self.timezone)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.time_fetch_security_events = datetime.datetime(date['year'], date['month'], date['day'], date['hour'], date['minute']).replace(tzinfo=pytz.timezone(self.timezone))
 
     def fetch_security_events(self, host):
         # set timer
-        start_time = (self.time_fetch_security_events + datetime.timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        start_time = self.time_fetch_security_events.strftime("%Y-%m-%dT%H:%M:%SZ")
         self.time_fetch_security_events = self._update_time_now()
         end_time = self.time_fetch_security_events.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # If start_time and end_time are not in the same second, then adjust end_time
+        # Issue: duplicate logs if a same second is retrieved 2 times
+        if start_time != end_time:
+            end_time = (self.time_fetch_security_events - datetime.timedelta(seconds=1)).strftime("%Y-%m-%dT%H:%M:%SZ")
 
         # fetch security events
         path = "/api/data/namespaces/" + self.name + "/app_security/events"

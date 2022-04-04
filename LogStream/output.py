@@ -1,5 +1,8 @@
 import logging
 import socket
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 from datetime import datetime
 from logging.handlers import SysLogHandler
 from LogStream import storage_engine
@@ -78,12 +81,129 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
         }
 
 
+class RemoteHTTP(storage_engine.DatabaseFormat):
+    def __init__(self,
+                 logger,
+                 host: str,
+                 port: int = None,
+                 protocol: str = 'http',
+                 path: str = '/',
+                 token: str = 'f5-xc-logstream'):
+        super(RemoteHTTP, self).__init__(logger)
+        # Table
+        self.type = 'http'
+        # Primary key
+        self.protocol = protocol
+        self.host = host
+        self.port = port
+        self.path = path
+        self.token = token
+
+        # sets up a session with the server
+        self.session = requests.session()
+        self.session.headers.update({
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer %s' % self.token
+        })
+        # self.session.mount('%s://' % self.protocol, HTTPAdapter(
+        #     max_retries=Retry(
+        #         total=5,
+        #         backoff_factor=0.5,
+        #         status_forcelist=[403, 500]
+        #     ),
+        #     pool_connections=100,
+        #     pool_maxsize=100
+        # ))
+
+    def emit(self, events):
+        if self.port is None:
+            url = self.protocol + "://" + self.host + self.path
+        else:
+            url = self.protocol + "://" + self.host + ':' + str(self.port) + self.path
+
+        for event in events:
+            struct_message = {
+                'app': event['authority'],
+                'bot_classification': event['bot_classification'],
+                'bot_verification_failed': event['bot_verification_failed'],
+                'browser_type': event['browser_type'],
+                'attack_types': event['attack_types'],
+                'component': event['req_path'],
+                'correlation_id': event['messageid'],
+                'description': event['vh_name'],
+                'environment': event['tenant'],
+                'gateway': event['src_site'],
+                'http.hostname': event['req_headers']['Host'],
+                'http.remote_addr': event['src_ip'],
+                'http.remote_port': event['src_port'],
+                'http.request_method': event['method'],
+                'http.response_code': event['rsp_code'],
+                'http.server_addr': event['dst_ip'],
+                'http.server_port': event['dst_port'],
+                'http.uri': event['req_headers']['Path'],
+                'is_truncated': event['is_truncated_field'],
+                'level': event['severity'],
+                'policy_name': 'NotAvailable',
+                'request_headers': event['req_headers'],
+                'request_outcome': event['calculated_action'],
+                'request_outcome_reason': 'NotAvailable',
+                'signaturess': event['signatures'],
+                'sub_violations': 'NotAvailable',
+                'support_id': event['req_id'],
+                'type': event['sec_event_type'],
+                'version': event['http_version'],
+                'violation_rating': event['violation_rating'],
+                'violations': event['violations'],
+                'x_forwarded_for_header_value': event['x_forwarded_for'],
+                'event_host': event['hostname'],
+                'event_source': event['site'],
+                'event_sourcetype': event['source_type'],
+                'event_time': event['time']
+            }
+            
+            # http request
+            if self.protocol == 'https':
+                r = self.session.post(
+                    url=url,
+                    json=struct_message,
+                    verify=False)
+
+            # https request
+            else:
+                r = self.session.post(
+                    url=url,
+                    json=struct_message)
+
+            # response
+            if r.status_code not in (200, 201, 202, 204):
+                self.generate_error(r)
+            self.logger.debug("%s::%s: SEND LOG: %s" %
+                              (__class__.__name__, __name__, event))
+
+    def get_json(self):
+        return {
+            'protocol':  self.protocol,
+            'host':  self.host,
+            'port':  self.port,
+            'path':  self.path,
+            'token':  self.token
+        }
+
+    def generate_error(self, r):
+        if self.logger:
+            self.logger.error('%s::%s: code %s; %s' %
+                              (__class__.__name__, __name__, r.status_code, r.text))
+        raise ConnectionError('%s::%s: code %s; %s' %
+                              (__class__.__name__, __name__, r.status_code, r.text))
+
+
 class LogCollectorDB(storage_engine.DatabaseFormat):
     def __init__(self, logger):
         super(LogCollectorDB, self).__init__(logger)
         self.handlers = {}
         # Relationship with other tables
         self.children['syslog'] = {}
+        self.children['http'] = {}
 
     def add(self, log_instance):
         if log_instance.id not in self.children[log_instance.type].keys():
@@ -93,23 +213,34 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
         if log_instance.id in self.children[log_instance.type].keys():
             log_instance.delete()
 
-    def get(self):
+    def get_json(self):
         data_all_types = {}
 
-        # syslog
-        type = 'syslog'
-        data = []
-        for log_instance in self.children[type].values():
-            data.append(log_instance.get_json())
-        data_all_types[type] = data
+        for type in ('http', 'syslog'):
+            data = []
+            for log_instance in self.children[type].values():
+                data.append(log_instance.get_json())
+            data_all_types[type] = data
 
         return data_all_types
 
-    def emit(self, events):
-        # syslog
-        type = 'syslog'
-        for log_instance in self.children[type].values():
-            log_instance.emit(events)
+    def emit(self, events, logcol_id=None):
+        """
+        Emit logs for all log collectors if logcol_id is not set.
+        If logcol_id is set, emit logs only to logcol_id
+        :param events:
+        :param logcol_id: position of logcollector in list returned by get_json()
+        :return:
+        """
+        cur_index = 0
+        for type in ('http', 'syslog'):
+            for log_instance in self.children[type].values():
+                if logcol_id is None:
+                    log_instance.emit(events)
+                elif cur_index == logcol_id:
+                    log_instance.emit(events)
+
+
 
 
 

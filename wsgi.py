@@ -306,23 +306,29 @@ class ConfigLogCollector:
         declaration = {}
 
         # syslog
-        key = 'syslog'
-        if key in data_json.keys():
-            declaration[key] = []
-            evaluation[key] = {
-                'list': [],
-                'code': 0
-            }
-            for instance in data_json[key]:
-                (tmp_evaluation, tmp_declaration) = ConfigSyslogServer.sanity_check(instance)
-                evaluation[key]['code'] = max(evaluation[key]['code'], tmp_evaluation['code'])
-                evaluation[key]['list'].append(tmp_evaluation)
-                declaration[key].append(tmp_declaration)
-        else:
-            evaluation[key] = {
+        keys = ('syslog', 'http')
+        key_found = False
+        for key in keys:
+            if key in data_json.keys():
+                key_found = True
+                declaration[key] = []
+                evaluation[key] = {
+                    'list': [],
+                    'code': 0
+                }
+                for instance in data_json[key]:
+                    if key == 'syslog':
+                        (tmp_evaluation, tmp_declaration) = ConfigSyslogServer.sanity_check(instance)
+                    elif key == 'http':
+                        (tmp_evaluation, tmp_declaration) = ConfigHTTPServer.sanity_check(instance)
+                    evaluation[key]['code'] = max(evaluation[key]['code'], tmp_evaluation['code'])
+                    evaluation[key]['list'].append(tmp_evaluation)
+                    declaration[key].append(tmp_declaration)
+        if not key_found:
+            evaluation['LogCollector'] = {
                 'code': 400,
-                'message': 'key must be set',
-                'key': key
+                'message': 'At least one LogCollector must be set',
+                'key': ['http', 'syslog']
             }
 
         # response
@@ -334,12 +340,16 @@ class ConfigLogCollector:
 
     @staticmethod
     def update(data_json):
-        for instance in data_json['syslog']:
-            ConfigSyslogServer.update(instance)
+        if 'http' in data_json.keys():
+            for instance in data_json['http']:
+                ConfigHTTPServer.update(instance)
+        elif 'syslog' in data_json.keys():
+            for instance in data_json['syslog']:
+                ConfigSyslogServer.update(instance)
 
     @staticmethod
     def get():
-        return logcol_db.get()
+        return logcol_db.get_json()
 
 
 @swagger.definition('syslog_server', tags=['v2_model'])
@@ -402,6 +412,80 @@ class ConfigSyslogServer:
         logcol_db.add(output.RemoteSyslog(
             ip_address=data_json['ip_address'],
             port=port,
+            logger=logger)
+        )
+
+
+@swagger.definition('http_server', tags=['v2_model'])
+class ConfigHTTPServer:
+    """
+    Configure a http(s) server
+    ---
+    required:
+      - host
+    properties:
+      protocol:
+        type: string
+        enum: [http, https]
+        default: http
+      host:
+        type: string
+        description: FQDN or IP address
+      port:
+        type: integer
+        description: custom listening port
+      path:
+        type: string
+        description: path
+        default: /
+      token:
+        type: string
+        description: Bearer token
+        default: 'f5-xc-logstream'
+    """
+
+    @staticmethod
+    def sanity_check(data_json):
+        evaluation = {}
+        declaration = {}
+
+        # Sanity check
+        for key in data_json.keys():
+            if key in ('protocol', 'host', 'port', 'path', 'token'):
+                evaluation[key] = {
+                    'code': 200,
+                    'message': 'OK',
+                    'value': data_json[key]
+                }
+                declaration[key] = data_json[key]
+            else:
+                evaluation[key] = {
+                    'code': 400,
+                    'message': 'unknown key',
+                    'key': key
+                }
+
+        # response
+        code = 0
+        for result in evaluation.values():
+            code = max(code, result['code'])
+        evaluation['code'] = code
+        return evaluation, declaration
+
+    @staticmethod
+    def update(data_json):
+        # set default value
+        port = data_json['port'] if 'port' in data_json.keys() else None
+        protocol = data_json['protocol'] if 'protocol' in data_json.keys() else 'http'
+        path = data_json['path'] if 'path' in data_json.keys() else '/'
+        token = data_json['token'] if 'token' in data_json.keys() else 'f5-xc-logstream'
+
+        logcol_db.add(output.RemoteHTTP(
+            protocol=protocol,
+            host=data_json['host'],
+            port=port,
+            path=path,
+            token=token,
             logger=logger)
         )
 
@@ -532,15 +616,18 @@ class Declare(Resource):
 
 class EngineThreading(Resource):
     @staticmethod
-    def start_main(thread_number=1):
+    def start_main(thread_number=None):
         """
-        Start threads.
+
+        :param thread_number: by default 1 thread per log collector
         :return:
         """
-        if len(thread_manager['thread_queue'].keys()) == 0 and \
-                thread_manager['event'].is_set():
+        if thread_number is None:
+            thread_number = len(logcol_db.get_json())
+
+        if len(thread_manager['thread_queue'].keys()) == 0 and thread_manager['event'].is_set():
             thread_manager['event'].clear()
-            for cur_index in range(thread_number):
+            for cur_index in range(0, thread_number - 1):
                 thread_name = str(uuid.uuid4())
                 t = threading.Thread(
                     target=EngineThreading.task_producer_consumer,
@@ -591,7 +678,7 @@ class EngineThreading(Resource):
         after sending all logs, sleep during update_interval
         :param thread_flag:
         :param thread_name:
-        :param cur_index: thread ID in pool
+        :param cur_index: thread ID in pool, also logcollector ID
         :return:
         """
         while not thread_flag.is_set():
@@ -600,7 +687,10 @@ class EngineThreading(Resource):
 
             # emit logs
             if len(events) > 0:
-                logcol_db.emit(filter.WAF.filter_example(events))
+                logcol_db.emit(
+                    events=filter.WAF.filter_example(events),
+                    logcol_id=cur_index
+                )
                 logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
                              (__class__.__name__, __name__, thread_name, cur_index))
 
@@ -610,7 +700,6 @@ class EngineThreading(Resource):
             time.sleep(thread_manager['update_interval'])
             logger.debug("%s::%s: THREAD is awake: name=%s;index:%s" %
                          (__class__.__name__, __name__, thread_name, cur_index))
-
 
         logger.debug("%s::%s: THREAD exited his work: name=%s;index:%s" %
                      (__class__.__name__, __name__, thread_name, cur_index))
