@@ -18,8 +18,8 @@ RUN apt-get update \
     && python3 -m venv /etc/faas-apps/venv
 
 ############################################# Create App's virtual environment #############################################
-RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
-    && git clone ${FAAS_APP_REPO} /etc/faas-apps/${FAAS_APP_NAME} \
+RUN mkdir -p /etc/faas-apps/logstream-xc/  \
+    && git clone https://github.com/nergalex/f5-xc-logstream.git /etc/faas-apps/logstream-xc \
     && source /etc/faas-apps/venv/bin/activate \
     && pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt \
     && deactivate \
