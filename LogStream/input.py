@@ -18,7 +18,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
         self.api_key = api_key
         self._update_timezone(timezone)
         self.session = requests.session()
-        self._f5xc_log_idle_timeout = 2
+        self._f5xc_log_idle_timeout = 3
 
     def generate_error(self, r):
         if self.logger:
