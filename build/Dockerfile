@@ -13,6 +13,7 @@ RUN apt-get update \
     && chown -R unit:0 /var/log/unit/ \
     && mkdir /etc/faas-apps/ \
     && chown -R unit:unit /etc/faas-apps/ \
+    && chmod 0775 unit:unit /var/lib/unit/certs/ \
     && python3 -m venv /etc/faas-apps/venv
 
 ############################################# Create App's virtual environment #############################################
@@ -26,13 +27,12 @@ RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
     && chmod 0775 /etc/faas-apps/${FAAS_APP_NAME}/declaration.json \
     && chmod 0775 /etc/faas-apps/${FAAS_APP_NAME}/logstream.log
 
-############################################# Create a virtual environment #############################################
+############################################# Configure Unit #############################################
 
 COPY ./*.pem  /docker-entrypoint.d/
 COPY ./*.json /docker-entrypoint.d/
 # COPY ./*.sh   /docker-entrypoint.d/
-
-
+CMD ["unitd", "--no-daemon", "--control", "unix:/unit/control.unit.sock"]
 
 
 

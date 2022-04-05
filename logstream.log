@@ -12,3 +12,6 @@
 2022-04-05 21:22:59,583 INFO 127.0.0.1 - - [05/Apr/2022 21:22:59] "GET /flasgger_static/swagger-ui-standalone-preset.js HTTP/1.1" 200 -
 2022-04-05 21:22:59,874 INFO 127.0.0.1 - - [05/Apr/2022 21:22:59] "GET /apispec_1.json HTTP/1.1" 200 -
 2022-04-05 21:23:50,292 INFO 127.0.0.1 - - [05/Apr/2022 21:23:50] "GET /engine HTTP/1.1" 200 -
+2022-04-05 23:10:37,499 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-05 23:10:37,499 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
