@@ -25,6 +25,11 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
 
     def emit(self, events):
         for event in events:
+            #  signature_ids
+            signature_ids = []
+            for signature in event['signatures']:
+                signature_ids.append(signature['id'])
+
             struct_message = [
                 'app=' + str(event['authority']),
                 'bot_classification=' + str(event['bot_classification']),
@@ -51,7 +56,7 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
                 'request_outcome=' + str(event['calculated_action']),
                 'request_outcome_reason=' + 'NotAvailable',
                 'signature_cves=' + 'NotAvailable',
-                'signature_ids=' + 'NotAvailable',
+                'signature_ids=' + str(signature_ids),
                 'signature_names=' + 'NotAvailable',
                 'sub_violations=' + 'NotAvailable',
                 'support_id=' + str(event['req_id']),
@@ -122,6 +127,11 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
             url = self.protocol + "://" + self.host + ':' + str(self.port) + self.path
 
         for event in events:
+            #  signature_ids
+            signature_ids = []
+            for signature in event['signatures']:
+                signature_ids.append(signature['id'])
+
             struct_message = {
                 'app': event['authority'],
                 'bot_classification': event['bot_classification'],
@@ -147,7 +157,8 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
                 'request_headers': event['req_headers'],
                 'request_outcome': event['calculated_action'],
                 'request_outcome_reason': 'NotAvailable',
-                'signaturess': event['signatures'],
+                'signatures': event['signatures'],
+                'signature_ids': signature_ids,
                 'sub_violations': 'NotAvailable',
                 'support_id': event['req_id'],
                 'type': event['sec_event_type'],
