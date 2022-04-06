@@ -811,14 +811,14 @@ f5xc_tenant = input.F5XCTenant(
 )
 
 # load configuration
-local_declaration_file_path = os.getenv('declaration')
-if local_declaration_file_path is None:
-    local_declaration_file_path = 'declaration.json'
-local_declaration = local_file_manager.Configuration(backup_file=local_declaration_file_path).get_json()
+local_config_file_path = os.getenv('declaration')
+if local_config_file_path is None:
+    local_config_file_path = 'declaration.json'
+local_config = local_file_manager.Configuration(backup_file=local_config_file_path).get_json()
 
 # Run
-if local_declaration is not None:
-    (local_evaluation, local_declaration) = Declare.sanity_check(local_declaration)
+if local_config is not None:
+    (local_evaluation, local_declaration) = Declare.sanity_check(local_config)
     if local_evaluation['code'] == 200:
         Declare.deploy(local_declaration)
         EngineThreading.start_main()
