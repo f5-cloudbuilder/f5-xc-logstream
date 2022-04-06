@@ -33,7 +33,7 @@ RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
 
 COPY ./*.pem  /docker-entrypoint.d/
 COPY ./*.json /docker-entrypoint.d/
-# COPY ./*.sh   /docker-entrypoint.d/
+COPY ./*.sh   /docker-entrypoint.d/
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
