@@ -5,6 +5,7 @@ FROM nginx/unit:1.26.1-python3.10
 
 # port used by the listener in config.json
 EXPOSE 8080
+EXPOSE 8443
 
 RUN apt-get update \
 	&& apt-get install --no-install-recommends --no-install-suggests -y tcpdump git curl \
