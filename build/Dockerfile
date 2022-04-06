@@ -8,7 +8,7 @@ EXPOSE 8080
 EXPOSE 8443
 
 RUN apt-get update \
-	&& apt-get install --no-install-recommends --no-install-suggests -y tcpdump git curl \
+	&& apt-get install --no-install-recommends --no-install-suggests -y tcpdump git curl net-tools iproute2 \
     && mkdir -p /var/log/unit/ \
     && touch /var/log/unit/access.log \
     && chown -R unit:0 /var/log/unit/ \
