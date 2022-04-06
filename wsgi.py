@@ -810,17 +810,11 @@ f5xc_tenant = input.F5XCTenant(
     logger=logger
 )
 
-# load embedded configuration
-local_declaration = os.getenv('declaration')
-local_config = local_file_manager.Configuration(backup_file='declaration.json')
-
-# load configuration from environment variable
-if local_declaration is not None:
-    local_declaration = json.loads(base64.b64decode(local_declaration))
-
-# load configuration from local file
-else:
-    local_declaration = local_config.get_json()
+# load configuration
+local_declaration_file_path = os.getenv('declaration')
+if local_declaration_file_path is None:
+    local_declaration_file_path = 'declaration.json'
+local_declaration = local_file_manager.Configuration(backup_file=local_declaration_file_path).get_json()
 
 # Run
 if local_declaration is not None:

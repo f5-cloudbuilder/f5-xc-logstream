@@ -57,22 +57,20 @@ Example of a declaration:
 
 Configure
 =================================================
-3 ways to apply configuration:
-
-Environment variable
-********************
-If a *declaration* environment variable ``declaration`` is present, LogStream will start its engine based on it.
-Value of ``declaration`` environment variable is a JSON declaration b64 encoded
-
-Example using an `online tool <https://www.base64encode.org/>`_: ``ewogICAgImY1eGNfdGVuYW50IjogewogICAgICAgICJhcGlfa2V5IjogWCIsCiAgICAgICAgIm5hbWUiOiAiWCIsCiAgICAgICAgIm5hbWVzcGFjZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJldmVudF9maWx0ZXIiOiB7CiAgICAgICAgICAgICAgICAgICAgInNlY19ldmVudF90eXBlIjogIndhZl9zZWNfZXZlbnQiCiAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgIm5hbWUiOiAiWCIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0sCiAgICAibG9nY29sbGVjdG9yIjogewogICAgICAgICJzeXNsb2ciOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJpcF9hZGRyZXNzIjogIjEwLjEwMC4wLjgiLAogICAgICAgICAgICAgICAgInBvcnQiOiA1MTQwCiAgICAgICAgICAgIH0KICAgICAgICBdCiAgICB9Cn0=``
+2 ways to apply configuration:
 
 Local file
 ********************
-If a *declaration* file named `declaration.json <https://github.com/nergalex/f5-xc-logstream/blob/master/declaration.json>`_ is present in the main folder, LogStream will start its engine based on it.
+Define an environment variable:
+- key: ``declaration``
+- value: absolute path to a declaration file
+
+If a *declaration* environment variable ``declaration`` is absent,
+LogStream will start using ``declaration.json`` present in local folder.
 
 API
 ***************
-If *declaration* is absent, LogStream will NOT start its engine. Use LogStream API to configure it and then to start its engine.
+If *declaration* file is absent, LogStream will NOT start its engine. Use LogStream API to configure it and then to start its engine.
 
 API allows you to:
 - `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
