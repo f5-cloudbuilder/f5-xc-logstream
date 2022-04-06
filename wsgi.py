@@ -793,7 +793,7 @@ class Engine(Resource):
 # log_file_path = os.getenv('log_file_path')
 log_file_path = os.environ.get('log_file_path')
 if log_file_path is None:
-    log_file_path = 'logstream.log'
+    log_file_path = '/unit/logstream.log'
 logger = setup_logging(
     log_level='warning',
     log_file=log_file_path
