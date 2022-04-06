@@ -790,7 +790,8 @@ class Engine(Resource):
 
 
 # Global var
-log_file_path = os.getenv('log_file_path')
+# log_file_path = os.getenv('log_file_path')
+log_file_path = os.environ.get('log_file_path')
 if log_file_path is None:
     log_file_path = 'logstream.log'
 logger = setup_logging(
@@ -814,7 +815,8 @@ f5xc_tenant = input.F5XCTenant(
 )
 
 # load configuration
-declaration_file_path = os.getenv('declaration_file_path')
+# declaration_file_path = os.getenv('declaration_file_path')
+declaration_file_path = os.environ.get('declaration_file_path')
 if declaration_file_path is None:
     declaration_file_path = 'declaration.json'
 local_config = local_file_manager.Configuration(backup_file=declaration_file_path).get_json()
