@@ -13,6 +13,9 @@ RUN apt-get update \
     && chown -R unit:0 /var/log/unit/ \
     && mkdir /etc/faas-apps/ \
     && chown -R unit:unit /etc/faas-apps/ \
+    && mkdir -p /var/lib/unit/certs/ \
+    && chown unit:unit /var/lib/unit/ \
+    && chown unit:unit /var/lib/unit/certs/ \
     && chmod 0774 unit:unit /var/lib/unit/certs/ \
     && python3 -m venv /etc/faas-apps/venv
 
