@@ -797,7 +797,6 @@ logger = setup_logging(
     log_level='warning',
     log_file='/unit/app_logstream.log'
 )
-
 logcol_db = output.LogCollectorDB(logger)
 thread_manager = {
     'event': threading.Event(),
