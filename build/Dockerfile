@@ -24,10 +24,7 @@ ARG FAAS_APP_REPO=https://github.com/nergalex/f5-xc-logstream.git
 
 RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
     && git clone ${FAAS_APP_REPO} /etc/faas-apps/${FAAS_APP_NAME} \
-    && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt \
-    && chown -R unit:unit /etc/faas-apps/${FAAS_APP_NAME}/ \
-    && chmod 0775 /etc/faas-apps/${FAAS_APP_NAME}/declaration.json \
-    && chmod 0775 /etc/faas-apps/${FAAS_APP_NAME}/logstream.log
+    && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt
 
 ############################################# Configure Unit #############################################
 

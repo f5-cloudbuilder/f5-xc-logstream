@@ -790,9 +790,12 @@ class Engine(Resource):
 
 
 # Global var
+log_file_path = os.getenv('log_file_path')
+if log_file_path is None:
+    log_file_path = 'logstream.log'
 logger = setup_logging(
     log_level='warning',
-    log_file='logstream.log'
+    log_file=log_file_path
 )
 logcol_db = output.LogCollectorDB(logger)
 thread_manager = {
@@ -811,10 +814,10 @@ f5xc_tenant = input.F5XCTenant(
 )
 
 # load configuration
-local_config_file_path = os.getenv('declaration')
-if local_config_file_path is None:
-    local_config_file_path = 'declaration.json'
-local_config = local_file_manager.Configuration(backup_file=local_config_file_path).get_json()
+declaration_file_path = os.getenv('declaration_file_path')
+if declaration_file_path is None:
+    declaration_file_path = 'declaration.json'
+local_config = local_file_manager.Configuration(backup_file=declaration_file_path).get_json()
 
 # Run
 if local_config is not None:
