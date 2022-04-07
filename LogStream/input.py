@@ -18,7 +18,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
         self.api_key = api_key
         self._update_timezone(timezone)
         self.session = requests.session()
-        self._f5xc_log_idle_timeout = 3
+        self._f5xc_log_idle_timeout = 2
 
     def generate_error(self, r):
         if self.logger:
@@ -83,7 +83,7 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
 
     def _update_time_now(self):
         # now minus the delay for F5XC to generate events logs
-        date = datetime.datetime.now(tz=pytz.timezone(self.timezone)) - datetime.timedelta(minutes=self._f5xc_log_idle_timeout)
+        date = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(minutes=self._f5xc_log_idle_timeout)
         return date
 
 
@@ -313,8 +313,6 @@ def setup_logging(log_level, log_file):
 
     logging.basicConfig(filename=log_file, format='%(asctime)s %(levelname)s %(message)s', level=log_level)
     return logging.getLogger(__name__)
-
-
 
 
 

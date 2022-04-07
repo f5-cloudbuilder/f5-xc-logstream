@@ -1,6 +1,6 @@
 {
     "f5xc_tenant": {
-        "api_key": "XXXXXXXXXXXXXXX=",
+        "api_key": "=",
         "name": "f5-emea-ent",
         "namespaces": [
             {
@@ -12,7 +12,7 @@
                     "year": 2022,
                     "month": 4,
                     "day": 7,
-                    "hour": 19,
+                    "hour": 22,
                     "minute": 0
                 }
             }
