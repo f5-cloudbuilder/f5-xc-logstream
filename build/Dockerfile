@@ -39,7 +39,7 @@ RUN chmod 777 /docker-entrypoint.d/*.pem \
     && chmod 777 /docker-entrypoint.d/*.sh
 CMD ["unitd", \
     "--no-daemon", \
-    "--control", "unix:/unit/control.unit.sock", \
+    "--control", "0.0.0.0:8000", \
     "--pid", "/unit/unit.pid", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
