@@ -20,10 +20,13 @@ RUN apt-get update \
 
 ############################################# Create App's virtual environment #############################################
 ARG FAAS_APP_NAME=logstream-xc
-ARG FAAS_APP_REPO=https://github.com/nergalex/f5-xc-logstream.git
+ARG GITHUB_USER=nergalex
+ARG GITHUB_REPO=f5-xc-logstream
+ARG GITHUB_BRANCH=master
 
 RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
-    && git clone ${FAAS_APP_REPO} /etc/faas-apps/${FAAS_APP_NAME} \
+ADD https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/refs/heads/${GITHUB_BRANCH} version.json \
+RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REPO}.git /etc/faas-apps/${FAAS_APP_NAME} \
     && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt
 
 ############################################# Configure Unit #############################################
@@ -36,7 +39,7 @@ RUN chmod 777 /docker-entrypoint.d/*.pem \
     && chmod 777 /docker-entrypoint.d/*.sh
 CMD ["unitd", \
     "--no-daemon", \
-    "--control", "0.0.0.0:8000", \
+    "--control", "unix:/unit/control.unit.sock", \
     "--pid", "/unit/unit.pid", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
