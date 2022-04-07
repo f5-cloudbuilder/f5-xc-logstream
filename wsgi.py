@@ -795,7 +795,7 @@ if log_file_path is None:
     log_file_path = '/unit/logstream.log'
 logger = setup_logging(
     log_level='debug',
-    log_file='/unit/app_logstream.log'
+    log_file=log_file_path
 )
 logcol_db = output.LogCollectorDB(logger)
 thread_manager = {
