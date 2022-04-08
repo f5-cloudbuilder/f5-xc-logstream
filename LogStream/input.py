@@ -60,7 +60,8 @@ class F5XCGeneric (storage_engine.DatabaseFormat):
             headers=headers,
             json=data,
             verify=True)
-
+        self.logger.debug('%s::%s: post json ; url=%s; data=%s' %
+                          (__class__.__name__, __name__, url, data))
         if r.status_code not in (200, 201, 202, 204):
             self.generate_error(r)
 
