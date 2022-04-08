@@ -287,10 +287,11 @@ class ConfigF5XCNamespace:
 @swagger.definition('logcollector', tags=['v2_model'])
 class ConfigLogCollector:
     """
-    Configure remote logging servers
+    Configure remote logging servers. At least one type of logcollector is required
     ---
     required:
       - syslog
+      - http
     properties:
         syslog:
           type: array
@@ -298,6 +299,12 @@ class ConfigLogCollector:
             type: object
             schema:
             $ref: '#/definitions/syslog_server'
+        http:
+          type: array
+          items:
+            type: object
+            schema:
+            $ref: '#/definitions/http_server'
     """
 
     @staticmethod
@@ -682,17 +689,18 @@ class EngineThreading(Resource):
         :return:
         """
         while not thread_flag.is_set():
+            # fetch events from all namespaces in Tenant
+            # filter events
+            # populate event queue of all log collectors
             f5xc_tenant.fetch_security_events()
-            events = f5xc_tenant.pop_security_events()
+            logcol_db.add_events(
+                filter.WAF.filter_example(
+                    f5xc_tenant.pop_security_events()))
 
-            # emit logs
-            if len(events) > 0:
-                logcol_db.emit(
-                    events=filter.WAF.filter_example(events),
-                    logcol_id=cur_index
-                )
-                logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
-                             (__class__.__name__, __name__, thread_name, cur_index))
+            # emit logs for one logcollector with id 'cur_index' in list
+            logcol_db.emit(logcol_id=cur_index)
+            logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
 
             # sleep
             logger.debug("%s::%s: THREAD is sleeping: name=%s;index:%s" %

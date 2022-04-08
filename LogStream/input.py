@@ -5,6 +5,7 @@ import pytz
 import datetime
 import requests
 import xmltodict
+from collections import deque
 
 
 class F5XCGeneric (storage_engine.DatabaseFormat):
@@ -97,7 +98,7 @@ class F5XCNamespace (F5XCGeneric):
         # Attribute
         self.name = name
         self.time_fetch_security_events = self._update_time_now()
-        self.events = []
+        self.events = deque()
         self.filter = ''
         self.event_filter = {}
         self.event_start_time = {}
@@ -208,8 +209,8 @@ class F5XCNamespace (F5XCGeneric):
         return self.events
 
     def pop_security_events(self):
-        data = self.events
-        self.events = []
+        data = list(self.events)
+        self.events.clear()
         return data
 
     def get_json(self):
@@ -259,10 +260,10 @@ class F5XCTenant (F5XCGeneric):
         return events
 
     def pop_security_events(self):
-        events = []
+        events = deque()
         for f5xc_namespace in self.f5xc_namespaces:
             events.extend(f5xc_namespace.pop_security_events())
-        return events
+        return list(events)
 
     def get_json(self):
         data = {

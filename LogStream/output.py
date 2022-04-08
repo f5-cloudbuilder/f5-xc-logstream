@@ -6,6 +6,7 @@ from requests.packages.urllib3.util.retry import Retry
 from datetime import datetime
 from logging.handlers import SysLogHandler
 from LogStream import storage_engine
+from collections import deque
 
 
 class RemoteSyslog(storage_engine.DatabaseFormat):
@@ -22,9 +23,16 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
             self.port = port
         self.handler = logging.handlers.SysLogHandler(address=(ip_address, port), socktype=socket.SOCK_STREAM)
         self.handler.append_nul = False
+        self.events = deque()
 
-    def emit(self, events):
-        for event in events:
+    def add_events(self, events):
+        self.events.extend(events)
+
+    def emit(self):
+        # emit events
+        while self.events:
+            event = self.events.popleft()
+
             #  signature_ids
             signature_ids = []
             for signature in event['signatures']:
@@ -108,6 +116,7 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
         self.port = port
         self.path = path
         self.token = token
+        self.events = deque()
 
         # sets up a session with the server
         self.session = requests.session()
@@ -125,13 +134,21 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
         #     pool_maxsize=100
         # ))
 
-    def emit(self, events):
+    def add_events(self, events):
+        self.events.extend(events)
+
+    def emit(self):
+
+        # set target uri
         if self.port is None:
             url = self.protocol + "://" + self.host + self.path
         else:
             url = self.protocol + "://" + self.host + ':' + str(self.port) + self.path
 
-        for event in events:
+        # emit events
+        while self.events:
+            event = self.events.popleft()
+
             #  signature_ids
             signature_ids = []
             for signature in event['signatures']:
@@ -246,7 +263,17 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
 
         return data_all_types
 
-    def emit(self, events, logcol_id=None):
+    def add_events(self, events):
+        """
+        populate event queue of all log collectors
+        :param events:
+        :return:
+        """
+        for logcol_type in ('http', 'syslog'):
+            for logcol_instance in self.children[logcol_type].values():
+                logcol_instance.add_events(events)
+
+    def emit(self, logcol_id=None):
         """
         Emit logs for all log collectors if logcol_id is not set.
         If logcol_id is set, emit logs only to logcol_id
@@ -255,12 +282,12 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
         :return:
         """
         cur_index = 0
-        for type in ('http', 'syslog'):
-            for log_instance in self.children[type].values():
+        for logcol_type in ('http', 'syslog'):
+            for logcol_instance in self.children[logcol_type].values():
                 if logcol_id is None:
-                    log_instance.emit(events)
+                    logcol_instance.emit()
                 elif cur_index == logcol_id:
-                    log_instance.emit(events)
+                    logcol_instance.emit()
 
 
 
