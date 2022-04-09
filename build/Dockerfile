@@ -34,9 +34,9 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 COPY ./*.pem  /docker-entrypoint.d/
 COPY ./*.json /docker-entrypoint.d/
 COPY ./*.sh   /docker-entrypoint.d/
-RUN chmod u+r /docker-entrypoint.d/*.pem \
-    && chmod u+r /docker-entrypoint.d/*.json \
-    && chmod u+x /docker-entrypoint.d/*.sh
+RUN chmod 777 /docker-entrypoint.d/*.pem \
+    && chmod 777 /docker-entrypoint.d/*.json \
+    && chmod 777 /docker-entrypoint.d/*.sh
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
