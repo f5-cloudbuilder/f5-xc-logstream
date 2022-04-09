@@ -350,7 +350,7 @@ class ConfigLogCollector:
         if 'http' in data_json.keys():
             for instance in data_json['http']:
                 ConfigHTTPServer.update(instance)
-        elif 'syslog' in data_json.keys():
+        if 'syslog' in data_json.keys():
             for instance in data_json['syslog']:
                 ConfigSyslogServer.update(instance)
 
@@ -623,28 +623,19 @@ class Declare(Resource):
 
 class EngineThreading(Resource):
     @staticmethod
-    def start_main(thread_number=None):
-        """
-
-        :param thread_number: by default 1 thread per log collector
-        :return:
-        """
-        if thread_number is None:
-            thread_number = len(logcol_db.get_json())
-
+    def start_main():
         if len(thread_manager['thread_queue'].keys()) == 0 and thread_manager['event'].is_set():
             thread_manager['event'].clear()
-            for cur_index in range(0, thread_number - 1):
-                thread_name = str(uuid.uuid4())
-                t = threading.Thread(
-                    target=EngineThreading.task_producer_consumer,
-                    name=thread_name,
-                    args=(thread_manager['event'], thread_name, cur_index)
-                )
-                thread_manager['thread_queue'][thread_name] = t
-                logger.debug("%s::%s: NEW THREAD: id=%s;index:%s" %
-                            (__class__.__name__, __name__, t.name, cur_index))
-                t.start()
+            thread_name = str(uuid.uuid4())
+            t = threading.Thread(
+                target=EngineThreading.task_producer_consumer,
+                name=thread_name,
+                args=(thread_manager['event'], thread_name)
+            )
+            thread_manager['thread_queue'][thread_name] = t
+            logger.debug("%s::%s: NEW THREAD: id=%s" %
+                        (__class__.__name__, __name__, t.name))
+            t.start()
             return "Engine started", 200
         else:
             return "Engine already started", 202
@@ -674,18 +665,17 @@ class EngineThreading(Resource):
             return "Engine already stopped", 202
 
     @staticmethod
-    def restart_main(thread_number=1):
+    def restart_main():
         EngineThreading.stop_main()
-        return EngineThreading.start_main(thread_number)
+        return EngineThreading.start_main()
 
     @staticmethod
-    def task_producer_consumer(thread_flag, thread_name, cur_index):
+    def task_producer_consumer(thread_flag, thread_name):
         """
         fetch events and send them on remote logging servers
         after sending all logs, sleep during update_interval
         :param thread_flag:
         :param thread_name:
-        :param cur_index: thread ID in pool, also logcollector ID
         :return:
         """
         while not thread_flag.is_set():
@@ -697,20 +687,20 @@ class EngineThreading(Resource):
                 filter.WAF.filter_example(
                     f5xc_tenant.pop_security_events()))
 
-            # emit logs for one logcollector with id 'cur_index' in list
-            logcol_db.emit(logcol_id=cur_index)
-            logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
-                         (__class__.__name__, __name__, thread_name, cur_index))
+            # emit logs for all logcollectors
+            logcol_db.emit()
+            logger.debug("%s::%s: THREAD sent events: name=%s" %
+                         (__class__.__name__, __name__, thread_name))
 
             # sleep
-            logger.debug("%s::%s: THREAD is sleeping: name=%s;index:%s" %
-                         (__class__.__name__, __name__, thread_name, cur_index))
+            logger.debug("%s::%s: THREAD is sleeping: name=%s" %
+                         (__class__.__name__, __name__, thread_name))
             time.sleep(thread_manager['update_interval'])
-            logger.debug("%s::%s: THREAD is awake: name=%s;index:%s" %
-                         (__class__.__name__, __name__, thread_name, cur_index))
+            logger.debug("%s::%s: THREAD is awake: name=%s" %
+                         (__class__.__name__, __name__, thread_name))
 
-        logger.debug("%s::%s: THREAD exited his work: name=%s;index:%s" %
-                     (__class__.__name__, __name__, thread_name, cur_index))
+        logger.debug("%s::%s: THREAD exited his work: name=%s" %
+                     (__class__.__name__, __name__, thread_name))
         thread_manager['thread_queue'].pop(thread_name, None)
 
 
@@ -756,16 +746,11 @@ class Engine(Resource):
                 schema:
                   required:
                     - action
-                    - thread_number
                   properties:
                     action:
                       type: string
                       description : Start/Stop engine
                       enum: ['start', 'stop', 'restart']
-                    thread_number:
-                      type: integer
-                      description : number of thread to start
-                      default: 1
             responses:
               200:
                 description: Action done
@@ -775,24 +760,19 @@ class Engine(Resource):
         # Sanity check
         cur_class = 'action'
         if cur_class not in data_json.keys() or \
-                data_json[cur_class] not in ('start', 'stop', 'restart') or \
-                (data_json[cur_class] == 'start' and 'thread_number' not in data_json.keys()):
+                data_json[cur_class] not in ('start', 'stop', 'restart'):
             return {
                 'code': 400,
-                'msg': 'parameters: ' + cur_class + ', thread_number must be set'
+                'msg': 'parameters: ' + cur_class + ' must be set'
             }
         else:
             # Sanity check
-            if 'thread_number' in data_json.keys():
-                thread_number = data_json['thread_number']
-            else:
-                thread_number = 1
             if data_json[cur_class].lower() == 'start':
-                return EngineThreading.start_main(thread_number)
+                return EngineThreading.start_main()
             elif data_json[cur_class].lower() == 'stop':
                 return EngineThreading.stop_main()
             elif data_json[cur_class].lower() == 'restart':
-                return EngineThreading.restart_main(thread_number)
+                return EngineThreading.restart_main()
             else:
                 return "Unknown action", 400
 

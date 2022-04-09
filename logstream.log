@@ -31,3 +31,39 @@
 2022-04-08 10:09:56,250 INFO 127.0.0.1 - - [08/Apr/2022 10:09:56] "[36mGET /flasgger_static/swagger-ui-standalone-preset.js HTTP/1.1[0m" 304 -
 2022-04-08 10:09:56,255 INFO 127.0.0.1 - - [08/Apr/2022 10:09:56] "[36mGET /flasgger_static/lib/jquery.min.js HTTP/1.1[0m" 304 -
 2022-04-08 10:09:56,473 INFO 127.0.0.1 - - [08/Apr/2022 10:09:56] "GET /apispec_1.json HTTP/1.1" 200 -
+2022-04-09 23:36:59,371 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-09 23:36:59,372 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-09 23:47:25,161 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-09 23:47:25,162 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-09 23:48:52,064 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-09 23:48:52,065 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 00:07:26,502 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 00:07:26,502 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 00:07:48,448 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 00:07:48,448 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 00:29:29,094 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 00:29:29,094 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 00:43:47,062 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 00:43:47,063 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 00:59:34,250 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 00:59:34,250 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:02:37,827 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:02:37,827 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:03:07,983 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:03:07,983 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:08:52,540 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:08:52,540 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:22:40,710 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:22:40,710 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)

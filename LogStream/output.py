@@ -255,12 +255,22 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
     def get_json(self):
         data_all_types = {}
 
-        for type in ('http', 'syslog'):
+        for instance_type in ('http', 'syslog'):
             data = []
-            for log_instance in self.children[type].values():
+            for log_instance in self.children[instance_type].values():
                 data.append(log_instance.get_json())
-            data_all_types[type] = data
+            data_all_types[instance_type] = data
 
+        return data_all_types
+
+    def get_instances(self):
+        data_all_types = []
+
+        for instance_type in ('http', 'syslog'):
+            for log_instance in self.children[instance_type].values():
+                data_instance = log_instance.get_json()
+                data_instance['type'] = instance_type
+                data_all_types.append(data_instance)
         return data_all_types
 
     def add_events(self, events):
@@ -273,21 +283,10 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
             for logcol_instance in self.children[logcol_type].values():
                 logcol_instance.add_events(events)
 
-    def emit(self, logcol_id=None):
-        """
-        Emit logs for all log collectors if logcol_id is not set.
-        If logcol_id is set, emit logs only to logcol_id
-        :param events:
-        :param logcol_id: position of logcollector in list returned by get_json()
-        :return:
-        """
-        cur_index = 0
+    def emit(self):
         for logcol_type in ('http', 'syslog'):
             for logcol_instance in self.children[logcol_type].values():
-                if logcol_id is None:
-                    logcol_instance.emit()
-                elif cur_index == logcol_id:
-                    logcol_instance.emit()
+                logcol_instance.emit()
 
 
 

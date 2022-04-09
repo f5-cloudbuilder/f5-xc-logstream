@@ -1,6 +1,6 @@
 {
     "f5xc_tenant": {
-        "api_key": "=",
+        "api_key": "Vr1IOAVbKRJMTxgqOK7M9KbYGZY=",
         "name": "f5-emea-ent",
         "namespaces": [
             {
@@ -24,6 +24,12 @@
                 "host": "52.177.94.15",
                 "port": 8888,
                 "path": "/debug.test"
+            }
+        ],
+        "syslog": [
+            {
+                "ip_address": "52.177.94.15",
+                "port": 5140
             }
         ]
     }
