@@ -656,6 +656,10 @@ Remote Syslog
 
 Troubleshoot
 ==================================================
+Start manually the Application in container:
+
+:kbd:`bash /docker-entrypoint.d/*.sh`
+
 View audit log:
 
 :kbd:`tail -100 /var/log/unit/unit.log`
