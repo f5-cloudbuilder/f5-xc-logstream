@@ -111,6 +111,7 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
         # Table
         self.type = 'http'
         # Primary key
+        self.id = host + ':' + str(port) + str(path)
         self.protocol = protocol
         self.host = host
         self.port = port
