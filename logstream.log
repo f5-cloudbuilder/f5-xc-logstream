@@ -67,3 +67,80 @@
 2022-04-10 01:22:40,710 WARNING  * Running on all addresses.
    WARNING: This is a development server. Do not use it in a production deployment.
 2022-04-10 01:22:40,710 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:25:44,520 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:25:44,520 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:26:03,542 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:26:03,542 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:27:08,960 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:27:08,961 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:27:22,504 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:27:22,505 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:28:35,512 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:28:35,512 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:30:01,728 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:30:01,729 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:31:57,755 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:31:57,755 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:33:11,790 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:33:11,790 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:34:59,085 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:34:59,085 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:35:54,045 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:35:54,045 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:37:12,127 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:37:12,127 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:37:51,447 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:37:51,449 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:39:55,345 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:39:55,345 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:44:48,159 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:44:48,159 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 01:56:41,807 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 01:56:41,807 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 04:55:19,280 ERROR 89.248.172.16 - - [10/Apr/2022 04:55:19] code 400, message Bad request version ('tq\x16¡¥%ä[\x987A\x1bò£"`c\x8f\x00\x83¶P{\x00\x00ôÀ0À,À(À$À\x14À')
+2022-04-10 04:55:19,280 INFO 89.248.172.16 - - [10/Apr/2022 04:55:19] "[35m[1m  ü1î\x85\x8b;h\x87ötq¡¥%ä[\x987Aò£"`c\x8f \x83¶P{  ôÀ0À,À(À$ÀÀ[0m" HTTPStatus.BAD_REQUEST -
+2022-04-10 04:55:22,831 INFO 89.248.172.16 - - [10/Apr/2022 04:55:22] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 04:55:28,826 INFO 35.195.93.98 - - [10/Apr/2022 04:55:28] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 04:55:35,635 ERROR 89.248.172.16 - - [10/Apr/2022 04:55:35] code 400, message Bad HTTP/0.9 request type ('\x03')
+2022-04-10 04:55:35,651 INFO 89.248.172.16 - - [10/Apr/2022 04:55:35] "[35m[1mGRb                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            [0m" HTTPStatus.BAD_REQUEST -
+2022-04-10 08:22:08,014 INFO 192.241.213.149 - - [10/Apr/2022 08:22:08] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 10:11:10,289 ERROR 167.94.138.46 - - [10/Apr/2022 10:11:10] code 400, message Bad request version ('À\x14À')
+2022-04-10 10:11:10,289 INFO 167.94.138.46 - - [10/Apr/2022 10:11:10] "[35m[1m î  ê\x81³ÃyÓ@+\x91¨<T»xvÄ\x94%r\x91gØMF±ºU5F \x93pÀÀLÇ^a<\x93¸\x8c\x86\x92µ·2½ÝF\x89f(µ½¿õ)\x8f &Ì¨Ì©À/À0À+À,ÀÀ	ÀÀ[0m" HTTPStatus.BAD_REQUEST -
+2022-04-10 10:11:11,488 INFO 167.94.138.46 - - [10/Apr/2022 10:11:11] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 10:11:11,704 INFO 167.94.138.46 - - [10/Apr/2022 10:11:11] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 10:11:11,915 ERROR 167.94.138.46 - - [10/Apr/2022 10:11:11] code 505, message Invalid HTTP version (2.0)
+2022-04-10 10:11:11,915 INFO 167.94.138.46 - - [10/Apr/2022 10:11:11] "[35m[1mPRI * HTTP/2.0[0m" HTTPStatus.HTTP_VERSION_NOT_SUPPORTED -
+2022-04-10 12:18:29,606 INFO 185.180.143.147 - - [10/Apr/2022 12:18:29] "[33mGET / HTTP/1.1[0m" 404 -
+2022-04-10 23:04:47,494 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:04:47,495 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 23:09:50,673 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:09:50,673 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 23:10:24,990 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:10:24,991 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 23:10:51,149 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:10:51,149 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 23:13:13,020 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:13:13,021 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-10 23:14:08,094 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-10 23:14:08,094 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
