@@ -36,7 +36,7 @@ COPY ./*.json /docker-entrypoint.d/
 COPY ./*.sh   /docker-entrypoint.d/
 RUN chmod 444 /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.json \
-    && chmod 555 /docker-entrypoint.d/*.sh \
+    && chmod 555 /docker-entrypoint.d/*.sh
 RUN rm -rf /var/lib/unit/*
 CMD ["unitd", \
     "--no-daemon", \
