@@ -408,13 +408,13 @@ INPUT - F5 XC
           "id_name": "200001475, XSS script tag end (Parameter) (2)"
         }
       ],
-      "req_id": "55af6750-7e58-435b-bb56-8be595512fc1",
-      "hostname": "master-8",
+      "req_id": "7d2d785c-0f32-4f4d-8bf1-c2a1032227ed",
+      "hostname": "master-13",
       "bot_verification_failed": false,
       "original_authority": "",
       "rtt_upstream_seconds": "",
       "src_instance": "FR",
-      "req_headers": "{\"Accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\",\"Accept-Encoding\":\"gzip, deflate, br\",\"Accept-Language\":\"en-US,en;q=0.9,fr;q=0.8\",\"Cache-Control\":\"max-age=0\",\"Cookie\":\"1d625=1649083663121-224247291; _imp_apg_r_=%7B%22diA%22%3A%22AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU%22%2C%22diB%22%3A%22AdLY9pzeIosqLRJ7XWTN8I8rcD5GcoYO%22%7D; _imp_di_pc_=AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU; 1d6203=4Q6H4PTMi9x7pRoC4tvaF7kZmANgGjGLk9xFninLl+IlFGsyvlnCNXxuJRHwT/Z4B67Fs3AOzSdTuYGjgdUEbBFSMgioG0ihuMqwdSa/mwcC0KNiwRBQgGvEPc0JFL2tglq2mOj+yRVnVZAIkJL4k7hiIU/BnUhKRdaqIN6i/QCJiWND; TS01120553=01795b7bc030829070ed3521d4fbcd0e6d8c9d951fb851bdefdc7efeb0a5695e916088d988f80e321180b744b96e5a5269e76667c5; TS01120553028=01d8db7103af00b2ca08ea64cf2be04fe54b5267b7ac39dbed20a7d2bf5ee1d29c2c300163ce3ba71d1519cf502c69e8fd8b727c88; TS01dc4fc6=01371e37ded1361e15dc34629806271234fdca4b53165b822945af4df88a06de5a431140d6e65a8ee28d1d553966c2ac4473e530dd; 1d621=95235356a57f0977bbd4713583e34ed400005821dc912d46dd03\",\"Host\":\"sentence-front-managed1.f5dc.dev\",\"Method\":\"GET\",\"Path\":\"/c/?a=%3Cscript%3Ecat%20/etc/password%3C/script%3E\",\"Scheme\":\"https\",\"Sec-Ch-Ua\":\"\\\" Not A;Brand\\\";v=\\\"99\\\", \\\"Chromium\\\";v=\\\"100\\\", \\\"Google Chrome\\\";v=\\\"100\\\"\",\"Sec-Ch-Ua-Mobile\":\"?0\",\"Sec-Ch-Ua-Platform\":\"\\\"Windows\\\"\",\"Sec-Fetch-Dest\":\"document\",\"Sec-Fetch-Mode\":\"navigate\",\"Sec-Fetch-Site\":\"none\",\"Sec-Fetch-User\":\"?1\",\"Upgrade-Insecure-Requests\":\"1\",\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36\",\"X-Envoy-External-Address\":\"82.66.123.186\",\"X-Forwarded-For\":\"82.66.123.186\",\"X-Forwarded-Proto\":\"https\",\"X-Request-Id\":\"55af6750-7e58-435b-bb56-8be595512fc1\"}",
+      "req_headers": "{\"Accept\":\"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\",\"Accept-Encoding\":\"gzip, deflate, br\",\"Accept-Language\":\"en-US,en;q=0.9,fr;q=0.8\",\"Cache-Control\":\"max-age=0\",\"Cookie\":\"1d625=1649083663121-224247291; _imp_apg_r_=%7B%22diA%22%3A%22AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU%22%2C%22diB%22%3A%22AdLY9pzeIosqLRJ7XWTN8I8rcD5GcoYO%22%7D; _imp_di_pc_=AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU; 1d6203=4Q6H4PTMi9x7pRoC4tvaF7kZmANgGjGLk9xFninLl+IlFGsyvlnCNXxuJRHwT/Z4B67Fs3AOzSdTuYGjgdUEbBFSMgioG0ihuMqwdSa/mwcC0KNiwRBQgGvEPc0JFL2tglq2mOj+yRVnVZAIkJL4k7hiIU/BnUhKRdaqIN6i/QCJiWND; TS01120553=01795b7bc030829070ed3521d4fbcd0e6d8c9d951fb851bdefdc7efeb0a5695e916088d988f80e321180b744b96e5a5269e76667c5; TS01120553028=01d8db7103af00b2ca08ea64cf2be04fe54b5267b7ac39dbed20a7d2bf5ee1d29c2c300163ce3ba71d1519cf502c69e8fd8b727c88; TS01dc4fc6=01371e37ded1361e15dc34629806271234fdca4b53165b822945af4df88a06de5a431140d6e65a8ee28d1d553966c2ac4473e530dd; 1d621=3c457337a368d5a5bcc0991ac95a444900003d5a3029dab13d60\",\"Host\":\"sentence-front-managed1.f5dc.dev\",\"Method\":\"GET\",\"Path\":\"/c/?a=%3Cscript%3Ecat%20/etc/password%3C/script%3E\",\"Scheme\":\"https\",\"Sec-Ch-Ua\":\"\\\" Not A;Brand\\\";v=\\\"99\\\", \\\"Chromium\\\";v=\\\"100\\\", \\\"Google Chrome\\\";v=\\\"100\\\"\",\"Sec-Ch-Ua-Mobile\":\"?0\",\"Sec-Ch-Ua-Platform\":\"\\\"Windows\\\"\",\"Sec-Fetch-Dest\":\"document\",\"Sec-Fetch-Mode\":\"navigate\",\"Sec-Fetch-Site\":\"none\",\"Sec-Fetch-User\":\"?1\",\"Upgrade-Insecure-Requests\":\"1\",\"User-Agent\":\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36\",\"X-Envoy-External-Address\":\"82.66.123.186\",\"X-Forwarded-For\":\"82.66.123.186\",\"X-Forwarded-Proto\":\"https\",\"X-Request-Id\":\"7d2d785c-0f32-4f4d-8bf1-c2a1032227ed\"}",
       "tenant": "f5-emea-ent-bceuutam",
       "app": "obelix",
       "policy_hits": {
@@ -448,7 +448,7 @@ INPUT - F5 XC
       "sni": "sentence-front-managed1.f5dc.dev",
       "response_flags": "",
       "site": "pa4-par",
-      "@timestamp": "2022-04-09T22:29:59.767Z",
+      "@timestamp": "2022-04-10T21:14:25.855Z",
       "calculated_action": "block",
       "req_params": "a=%3Cscript%3Ecat%20/etc/password%3C/script%3E",
       "sample_rate": "",
@@ -525,12 +525,12 @@ INPUT - F5 XC
           "name": "ATTACK_TYPE_CROSS_SITE_SCRIPTING"
         }
       ],
-      "src_port": "49359",
+      "src_port": "58950",
       "dcid": "1649083663121-224247291",
       "req_body": "",
       "time_to_last_upstream_tx_byte": 0,
       "namespace": "al-dacosta",
-      "time": "2022-04-09T22:29:59.767Z",
+      "time": "2022-04-10T21:14:25.855Z",
       "waf_instance_id": "",
       "sec_event_type": "waf_sec_event",
       "user": "Cookie-_imp_di_pc_-AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU",
@@ -560,7 +560,7 @@ OUTPUT - HTTP
         "gateway": "pa4-par",
         "http.hostname": "sentence-front-managed1.f5dc.dev",
         "http.remote_addr": "82.66.123.186",
-        "http.remote_port": "49359",
+        "http.remote_port": "58950",
         "http.request_method": "GET",
         "http.response_code": "200",
         "http.server_addr": "72.19.3.187",
@@ -575,7 +575,7 @@ OUTPUT - HTTP
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "en-US,en;q=0.9,fr;q=0.8",
             "Cache-Control": "max-age=0",
-            "Cookie": "1d625=1649083663121-224247291; _imp_apg_r_=%7B%22diA%22%3A%22AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU%22%2C%22diB%22%3A%22AdLY9pzeIosqLRJ7XWTN8I8rcD5GcoYO%22%7D; _imp_di_pc_=AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU; 1d6203=4Q6H4PTMi9x7pRoC4tvaF7kZmANgGjGLk9xFninLl+IlFGsyvlnCNXxuJRHwT/Z4B67Fs3AOzSdTuYGjgdUEbBFSMgioG0ihuMqwdSa/mwcC0KNiwRBQgGvEPc0JFL2tglq2mOj+yRVnVZAIkJL4k7hiIU/BnUhKRdaqIN6i/QCJiWND; TS01120553=01795b7bc030829070ed3521d4fbcd0e6d8c9d951fb851bdefdc7efeb0a5695e916088d988f80e321180b744b96e5a5269e76667c5; TS01120553028=01d8db7103af00b2ca08ea64cf2be04fe54b5267b7ac39dbed20a7d2bf5ee1d29c2c300163ce3ba71d1519cf502c69e8fd8b727c88; TS01dc4fc6=01371e37ded1361e15dc34629806271234fdca4b53165b822945af4df88a06de5a431140d6e65a8ee28d1d553966c2ac4473e530dd; 1d621=95235356a57f0977bbd4713583e34ed400005821dc912d46dd03",
+            "Cookie": "1d625=1649083663121-224247291; _imp_apg_r_=%7B%22diA%22%3A%22AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU%22%2C%22diB%22%3A%22AdLY9pzeIosqLRJ7XWTN8I8rcD5GcoYO%22%7D; _imp_di_pc_=AciXP2IAAAAAgyqEB%2BOQg7HcJ9AtrCIU; 1d6203=4Q6H4PTMi9x7pRoC4tvaF7kZmANgGjGLk9xFninLl+IlFGsyvlnCNXxuJRHwT/Z4B67Fs3AOzSdTuYGjgdUEbBFSMgioG0ihuMqwdSa/mwcC0KNiwRBQgGvEPc0JFL2tglq2mOj+yRVnVZAIkJL4k7hiIU/BnUhKRdaqIN6i/QCJiWND; TS01120553=01795b7bc030829070ed3521d4fbcd0e6d8c9d951fb851bdefdc7efeb0a5695e916088d988f80e321180b744b96e5a5269e76667c5; TS01120553028=01d8db7103af00b2ca08ea64cf2be04fe54b5267b7ac39dbed20a7d2bf5ee1d29c2c300163ce3ba71d1519cf502c69e8fd8b727c88; TS01dc4fc6=01371e37ded1361e15dc34629806271234fdca4b53165b822945af4df88a06de5a431140d6e65a8ee28d1d553966c2ac4473e530dd; 1d621=3c457337a368d5a5bcc0991ac95a444900003d5a3029dab13d60",
             "Host": "sentence-front-managed1.f5dc.dev",
             "Method": "GET",
             "Path": "/c/?a=%3Cscript%3Ecat%20/etc/password%3C/script%3E",
@@ -592,7 +592,7 @@ OUTPUT - HTTP
             "X-Envoy-External-Address": "82.66.123.186",
             "X-Forwarded-For": "82.66.123.186",
             "X-Forwarded-Proto": "https",
-            "X-Request-Id": "55af6750-7e58-435b-bb56-8be595512fc1"
+            "X-Request-Id": "7d2d785c-0f32-4f4d-8bf1-c2a1032227ed"
         },
         "request_outcome": "block",
         "request_outcome_reason": "NotAvailable",
@@ -654,20 +654,20 @@ OUTPUT - HTTP
             "200001475, XSS script tag end (Parameter) (2)"
         ],
         "sub_violations": "NotAvailable",
-        "support_id": "55af6750-7e58-435b-bb56-8be595512fc1",
+        "support_id": "7d2d785c-0f32-4f4d-8bf1-c2a1032227ed",
         "type": "waf_sec_event",
         "version": "HTTP/1.1",
         "violation_rating": "5",
         "violations":
         {},
         "x_forwarded_for_header_value": "82.66.123.186",
-        "event_host": "master-8",
+        "event_host": "master-13",
         "event_source": "pa4-par",
         "event_sourcetype": "kafka",
-        "event_time": "2022-04-09T22:29:59.767Z"
+        "event_time": "2022-04-10T21:14:25.855Z"
     }
 
 OUTPUT - Syslog
 ***************************
 
-``2022-04-10 00:32:01.000000000 +0000 debug.logstream.user.warn: {"host":"logstream","ident":"logger","message":"app=sentence-front-managed1.f5dc.dev;bot_classification=;bot_verification_failed=False;browser_type=Chrome;attack_types=[{'name': 'ATTACK_TYPE_CROSS_SITE_SCRIPTING'}];component=/c/;correlation_id=c102667e-dea5-4551-b495-71bf4217a9f6;description=ves-io-http-loadbalancer-sentence-front-managed1;environment=f5-emea-ent-bceuutam;gateway=pa4-par;http.hostname=sentence-front-managed1.f5dc.dev;http.remote_addr=82.66.123.186;http.remote_port=49359;http.request_method=GET;http.response_code=200;http.server_addr=72.19.3.187;http.server_port=0;http.uri=/c/?a=%3Cscript%3Ecat%20/etc/password%3C/script%3E;is_truncated=False;level=info;policy_name=NotAvailable;request=NotAvailable;request_outcome=block;request_outcome_reason=NotAvailable;signature_cves=NotAvailable;signature_ids=['200000091', '200000097', '200000098', '200001475'];signature_names=['200000091, XSS script tag end (Headers)', '200000097, XSS script tag (Headers)', '200000098, XSS script tag (Parameter)', '200001475, XSS script tag end (Parameter) (2)'];sub_violations=NotAvailable;support_id=55af6750-7e58-435b-bb56-8be595512fc1;type=waf_sec_event;version=HTTP/1.1;violation_rating=NotAvailable;violations={};x_forwarded_for_header_value=82.66.123.186;event_host=master-8;event_source=pa4-par;event_sourcetype=kafka;event_time=2022-04-09T22:29:59.767Z"}``
+``2022-04-10 23:17:10.000000000 +0000 debug.logstream.user.warn: {"host":"logstream","ident":"logger","message":"app=sentence-front-managed1.f5dc.dev;bot_classification=;bot_verification_failed=False;browser_type=Chrome;attack_types=[{'name': 'ATTACK_TYPE_CROSS_SITE_SCRIPTING'}];component=/c/;correlation_id=c102667e-dea5-4551-b495-71bf4217a9f6;description=ves-io-http-loadbalancer-sentence-front-managed1;environment=f5-emea-ent-bceuutam;gateway=pa4-par;http.hostname=sentence-front-managed1.f5dc.dev;http.remote_addr=82.66.123.186;http.remote_port=58950;http.request_method=GET;http.response_code=200;http.server_addr=72.19.3.187;http.server_port=0;http.uri=/c/?a=%3Cscript%3Ecat%20/etc/password%3C/script%3E;is_truncated=False;level=info;policy_name=NotAvailable;request=NotAvailable;request_outcome=block;request_outcome_reason=NotAvailable;signature_cves=NotAvailable;signature_ids=['200000091', '200000097', '200000098', '200001475'];signature_names=['200000091, XSS script tag end (Headers)', '200000097, XSS script tag (Headers)', '200000098, XSS script tag (Parameter)', '200001475, XSS script tag end (Parameter) (2)'];sub_violations=NotAvailable;support_id=7d2d785c-0f32-4f4d-8bf1-c2a1032227ed;type=waf_sec_event;version=HTTP/1.1;violation_rating=NotAvailable;violations={};x_forwarded_for_header_value=82.66.123.186;event_host=master-13;event_source=pa4-par;event_sourcetype=kafka;event_time=2022-04-10T21:14:25.855Z"}``

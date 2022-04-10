@@ -626,16 +626,17 @@ class EngineThreading(Resource):
     def start_main():
         if len(thread_manager['thread_queue'].keys()) == 0 and thread_manager['event'].is_set():
             thread_manager['event'].clear()
-            thread_name = str(uuid.uuid4())
-            t = threading.Thread(
-                target=EngineThreading.task_producer_consumer,
-                name=thread_name,
-                args=(thread_manager['event'], thread_name)
-            )
-            thread_manager['thread_queue'][thread_name] = t
-            logger.debug("%s::%s: NEW THREAD: id=%s" %
-                        (__class__.__name__, __name__, t.name))
-            t.start()
+            for cur_index, logcol_instance in enumerate(logcol_db.get_instances()):
+                thread_name = str(uuid.uuid4())
+                t = threading.Thread(
+                    target=EngineThreading.task_producer_consumer,
+                    name=thread_name,
+                    args=(thread_manager['event'], thread_name, cur_index)
+                )
+                thread_manager['thread_queue'][thread_name] = t
+                logger.debug("%s::%s: NEW THREAD: id=%s;index:%s" %
+                            (__class__.__name__, __name__, t.name, cur_index))
+                t.start()
             return "Engine started", 200
         else:
             return "Engine already started", 202
@@ -670,12 +671,13 @@ class EngineThreading(Resource):
         return EngineThreading.start_main()
 
     @staticmethod
-    def task_producer_consumer(thread_flag, thread_name):
+    def task_producer_consumer(thread_flag, thread_name, cur_index):
         """
         fetch events and send them on remote logging servers
         after sending all logs, sleep during update_interval
         :param thread_flag:
         :param thread_name:
+        :param cur_index: thread ID in pool, also logcollector ID
         :return:
         """
         while not thread_flag.is_set():
@@ -687,17 +689,17 @@ class EngineThreading(Resource):
                 filter.WAF.filter_example(
                     f5xc_tenant.pop_security_events()))
 
-            # emit logs for all logcollectors
-            logcol_db.emit()
-            logger.debug("%s::%s: THREAD sent events: name=%s" %
-                         (__class__.__name__, __name__, thread_name))
+            # emit logs for one logcollector with id 'cur_index' in list
+            logcol_db.emit(logcol_id=cur_index)
+            logger.debug("%s::%s: THREAD sent events: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
 
             # sleep
-            logger.debug("%s::%s: THREAD is sleeping: name=%s" %
-                         (__class__.__name__, __name__, thread_name))
+            logger.debug("%s::%s: THREAD is sleeping: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
             time.sleep(thread_manager['update_interval'])
-            logger.debug("%s::%s: THREAD is awake: name=%s" %
-                         (__class__.__name__, __name__, thread_name))
+            logger.debug("%s::%s: THREAD is awake: name=%s;index:%s" %
+                         (__class__.__name__, __name__, thread_name, cur_index))
 
         logger.debug("%s::%s: THREAD exited his work: name=%s" %
                      (__class__.__name__, __name__, thread_name))

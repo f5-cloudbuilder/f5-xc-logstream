@@ -284,10 +284,21 @@ class LogCollectorDB(storage_engine.DatabaseFormat):
             for logcol_instance in self.children[logcol_type].values():
                 logcol_instance.add_events(events)
 
-    def emit(self):
+    def emit(self, logcol_id):
+        """
+        Emit logs for all log collectors if logcol_id is not set.
+        If logcol_id is set, emit logs only to logcol_id
+        :param events:
+        :param logcol_id: position of logcollector in list returned by get_json()
+        :return:
+        """
+        cur_index = 0
         for logcol_type in ('http', 'syslog'):
             for logcol_instance in self.children[logcol_type].values():
-                logcol_instance.emit()
+                if logcol_id is None:
+                    logcol_instance.emit()
+                elif cur_index == logcol_id:
+                    logcol_instance.emit()
 
 
 
