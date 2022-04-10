@@ -28,7 +28,11 @@ No logs are stored. LogStream receives logs and then PUSH them directly to remot
 
 API reference
 =================================================
+API Dev Portal is available on your LogStream instance via ``/apidocs/``
 
+API reference can be downloaded `here <https://github.com/nergalex/f5-xc-logstream/blob/master/swagger.json>`_
+
+A Postman collection is available `here <https://github.com/nergalex/f5-xc-logstream/blob/master/LogStream-F5_XC.postman_collection.json>`_
 
 Example of Declaration
 **************************************************
@@ -394,32 +398,35 @@ OUTPUT - Syslog
 
 Configure
 =================================================
-2 ways to apply configuration:
 
-Local file
+Local declaration file
 ********************
 Define an environment variable:
-- key: ``declaration``
-- value: absolute path to a declaration file
+- key: ``declaration_file_path``
+- value: absolute path to a declaration file or a relative path in wsgi folder
 
-If a *declaration* environment variable ``declaration`` is absent,
+By default, if a *declaration* environment variable ``declaration_file_path`` is absent,
 LogStream will start using ``declaration.json`` present in local folder.
+
+Local log file
+********************
+Define an environment variable:
+- key: ``log_file_path``
+- value: absolute path to a log file or a relative path in wsgi folder
+
+By default, if a *declaration* environment variable ``log_file_path`` is absent,
+LogStream will start using ``logstream.log`` present in local folder.
 
 API
 ***************
-If *declaration* file is absent, LogStream will NOT start its engine. Use LogStream API to configure it and then to start its engine.
+If *declaration* file is absent, LogStream will NOT start its engine.
+Use LogStream API to configure it and then to start its engine.
 
 API allows you to:
 - `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
 - `action` endpoint to start/stop the engine.
 - `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
 - Note that the last `declaration` is saved locally
-
-API Dev Portal is available on your LogStream instance via ``/apidocs/``
-
-API reference can be downloaded `here <https://github.com/nergalex/f5-xc-logstream/blob/master/swagger.json>`_
-
-A Postman collection is available `here <https://github.com/nergalex/f5-xc-logstream/blob/master/LogStream-F5_XC.postman_collection.json>`_
 
 Deployment on a VM
 ==================================================
@@ -467,6 +474,8 @@ Ansible role structure
 
 - The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
 
+Ansible workflow
+***************************
 Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
 
 =============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
@@ -500,7 +509,7 @@ Extra variable                                  Description
 
 .. code:: yaml
 
-    extra_logstream_declaration_b64: ewogICAgImY1eGNfdGVuYW50IjogewogICAgICAgICJhcGlfa2V5IjogWCIsCiAgICAgICAgIm5hbWUiOiAiWCIsCiAgICAgICAgIm5hbWVzcGFjZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJldmVudF9maWx0ZXIiOiB7CiAgICAgICAgICAgICAgICAgICAgInNlY19ldmVudF90eXBlIjogIndhZl9zZWNfZXZlbnQiCiAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgIm5hbWUiOiAiWCIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0sCiAgICAibG9nY29sbGVjdG9yIjogewogICAgICAgICJzeXNsb2ciOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJpcF9hZGRyZXNzIjogIjEwLjEwMC4wLjgiLAogICAgICAgICAgICAgICAgInBvcnQiOiA1MTQwCiAgICAgICAgICAgIH0KICAgICAgICBdCiAgICB9Cn0=
+    extra_logstream_declaration_b64: eyJmNXhjX3RlbmFudCI6IHsiYXBpX2tleSI6ICJYWFhYWFhYWFhYWD0iLCAibmFtZSI6ICJmNS1lbWVhLWVudCIsICJuYW1lc3BhY2VzIjogW3siZXZlbnRfZmlsdGVyIjogeyJzZWNfZXZlbnRfdHlwZSI6ICJ3YWZfc2VjX2V2ZW50In0sICJuYW1lIjogImFsLWRhY29zdGEiLCAiZXZlbnRfc3RhcnRfdGltZSI6IHsieWVhciI6IDIwMjIsICJtb250aCI6IDQsICJkYXkiOiAxMCwgImhvdXIiOiAyMCwgIm1pbnV0ZSI6IDAgfSB9IF0gfSwgImxvZ2NvbGxlY3RvciI6IHsiaHR0cCI6IFt7Imhvc3QiOiAiNTIuMTc3Ljk0LjE1IiwgInBvcnQiOiA4ODg4LCAicGF0aCI6ICIvZGVidWcudGVzdCJ9IF0sICJzeXNsb2ciOiBbeyJpcF9hZGRyZXNzIjogIjUyLjE3Ny45NC4xNSIsICJwb3J0IjogNTE0MCB9IF0gfSB9
     extra_platform_name: Demo
     extra_platform_tags: environment=DMO platform=Demo project=LogStream
     extra_subnet_mgt_on_premise: 10.0.0.0/24
@@ -558,43 +567,21 @@ Extra variable                                  Description
 .. code:: yaml
 
     extra_logstream_declaration_b64: ewogICAgImY1eGNfdGVuYW50IjogewogICAgICAgICJhcGlfa2V5IjogWCIsCiAgICAgICAgIm5hbWUiOiAiWCIsCiAgICAgICAgIm5hbWVzcGFjZXMiOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJldmVudF9maWx0ZXIiOiB7CiAgICAgICAgICAgICAgICAgICAgInNlY19ldmVudF90eXBlIjogIndhZl9zZWNfZXZlbnQiCiAgICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICAgIm5hbWUiOiAiWCIKICAgICAgICAgICAgfQogICAgICAgIF0KICAgIH0sCiAgICAibG9nY29sbGVjdG9yIjogewogICAgICAgICJzeXNsb2ciOiBbCiAgICAgICAgICAgIHsKICAgICAgICAgICAgICAgICJpcF9hZGRyZXNzIjogIjEwLjEwMC4wLjgiLAogICAgICAgICAgICAgICAgInBvcnQiOiA1MTQwCiAgICAgICAgICAgIH0KICAgICAgICBdCiAgICB9Cn0=
-    extra_platform_name: Demo
-    extra_platform_tags: environment=DMO platform=Demo project=LogStream
-    extra_subnet_mgt_on_premise: 10.0.0.0/24
-    extra_vm:
-      admin_username: cyber
-      availability_zone:
-        - 1
-      ip: 10.100.0.54
-      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
-      location: eastus2
-      name: logstream-xc
-      size: Standard_B2s
+    extra_owner_email: xxx@xxx.com
+    extra_volterra:
+      tenant:
+        full: xxx-ccc
+        short: xxx
+      token: XXXXXXXXXXXXXXXXXXXX
+    extra_volterra_namespace: xxx
+    extra_volterra_re: xxx
+    extra_volterra_site_id: 1
     faas_app:
       ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
       cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
       key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
       name: logstream-xc
       repo: 'https://github.com/nergalex/f5-xc-logstream.git'
-      declaration:
-        f5xc_tenant:
-          api_key: XXXXXXXXXXXXX=
-          name: XXXXXXXXXX
-          namespaces:
-            - event_filter:
-                sec_event_type: waf_sec_event
-              name: XXXXXXXXXXXXX
-              event_start_time:
-                year: 2022
-                month: 9
-                day: 9
-                hour: 20
-                minute: 0
-        logcollector:
-          http:
-            - host: 52.177.94.15
-              port: 8888
-              path: /debug.test
       volume_declaration: /config
       volume_unit: /unit
     stats_acr_login_server: fqdn_of_a_container_registry
