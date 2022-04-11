@@ -63,9 +63,9 @@ CMD ["unitd", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
     "--log", "/unit/unit.log"]
-CMD ["sleep", \
-    "15"]
-CMD ["bash", \
-    "/docker-entrypoint.d/logstream-xc.sh"]
+#CMD ["sleep", \
+#    "15"]
+#CMD ["bash", \
+#    "/docker-entrypoint.d/logstream-xc.sh"]
 
 
