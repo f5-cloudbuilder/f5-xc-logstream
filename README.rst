@@ -675,7 +675,17 @@ Remote Syslog
 
 Troubleshoot
 ==================================================
-Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
+
+View TLS configuration on Unit:
+
+:kbd:`curl http://localhost:8000/certificates/logstream-xc/chain/0`
+
+View App configuration on Unit:
+
+:kbd:`curl http://localhost:8000/config/`
+
+VM
+**************************************************
 
 View audit log:
 
@@ -689,17 +699,30 @@ View app log:
 
 :kbd:`tail -f /etc/faas-apps/logstream-xc/logstream.log`
 
-View TLS configuration on Unit:
+Container
+**************************************************
 
-:kbd:`curl http://localhost:8000/certificates/logstream-xc/chain/0`
+Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 
-View App configuration on Unit:
+View startup log:
 
-:kbd:`curl http://localhost:8000/config/`
+:kbd:`cat /unit/docker-entrypoint.log`
 
+View audit log:
 
+:kbd:`tail -f /unit/unit.log`
 
+View access log:
 
+:kbd:`tail -f /unit/access.log`
+
+View app log:
+
+:kbd:`tail -f /unit/logstream.log`
+
+View local configuration:
+
+:kbd:`cat /config/declaration.json`
 
 
 
