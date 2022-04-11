@@ -59,13 +59,13 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 #CMD ["pkill", \
 #    "-f", \
 #    "unit"]
-#CMD ["unitd", \
-#    "--no-daemon", \
-#    "--control", "0.0.0.0:8000", \
-#    "--pid", "/unit/unit.pid", \
-#    "--state", "/unit/",  \
-#    "--tmp", "/unit/",  \
-#    "--log", "/unit/unit.log"]
+CMD ["unitd", \
+    "--no-daemon", \
+    "--control", "0.0.0.0:8000", \
+    "--pid", "/unit/unit.pid", \
+    "--state", "/unit/",  \
+    "--tmp", "/unit/",  \
+    "--log", "/unit/unit.log"]
 #CMD ["sleep", \
 #    "15"]
 #CMD ["bash", \
