@@ -62,7 +62,7 @@ CMD ["unitd", \
     "--pid", "/unit/unit.pid", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
-    "--log", "/unit/unit.log" \
+    "--log", "/unit/unit.log", \
     "bash", \
     "/docker-entrypoint.d/logstream-xc.sh"]
 
