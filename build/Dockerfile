@@ -31,11 +31,9 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 
 ############################################# Clear Unit #############################################
 
-RUN pkill -f unit
-RUN rm -rf /var/lib/unit
-RUN mkdir /var/lib/unit
-RUN chown -R unit:unit /var/lib/unit
-RUN chmod u+w /var/lib/unit
+# RUN mkdir /var/lib/unit
+# RUN chown -R unit:unit /var/lib/unit
+# RUN chmod u+w /var/lib/unit
 
 ############################################# Prepare Unit #############################################
 
@@ -51,7 +49,15 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 
 
 ############################################# Launch Unit when container starts #############################################
-
+CMD ["pkill", \
+    "-f", \
+    "unit"]
+CMD ["rm", \
+    "-rf", \
+    "/var/lib/unit"]
+CMD ["rm", \
+    "-rf", \
+    "/var/lib/unit"]
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
