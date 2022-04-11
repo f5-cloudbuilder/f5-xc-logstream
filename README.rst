@@ -10,6 +10,7 @@ Use Case
 LogStream forwards http security event logs - received from `F5 XC <https://docs.cloud.f5.com/docs/api/app-security>`_ - to remote servers (log collector, SIEM).
 
 Supported downstream protocol:
+
 - Syslog
 - HTTP(s) + Bearer token
 
@@ -608,8 +609,10 @@ Extra variable                                  Description
     stats_acr_username: username_credential_of_a_container_registry
     stats_jumphost_ip: host_to_build_image
 
-Remote Syslog
+Remote Log Collector
 ==================================================
+Example of a Log Collector using Fluentd
+
 -  `Optimize the Network Kernel Parameters <https://docs.fluentd.org/installation/before-install#optimize-the-network-kernel-parameters>`_
 
 .. code:: bash
@@ -649,6 +652,7 @@ Remote Syslog
           @type http
           @id input_http
           port 8888
+          bind 0.0.0.0
         </source>
         <source>
           @type syslog
