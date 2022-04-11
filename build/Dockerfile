@@ -58,7 +58,7 @@ CMD ["rm", \
     "/var/lib/unit/certs"]
 CMD ["unitd", \
     "--no-daemon", \
-    "--control", "unix:/unit/control.unit.sock", \
+    "--control", "0.0.0.0:8000", \
     "--pid", "/unit/unit.pid", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
