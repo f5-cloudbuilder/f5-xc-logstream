@@ -44,17 +44,18 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.sh \
     && chmod 444 /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.json \
-    && chmod 555 /docker-entrypoint.d/*.sh \
-    && chmod 777 /docker-entrypoint.d
+    && chmod 555 /docker-entrypoint.d/*.sh
 
 
 ############################################# Launch Unit when container starts #############################################
 CMD ["pkill", \
     "-f", \
     "unit"]
+CMD ["sleep", \
+    "15"]
 CMD ["rm", \
     "-rf", \
-    "/var/lib/unit/*"]
+    "/var/lib/unit/certs"]
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
@@ -62,7 +63,9 @@ CMD ["unitd", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
     "--log", "/unit/unit.log"]
-#CMD ["bash", \
-#    "/docker-entrypoint.d/logstream-xc.sh"]
+CMD ["sleep", \
+    "15"]
+CMD ["bash", \
+    "/docker-entrypoint.d/logstream-xc.sh"]
 
 
