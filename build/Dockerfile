@@ -29,15 +29,25 @@ ADD https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/refs/heads/${
 RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REPO}.git /etc/faas-apps/${FAAS_APP_NAME} \
     && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt
 
-############################################# Configure Unit #############################################
+############################################# Clear Unit #############################################
+
+RUN sudo pkill unitd \
+  && rm -rf /var/lib/unit/*
+
+############################################# Prepare Unit #############################################
 
 COPY ./*.pem  /docker-entrypoint.d/
 COPY ./*.json /docker-entrypoint.d/
 COPY ./*.sh   /docker-entrypoint.d/
-RUN chmod 444 /docker-entrypoint.d/*.pem \
+RUN chown unit:unit /docker-entrypoint.d/*.pem \
+    && chown unit:unit /docker-entrypoint.d/*.json \
+    && chown unit:unit /docker-entrypoint.d/*.sh \
+    && chmod 444 /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.json \
     && chmod 555 /docker-entrypoint.d/*.sh
-RUN rm -rf /var/lib/unit/*
+
+############################################# Launch Unit when container starts #############################################
+
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
@@ -45,5 +55,4 @@ CMD ["unitd", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
     "--log", "/unit/unit.log"]
-
 
