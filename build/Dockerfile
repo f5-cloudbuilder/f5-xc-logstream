@@ -48,7 +48,6 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 RUN chown -R unit:unit /var/lib/unit/ \
     && chmod u+w /var/lib/unit/ \
     && chmod u+w /var/lib/unit/*
-RUN unitd --no-daemon --control unix:/unit/control.unit.sock --pid /unit/unit.pid --state /unit/ --tmp /unit/ --log /unit/unit.log
 
 ############################################# Launch Unit when container starts #############################################
 
