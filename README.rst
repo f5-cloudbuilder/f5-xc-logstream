@@ -676,9 +676,7 @@ Remote Syslog
 
 Troubleshoot
 ==================================================
-Start manually the Application in container:
-
-:kbd:`bash /docker-entrypoint.d/*.sh`
+Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 
 View audit log:
 
