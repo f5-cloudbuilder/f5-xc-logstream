@@ -45,6 +45,8 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.json \
     && chmod 555 /docker-entrypoint.d/*.sh
+RUN chown unit:unit /var/lib/unit/ \
+    && chmod u+w /var/lib/unit/
 
 ############################################# Launch Unit when container starts #############################################
 
