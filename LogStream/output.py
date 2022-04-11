@@ -43,6 +43,12 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
             for signature in event['signatures']:
                 signature_names.append(signature['id_name'])
 
+            #  signature_names
+            if 'Path' in event['req_headers'].keys():
+                req_headers_path = event['req_headers']['Path']
+            else:
+                req_headers_path = "Not Available"
+
             struct_message = [
                 'app=' + str(event['authority']),
                 'bot_classification=' + str(event['bot_classification']),
@@ -61,7 +67,7 @@ class RemoteSyslog(storage_engine.DatabaseFormat):
                 'http.response_code=' + str(event['rsp_code']),
                 'http.server_addr=' + str(event['dst_ip']),
                 'http.server_port=' + str(event['dst_port']),
-                'http.uri=' + str(event['req_headers']['Path']),
+                'http.uri=' + str(req_headers_path),
                 'is_truncated=' + str(event['is_truncated_field']),
                 'level=' + str(event['severity']),
                 'policy_name=' + 'NotAvailable',
@@ -178,7 +184,7 @@ class RemoteHTTP(storage_engine.DatabaseFormat):
                 'http.response_code': event['rsp_code'],
                 'http.server_addr': event['dst_ip'],
                 'http.server_port': event['dst_port'],
-                'http.uri': event['req_headers']['Path'],
+                'http.uri': event['req_headers']['Path'] if 'Path' in event['req_headers'].keys() else "Not Available",
                 'is_truncated': event['is_truncated_field'],
                 'level': event['severity'],
                 'policy_name': 'NotAvailable',
