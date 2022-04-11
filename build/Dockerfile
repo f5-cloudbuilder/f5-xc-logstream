@@ -32,7 +32,10 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 ############################################# Clear Unit #############################################
 
 RUN chown unit:unit /var/lib/unit
+RUN chown unit:unit /var/lib/unit/*
 RUN chmod u+w /var/lib/unit
+RUN chmod u+w /var/lib/unit/*
+RUN rm -rf /var/lib/unit/certs
 
 ############################################# Prepare Unit #############################################
 
