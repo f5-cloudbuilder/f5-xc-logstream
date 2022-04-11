@@ -31,7 +31,7 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 
 ############################################# Clear Unit #############################################
 
-RUN chown -R unit:unit /var/lib/unit
+RUN chown unit:unit /var/lib/unit
 RUN chmod u+w /var/lib/unit
 
 ############################################# Prepare Unit #############################################
@@ -62,7 +62,7 @@ CMD ["unitd", \
     "--state", "/unit/",  \
     "--tmp", "/unit/",  \
     "--log", "/unit/unit.log"]
-CMD ["bash", \
-    "/docker-entrypoint.d/logstream-xc.sh"]
+#CMD ["bash", \
+#    "/docker-entrypoint.d/logstream-xc.sh"]
 
 
