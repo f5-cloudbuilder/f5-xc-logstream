@@ -31,7 +31,7 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 
 ############################################# Clear Unit #############################################
 
-RUN pkill -f unit
+# RUN pkill -f unit
 RUN cd /var/lib/unit && rm -rf *
 
 ############################################# Prepare Unit #############################################
