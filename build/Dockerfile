@@ -55,9 +55,6 @@ CMD ["pkill", \
 CMD ["rm", \
     "-rf", \
     "/var/lib/unit"]
-CMD ["rm", \
-    "-rf", \
-    "/var/lib/unit"]
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
