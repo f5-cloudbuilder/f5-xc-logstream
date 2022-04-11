@@ -1,5 +1,8 @@
 LogStream for F5 Distributed Cloud | Security Events
 ####################################################
+
+.. figure:: _picture/architecture.png
+
 .. contents:: Table of Contents
 
 Introduction
@@ -13,8 +16,6 @@ Supported downstream protocol:
 
 - Syslog
 - HTTP(s) + Bearer token
-
-.. figure:: _picture/architecture.png
 
 Demo
 **************************************************
