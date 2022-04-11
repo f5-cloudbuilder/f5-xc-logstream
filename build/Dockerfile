@@ -54,11 +54,6 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 CMD ["pkill", \
     "-f", \
     "unit"]
-CMD ["sleep", \
-    "15"]
-CMD ["rm", \
-    "-rf", \
-    "/var/lib/unit/certs"]
 CMD ["unitd", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000", \
