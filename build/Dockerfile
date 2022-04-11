@@ -35,7 +35,12 @@ RUN chown unit:unit /var/lib/unit
 RUN chown unit:unit /var/lib/unit/*
 RUN chmod u+w /var/lib/unit
 RUN chmod u+w /var/lib/unit/*
-RUN rm -rf /var/lib/unit/certs
+
+# RUN rm -rf /var/lib/unit/certs
+# RUN rm -f /var/lib/unit/*
+# 2022/04/11 10:57:59 [alert] 11#11 Unable to create certificates storage directory: mkdir(/var/lib/unit/certs/) failed (13: Permission denied)
+# 2022/04/11 10:57:59 [alert] 11#11 bind(6, unix:/var/run/control.unit.sock.tmp) failed (13: Permission denied)
+
 
 ############################################# Prepare Unit #############################################
 
