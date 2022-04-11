@@ -56,15 +56,7 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 
 
 ############################################# Launch Unit when container starts #############################################
-CMD ["unitd", \
-    "--no-daemon", \
-    "--control", "0.0.0.0:8000", \
-    "--pid", "/unit/unit.pid", \
-    "--state", "/unit/",  \
-    "--tmp", "/unit/",  \
-    "--log", "/unit/unit.log", \
-    ";", \
-    "bash", \
-    "/docker-entrypoint.d/logstream-xc.sh"]
+CMD ["sh", "-c",
+    "unitd --no-daemon --control 0.0.0.0:8000 --pid /unit/unit.pid --state /unit/ --tmp /unit/ --log /unit/unit.log && bash /docker-entrypoint.d/logstream-xc.sh"]
 
 
