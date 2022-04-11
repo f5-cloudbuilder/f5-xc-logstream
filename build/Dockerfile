@@ -14,8 +14,6 @@ RUN apt-get update \
     && chown -R unit:0 /var/log/unit/ \
     && mkdir /etc/faas-apps/ \
     && chown -R unit:unit /etc/faas-apps/ \
-#    && mkdir -p /var/lib/unit/certs/ \
-#    && chmod 0774 /var/lib/unit/certs/ \
     && python3 -m venv /etc/faas-apps/venv
 
 ############################################# Create App's virtual environment #############################################
@@ -28,18 +26,6 @@ RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/  \
 ADD https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/refs/heads/${GITHUB_BRANCH} version.json
 RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REPO}.git /etc/faas-apps/${FAAS_APP_NAME} \
     && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt
-
-############################################# Clear Unit #############################################
-
-#RUN chown unit:unit /var/lib/unit
-#RUN chown unit:unit /var/lib/unit/*
-#RUN chmod u+w /var/lib/unit
-#RUN chmod u+w /var/lib/unit/*
-
-# RUN rm -rf /var/lib/unit/certs
-# RUN rm -f /var/lib/unit/*
-# 2022/04/11 10:57:59 [alert] 11#11 Unable to create certificates storage directory: mkdir(/var/lib/unit/certs/) failed (13: Permission denied)
-# 2022/04/11 10:57:59 [alert] 11#11 bind(6, unix:/var/run/control.unit.sock.tmp) failed (13: Permission denied)
 
 
 ############################################# Prepare Unit #############################################
@@ -57,5 +43,6 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 
 ############################################# Launch Unit when container starts #############################################
 CMD ["/docker-entrypoint.d/logstream-xc.sh"]
+
 
 

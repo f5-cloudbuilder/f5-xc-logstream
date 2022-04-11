@@ -398,6 +398,24 @@ OUTPUT - Syslog
 
 Configure
 =================================================
+Different ways to configure Logstream.
+
+Regional Edge
+********************
+
+- ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
+
+Modify ``declaration.json`` in ``workload``:
+- ``workloads`` > ``logstream-xc`` > ``...`` > ``Manage configuration`` > ``Edit Configuration``
+- `Type of Workload`` > ``Service``  > ``Edit configuration``
+- ``Configuration Parameters`` > ``declaration.json`` > ``...``  > ``Edit``
+- ``File`` > ``Edit configuration``
+- ``Data``: modify in ASCII or in JSON view
+- ``Apply`` for each opened screens
+- ``Save and Exit`` for each opened screens
+
+Start a new ``POD``:
+- ``PODs`` > ``logstream-xc`` > ``...`` > ``Delete``
 
 Local declaration file
 ********************
