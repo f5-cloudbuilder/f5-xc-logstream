@@ -32,7 +32,7 @@ RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REP
 ############################################# Clear Unit #############################################
 
 RUN pkill -f unit
-RUN rmdir -f /var/lib/unit
+RUN rmdir /var/lib/unit
 RUN mkdir /var/lib/unit
 RUN chown -R unit:unit /var/lib/unit
 RUN chmod u+w /var/lib/unit
