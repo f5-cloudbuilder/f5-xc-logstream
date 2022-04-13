@@ -465,8 +465,6 @@ Bootstrap
 Install docker
 **************************************************
 
-- Connect on your VM
-
 - Install docker by following `this guide <https://docs.docker.com/get-docker/>`_. Example:
     - `Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_
 
