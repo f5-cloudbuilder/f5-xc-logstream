@@ -41,7 +41,7 @@ RUN chown unit:unit /docker-entrypoint.d/*.pem \
 RUN rm -rf /var/lib/unit/*
 
 ############################################# Launch Unit #############################################
-CMD ["unitd", \
+CMD ["unitd-debug", \
     "--no-daemon", \
     "--control", "0.0.0.0:8000"]
 
