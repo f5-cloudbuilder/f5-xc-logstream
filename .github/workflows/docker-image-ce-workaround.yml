@@ -1,0 +1,29 @@
+name: Deploy logstream on CE
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+# https://docs.github.com/en/enterprise-cloud@latest/actions/learn-github-actions/environment-variables#default-environment-variables
+env:
+  LOCAL_DECLARATION: /home/cyber/declaration.json
+  FAAS_APP_NAME: logstream-xc
+  GITHUB_BASE_REF: master
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: docker build . --file ./build-ce-workaround/Dockerfile --tag logstream-xc:${GITHUB_RUN_ID} --build-arg GITHUB_REPOSITORY=${{ github.repository }} --build-arg FAAS_APP_NAME=${{ env.FAAS_APP_NAME }} --build-arg GITHUB_BASE_REF=${{ env.GITHUB_BASE_REF }}
+      - name: Launch Logstream image
+        run: docker run -dit -h logstream-xc --restart=always --name=logstream-xc -p 8000:8000 -p 80:8080 -p 443:8443 -v ${{ env.LOCAL_DECLARATION }}:/etc/faas-apps/${{ env.FAAS_APP_NAME }}/declaration.json logstream-xc:${GITHUB_RUN_ID}
+
+
+
