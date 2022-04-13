@@ -162,3 +162,17 @@
 2022-04-11 17:33:21,100 WARNING  * Running on all addresses.
    WARNING: This is a development server. Do not use it in a production deployment.
 2022-04-11 17:33:21,101 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-13 20:53:30,328 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-13 20:53:30,328 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-13 20:53:35,569 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"6Query duration (end_time - start_time) cannot be \u003e 24h:2022-04-13 18:53:35.511330309 +0000 UTC m=+35971.657693876"}],"message":"There was a server error in processing request"}
+2022-04-13 20:54:59,000 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-13 20:54:59,000 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-13 20:55:00,984 ERROR F5XCGeneric::LogStream.input: code 500; {"code":13,"details":[{"type_url":"type.googleapis.com/ves.io.stdlib.server.error.Error","value":"6Query duration (end_time - start_time) cannot be \u003e 24h:2022-04-13 18:55:00.927490288 +0000 UTC m=+36057.073853845"}],"message":"There was a server error in processing request"}
+2022-04-13 20:55:16,299 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-13 20:55:16,300 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
+2022-04-13 20:56:32,847 WARNING  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+2022-04-13 20:56:32,848 INFO  * Running on http://192.168.1.43:3001/ (Press CTRL+C to quit)
