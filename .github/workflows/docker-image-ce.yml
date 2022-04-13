@@ -22,7 +22,7 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file ./build-ce/Dockerfile --tag logstream-xc:${GITHUB_RUN_ID} --build-arg GITHUB_REPOSITORY=${{ github.repository }} --build-arg FAAS_APP_NAME=${{ env.FAAS_APP_NAME }} --build-arg GITHUB_BASE_REF=${{ env.GITHUB_BASE_REF }}
       - name: Launch Logstream image
-        run: docker run -dit -h logstream-xc --restart=always --name=logstream-xc -p 8000:8000 -p 80:8080 -p 443:8443 -v ./declaration.json:/etc/faas-apps/${{ env.FAAS_APP_NAME }}/declaration.json logstream-xc:${GITHUB_RUN_ID}
+        run: docker run -dit -h logstream-xc --restart=always --name=logstream-xc -p 8000:8000 -p 80:8080 -p 443:8443 -v declaration.json:/etc/faas-apps/${{ env.FAAS_APP_NAME }}/declaration.json logstream-xc:${GITHUB_RUN_ID}
 
 
 
