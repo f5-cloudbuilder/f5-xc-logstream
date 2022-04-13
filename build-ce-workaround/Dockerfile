@@ -30,12 +30,15 @@ RUN touch /etc/faas-apps/logstream-xc/logstream-app.log \
 
 ############################################# Prepare Unit #############################################
 
-COPY ./build-ce/*.pem  /docker-entrypoint.d/
-COPY ./build-ce/*.json /docker-entrypoint.d/
+COPY ./*.pem  /docker-entrypoint.d/
+COPY ./*.json /docker-entrypoint.d/
+COPY ./*.sh   /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.json \
+    && chown unit:unit /docker-entrypoint.d/*.sh \
     && chmod 444 /docker-entrypoint.d/*.pem \
-    && chmod 444 /docker-entrypoint.d/*.json
+    && chmod 444 /docker-entrypoint.d/*.json \
+    && chmod 555 /docker-entrypoint.d/*.sh
 
 ############################################# Clean Unit in order to launch entrypoints at startup #############################################
 RUN rm -rf /var/lib/unit/*
