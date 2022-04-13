@@ -34,7 +34,6 @@ COPY ./build-ce/*.pem  /docker-entrypoint.d/
 COPY ./build-ce/*.json /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.json \
-    && chown unit:unit /docker-entrypoint.d/*.sh \
     && chmod 444 /docker-entrypoint.d/*.pem \
     && chmod 444 /docker-entrypoint.d/*.json
 
