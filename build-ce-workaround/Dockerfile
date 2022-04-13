@@ -30,9 +30,9 @@ RUN touch /etc/faas-apps/logstream-xc/logstream-app.log \
 
 ############################################# Prepare Unit #############################################
 
-COPY ./*.pem  /docker-entrypoint.d/
-COPY ./*.json /docker-entrypoint.d/
-COPY ./*.sh   /docker-entrypoint.d/
+COPY ./build-ce-workaround/*.pem  /docker-entrypoint.d/
+COPY ./build-ce-workaround/*.json /docker-entrypoint.d/
+COPY ./build-ce-workaround/*.sh   /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.json \
     && chown unit:unit /docker-entrypoint.d/*.sh \
