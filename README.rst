@@ -449,7 +449,120 @@ API allows you to:
 - `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
 - Note that the last `declaration` is saved locally
 
-Deployment on a VM
+Deployment Guide
+####################################################
+VM + Github action
+==================================================
+Bootstrap
+**************************************************
+
+- Deploy a Linux VM. Example in Azure:
+    - publisher: Canonical
+    - offer: 0001-com-ubuntu-server-impish
+    - sku: 21_10-gen2
+    - version: latest
+
+Install docker
+**************************************************
+
+- Connect on your VM
+
+- Install docker by following `this guide <https://docs.docker.com/get-docker/>`_. Example:
+    - `Ubuntu <https://docs.docker.com/engine/install/ubuntu/>`_
+
+.. code:: bash
+
+    sudo apt-get update
+    sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+    sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+- Determine your username
+
+.. code:: bash
+
+    whoami
+
+- Set a variable with your username by replacing ``myUserName`` bellow
+
+.. code:: bash
+
+    export USER=myUserName
+
+- Add your user to the docker group
+
+.. code:: bash
+
+    sudo usermod -aG docker ${USER}
+
+- Log out and log back in so that your group membership is re-evaluated
+- Verify that your user is a member of group ``docker`` in the returned list
+
+.. code:: bash
+
+    id
+
+- Verify that you can run docker commands without sudo
+
+.. code:: bash
+
+    docker run hello-world
+
+If you encounter an issue, follow this `article <https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket>`_
+
+Deploy a github runner agent
+**************************************************
+
+- Fork this github repository by clicking on top left button ``Fork``
+- In your github repository, click on ``Settings``
+- click on ``Actions``
+- click on ``Runners``
+- click on ``New self-hosted runner``
+- click on ``Linux``
+- follow the guide to deploy a github runner agent on your VM
+    - during registration prompt, enter
+
+.. code:: bash
+
+    # Runner Registration
+    Enter the name of the runner group to add this runner to: [press Enter for Default]
+    Enter the name of runner: logstream-xc
+    Enter any additional labels (ex. label-1,label-2): ubuntu-latest
+
+    # Runner settings
+    Enter name of work folder: [press Enter for _work]
+
+Modify github workflow
+**************************************************
+In your github repository, do:
+
+- click on ``Actions``
+- click on ``Docker Image CI``
+- click on ``docker-image.yml``
+
+- Edit ``./build/Dockerfile`` and set variables bellow with info of your github repo
+
+.. code:: bash
+
+    ARG GITHUB_USER=nergalex
+    ARG GITHUB_REPO=f5-xc-logstream
+
+- Edit ``./build/Dockerfile`` and set variables bellow with info of your github repo
+
+.. code:: bash
+
+    ARG GITHUB_USER=nergalex
+    ARG GITHUB_REPO=f5-xc-logstream
+
+VM + Ansible Tower
 ==================================================
 An example of a deployment on an Azure VM using Ansible Tower.
 
