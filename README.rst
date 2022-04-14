@@ -20,7 +20,8 @@ UI
     - Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
     - Create a ``workload`` by replacing emphasized line bellow
 
-.. code:: json
+.. code-block:: json
+    :emphasize-lines: 4
 
     {
       "metadata": {
