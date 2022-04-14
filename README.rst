@@ -156,8 +156,6 @@ Ansible role structure
 
 - The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 Workflow
 --------------------------------------------------
 Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
@@ -235,6 +233,7 @@ Unit starts Logstream with environment variables
 API
 =================================================
 API allows you to:
+
 - `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
 - `action` endpoint to start/stop the engine.
 - `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
@@ -244,6 +243,7 @@ API Dev Portal is available at ``/apidocs/``
 
 References
 ####################################################
+
 - Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 
 
