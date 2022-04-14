@@ -18,7 +18,7 @@ UI
 ==================================================
 - Deploy Logstream
     - Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
-    - Create a ``workload`` by replacing ``myNameSpace`` line 4
+    - Create a ``workload`` by replacing ``myNameSpace`` line 4 bellow
 
 .. code-block:: json
 
