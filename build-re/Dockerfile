@@ -29,6 +29,7 @@ RUN git clone -b ${GITHUB_BASE_REF} https://github.com/${GITHUB_REPOSITORY}.git 
 
 ############################################# Prepare Unit #############################################
 
+ARG LOGSTREAM_XC_PEM_PRIVATE_KEYS
 ARG BUILD_PATH
 
 COPY ${BUILD_PATH}/*.pem  /docker-entrypoint.d/
