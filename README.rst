@@ -16,17 +16,135 @@ Regional Edge | Container in F5 XC POP
 *************************************************
 UI
 ==================================================
-- Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
-- Modify ``declaration.json`` in ``workload``:
-    - ``workloads`` > ``logstream-xc`` > ``...`` > ``Manage configuration`` > ``Edit Configuration``
+- Deploy Logstream
+    - Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
+    - Create a ``workload`` by replacing emphasized lines bellow
+
+.. code:: json
+    :emphasize-lines: 4,5
+    {
+      "metadata": {
+        "name": "logstream-xc",
+        "namespace": "myNameSpace",
+        "labels": {
+          "project": "logstream-xc"
+        },
+        "annotations": {
+          "ves.io/app": "logstream-xc"
+        },
+        "description": "https://github.com/nergalex/f5-xc-logstream",
+        "disable": false
+      },
+      "spec": {
+        "service": {
+          "num_replicas": 1,
+          "containers": [
+            {
+              "name": "logstream-xc",
+              "image": {
+                "name": "registry.gitlab.com/nergalex/f5-xc-logstream/logstream-xc:re",
+                "public": {},
+                "pull_policy": "IMAGE_PULL_POLICY_ALWAYS"
+              },
+              "init_container": false,
+              "flavor": "CONTAINER_FLAVOR_TYPE_TINY",
+              "command": [],
+              "args": []
+            }
+          ],
+          "volumes": [
+            {
+              "name": "unit-logstream-xc",
+              "persistent_volume": {
+                "storage": {
+                  "access_mode": "ACCESS_MODE_READ_WRITE_ONCE",
+                  "storage_size": 1,
+                  "default": {}
+                },
+                "mount": {
+                  "mode": "VOLUME_MOUNT_READ_WRITE",
+                  "mount_path": "/unit",
+                  "sub_path": ""
+                }
+              }
+            }
+          ],
+          "configuration": {
+            "parameters": [
+              {
+                "file": {
+                  "name": "declaration.json",
+                  "data": "string:///eyJmNXhjX3RlbmFudCI6eyJhcGlfa2V5IjoiWFhYWFgiLCJuYW1lIjoiWFhYWFgiLCJuYW1lc3BhY2VzIjpbeyJldmVudF9maWx0ZXIiOnsic2VjX2V2ZW50X3R5cGUiOiJ3YWZfc2VjX2V2ZW50In0sIm5hbWUiOiJhbC1kYWNvc3RhIiwiZXZlbnRfc3RhcnRfdGltZSI6eyJ5ZWFyIjoyMDIyLCJtb250aCI6NCwiZGF5IjoxNCwiaG91ciI6OCwibWludXRlIjowfX1dfSwibG9nY29sbGVjdG9yIjp7Imh0dHAiOlt7Imhvc3QiOiI1Mi4xNzcuOTQuMTUiLCJwb3J0Ijo4ODg4LCJwYXRoIjoiL2RlYnVnLnRlc3QifV0sInN5c2xvZyI6W3siaXBfYWRkcmVzcyI6IjUyLjE3Ny45NC4xNSIsInBvcnQiOjUxNDB9XX19",
+                  "volume_name": "config-logstream-xc",
+                  "mount": {
+                    "mode": "VOLUME_MOUNT_READ_WRITE",
+                    "mount_path": "/config",
+                    "sub_path": ""
+                  }
+                }
+              },
+              {
+                "env_var": {
+                  "name": "FAAS_APP_NAME",
+                  "value": "logstream-xc"
+                }
+              }
+            ]
+          },
+          "deploy_options": {
+            "deploy_re_sites": {
+              "site": [
+                {
+                  "tenant": "ves-io",
+                  "namespace": "system",
+                  "name": "pa4-par"
+                }
+              ]
+            }
+          },
+          "advertise_options": {
+            "advertise_in_cluster": {
+              "multi_ports": {
+                "ports": [
+                  {
+                    "name": "http",
+                    "info": {
+                      "port": 8080,
+                      "protocol": "PROTOCOL_HTTP",
+                      "same_as_port": {}
+                    }
+                  },
+                  {
+                    "name": "https",
+                    "info": {
+                      "port": 8443,
+                      "protocol": "PROTOCOL_TLS_WITH_SNI",
+                      "same_as_port": {}
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+
+- Configure Logstream
     - ``Type of Workload`` > ``Service``  > ``Edit configuration``
     - ``Configuration Parameters`` > ``declaration.json`` > ``...``  > ``Edit``
     - ``File`` > ``Edit configuration``
     - ``Data``: modify in ASCII view or in JSON view
-    - ``Apply`` for each opened screens
-    - ``Save and Exit`` for each opened screens
+    - ``Apply`` for each screen
 
-- Start a new ``POD``:
+- Manage on which RE to deploy Logstream container
+    - ``Type of Workload`` > ``Service``  > ``Edit configuration``
+    - ``Deploy Options`` > ``Edit configuration``
+    - List of Regional Edge Sites to Deploy: choose one RE in list
+    - ``Apply`` for each screen
+
+- ``Save and Exit``
+- After a modification in Logstream configuration, start a new ``POD``:
     - ``PODs`` > ``logstream-xc`` > ``...`` > ``Delete``
 
 Ansible
