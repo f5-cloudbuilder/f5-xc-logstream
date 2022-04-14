@@ -211,40 +211,7 @@ Extra variable                                  Description
       name: logstream-xc
       repo: 'https://github.com/nergalex/f5-xc-logstream.git'
 
-Administration Guide
-####################################################
-Environment variable
-=================================================
 
-Unit starts Logstream with environment variables
-
-- Local log file
-    - key: ``log_file_path``
-    - value: absolute path to a log file or a relative path in wsgi folder
-    - Default, if a *declaration* environment variable ``log_file_path`` is absent, LogStream will start using ``logstream.log`` present in local folder.
-    - Note: If *log* file is absent, LogStream will NOT start.
-
-- Local declaration file
-    - key: ``declaration_file_path``
-    - value: absolute path to a declaration file or a relative path in wsgi folder
-    - Default: if a *declaration* environment variable ``declaration_file_path`` is absent, LogStream will start using ``declaration.json`` present in local folder.
-    - Note: If *declaration* file is absent, LogStream will NOT start its engine but API GW is still running. In this case, use LogStream API to configure it and then to start its engine.
-
-API
-=================================================
-API allows you to:
-
-- `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
-- `action` endpoint to start/stop the engine.
-- `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
-- Note that the last `declaration` is saved locally
-
-API Dev Portal is available at ``/apidocs/``
-
-References
-####################################################
-
-- Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 
 
 
