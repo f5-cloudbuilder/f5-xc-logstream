@@ -21,7 +21,6 @@ UI
     - Create a ``workload`` by replacing emphasized line bellow
 
 .. code:: json
-    :emphasize-lines: 4
 
     {
       "metadata": {
