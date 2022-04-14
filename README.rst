@@ -12,148 +12,24 @@ See repository `f5-log-converter <https://github.com/nergalex/f5-log-converter>`
 Deployment Guide
 ####################################################
 
-Regional Edge
+Regional Edge | Container in F5 XC POP
 *************************************************
-
-- ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
-
-Modify ``declaration.json`` in ``workload``:
-
-- ``workloads`` > ``logstream-xc`` > ``...`` > ``Manage configuration`` > ``Edit Configuration``
-- ``Type of Workload`` > ``Service``  > ``Edit configuration``
-- ``Configuration Parameters`` > ``declaration.json`` > ``...``  > ``Edit``
-- ``File`` > ``Edit configuration``
-- ``Data``: modify in ASCII view or in JSON view
-- ``Apply`` for each opened screens
-- ``Save and Exit`` for each opened screens
-
-Start a new ``POD``:
-
-- ``PODs`` > ``logstream-xc`` > ``...`` > ``Delete``
-
-Customer Edge | VM/Docker
+UI
 ==================================================
-Github Action
-**************************************************
-- Fork this repository
-- Deploy a github runner
-- Set viariable github workflow ``container-registry-ce``
-    - LOCAL_DECLARATION: absolute path to your declaration file in your VM
-    - runs-on: label set on your github runner
+- Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
+- Modify ``declaration.json`` in ``workload``:
+    - ``workloads`` > ``logstream-xc`` > ``...`` > ``Manage configuration`` > ``Edit Configuration``
+    - ``Type of Workload`` > ``Service``  > ``Edit configuration``
+    - ``Configuration Parameters`` > ``declaration.json`` > ``...``  > ``Edit``
+    - ``File`` > ``Edit configuration``
+    - ``Data``: modify in ASCII view or in JSON view
+    - ``Apply`` for each opened screens
+    - ``Save and Exit`` for each opened screens
 
-.. code:: yaml
-
-    env:
-      LOCAL_DECLARATION: /home/cyber/declaration.json
-      (...)
-    jobs:
-      run_locally:
-        runs-on: ubuntu-latest
-
-- Commit
+- Start a new ``POD``:
+    - ``PODs`` > ``logstream-xc`` > ``...`` > ``Delete``
 
 Ansible
-==================================================
-An example of a deployment on an Azure VM using Ansible Tower.
-
-Virtualenv
-***************************
-- Create a virtualenv following `this guide <https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html>`_
-- In virtualenv, as a prerequisite for Azure collection, install Azure SDK following `this guide <https://github.com/ansible-collections/azure>`_
-
-Credential
-***************************
-- Create a Service Principal on Azure following `this guide <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>`_
-- Create a Microsoft Azure Resource Manager following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#microsoft-azure-resource-manager>`_
-- Create Credentials ``cred_NGINX`` to manage access to NGINX instances following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#machine>`_
-
-=====================================================   =============================================   =============================================   =============================================   =============================================
-REDENTIAL TYPE                                          USERNAME                                        SSH PRIVATE KEY                                 SIGNED SSH CERTIFICATE                          PRIVILEGE ESCALATION METHOD
-=====================================================   =============================================   =============================================   =============================================   =============================================
-``Machine``                                             ``my_VM_admin_user``                            ``my_VM_admin_user_key``                        ``my_VM_admin_user_CRT``                        ``sudo``
-=====================================================   =============================================   =============================================   =============================================   =============================================
-
-Ansible role structure
-***************************
-- Deployment is based on ``workflow template``. Example: ``workflow template`` = ``wf-create_create_edge_security_inbound``
-- ``workflow template`` includes multiple ``job template``. Example: ``job template`` = ``poc-azure_create_hub_edge_security_inbound``
-- ``job template`` have an associated ``playbook``. Example: ``playbook`` = ``playbooks/poc-azure.yaml``
-- ``playbook`` launch a ``play`` in a ``role``. Example: ``role`` = ``poc-azure``
-
-.. code:: yaml
-
-    - hosts: localhost
-      gather_facts: no
-      roles:
-        - role: poc-azure
-
-- ``play`` is an ``extra variable`` named ``activity`` and set in each ``job template``. Example: ``create_hub_edge_security_inbound``
-- The specified ``play`` (or ``activity``) is launched by the ``main.yaml`` task located in the role ``tasks/main.yaml``
-
-.. code:: yaml
-
-    - name: Run specified activity
-      include_tasks: "{{ activity }}.yaml"
-      when: activity is defined
-
-- The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
-
-Workflow
-***************************
-Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
-
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-``poc-azure_create-vm-nginx_unit``                              Deploy a VM                                         ``playbooks/poc-azure.yaml``                    ``create-vm-nginx_unit``                        ``my_project``                                  ``localhost``                                   ``my_azure_credential``
-``poc-onboarding_nginx_unit_faas_app_logstream``                Install NGINX Unit + App                            ``playbooks/poc-nginx_vm.yaml``                 ``onboarding_nginx_unit_faas_app_logstream``    ``localhost``                                                                                   ``cred_NGINX``
-=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
-
-==============================================  =============================================
-Extra variable                                  Description
-==============================================  =============================================
-``extra_vm``                                    Dict of VM properties
-``extra_vm.ip``                                 VM IP address
-``extra_vm.name``                               VM name
-``extra_vm.size``                               Azure VM type
-``extra_vm.availability_zone``                  Azure AZ
-``extra_vm.location``                           Azure location
-``extra_vm.admin_username``                     admin username
-``extra_vm.key_data``                           admin user's public key
-``extra_platform_name``                         platform name used for Azure resource group
-``extra_platform_tags``                         Azure VM tags
-``extra_subnet_mgt_on_premise``                 Cross management zone
-``faas_app``                                    Dict of Function as a Service
-``faas_app.name``                               App's name
-``faas_app.repo``                               Logstream repo
-``faas_app.ca_pem``                             Intermediate CA that signed App's keys
-``faas_app.cert_pem``                           App's certificate
-``faas_app.key_pem``                            App's key
-==============================================  =============================================
-
-.. code:: yaml
-
-    extra_logstream_declaration_b64: eyJmNXhjX3RlbmFudCI6IHsiYXBpX2tleSI6ICJYWFhYWFhYWFhYWD0iLCAibmFtZSI6ICJmNS1lbWVhLWVudCIsICJuYW1lc3BhY2VzIjogW3siZXZlbnRfZmlsdGVyIjogeyJzZWNfZXZlbnRfdHlwZSI6ICJ3YWZfc2VjX2V2ZW50In0sICJuYW1lIjogImFsLWRhY29zdGEiLCAiZXZlbnRfc3RhcnRfdGltZSI6IHsieWVhciI6IDIwMjIsICJtb250aCI6IDQsICJkYXkiOiAxMCwgImhvdXIiOiAyMCwgIm1pbnV0ZSI6IDAgfSB9IF0gfSwgImxvZ2NvbGxlY3RvciI6IHsiaHR0cCI6IFt7Imhvc3QiOiAiNTIuMTc3Ljk0LjE1IiwgInBvcnQiOiA4ODg4LCAicGF0aCI6ICIvZGVidWcudGVzdCJ9IF0sICJzeXNsb2ciOiBbeyJpcF9hZGRyZXNzIjogIjUyLjE3Ny45NC4xNSIsICJwb3J0IjogNTE0MCB9IF0gfSB9
-    extra_platform_name: Demo
-    extra_platform_tags: environment=DMO platform=Demo project=LogStream
-    extra_subnet_mgt_on_premise: 10.0.0.0/24
-    extra_vm:
-      admin_username: cyber
-      availability_zone:
-        - 1
-      ip: 10.100.0.54
-      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
-      location: eastus2
-      name: logstream-xc
-      size: Standard_B2s
-    faas_app:
-      ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
-      cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
-      key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
-      name: logstream-xc
-      repo: 'https://github.com/nergalex/f5-xc-logstream.git'
-
-Regional Edge | Container in F5 XC POP
 ==================================================
 An example of a deployment on a container hosted in a Regional Edge of F5 Distributed Cloud, using Ansible Tower.
 
@@ -213,14 +89,133 @@ Extra variable                                  Description
     stats_acr_username: username_credential_of_a_container_registry
     stats_jumphost_ip: host_to_build_image
 
+Customer Edge | VM/Docker
+**************************************************
+Github Action
+==================================================
+- Fork this repository
+- Deploy a github runner
+- Set viariable github workflow ``container-registry-ce``
+    - LOCAL_DECLARATION: absolute path to your declaration file in your VM
+    - runs-on: label set on your github runner
+
+.. code:: yaml
+
+    env:
+      LOCAL_DECLARATION: /home/cyber/declaration.json
+      (...)
+    jobs:
+      run_locally:
+        runs-on: ubuntu-latest
+
+- Commit
+
+Ansible
+==================================================
+An example of a deployment on an Azure VM using Ansible Tower.
+
+Virtualenv
+--------------------------------------------------
+- Create a virtualenv following `this guide <https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html>`_
+- In virtualenv, as a prerequisite for Azure collection, install Azure SDK following `this guide <https://github.com/ansible-collections/azure>`_
+
+Credential
+--------------------------------------------------
+- Create a Service Principal on Azure following `this guide <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>`_
+- Create a Microsoft Azure Resource Manager following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#microsoft-azure-resource-manager>`_
+- Create Credentials ``cred_NGINX`` to manage access to NGINX instances following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#machine>`_
+
+=====================================================   =============================================   =============================================   =============================================   =============================================
+REDENTIAL TYPE                                          USERNAME                                        SSH PRIVATE KEY                                 SIGNED SSH CERTIFICATE                          PRIVILEGE ESCALATION METHOD
+=====================================================   =============================================   =============================================   =============================================   =============================================
+``Machine``                                             ``my_VM_admin_user``                            ``my_VM_admin_user_key``                        ``my_VM_admin_user_CRT``                        ``sudo``
+=====================================================   =============================================   =============================================   =============================================   =============================================
+
+Ansible role structure
+--------------------------------------------------
+- Deployment is based on ``workflow template``. Example: ``workflow template`` = ``wf-create_create_edge_security_inbound``
+- ``workflow template`` includes multiple ``job template``. Example: ``job template`` = ``poc-azure_create_hub_edge_security_inbound``
+- ``job template`` have an associated ``playbook``. Example: ``playbook`` = ``playbooks/poc-azure.yaml``
+- ``playbook`` launch a ``play`` in a ``role``. Example: ``role`` = ``poc-azure``
+
+.. code:: yaml
+
+    - hosts: localhost
+      gather_facts: no
+      roles:
+        - role: poc-azure
+
+- ``play`` is an ``extra variable`` named ``activity`` and set in each ``job template``. Example: ``create_hub_edge_security_inbound``
+- The specified ``play`` (or ``activity``) is launched by the ``main.yaml`` task located in the role ``tasks/main.yaml``
+
+.. code:: yaml
+
+    - name: Run specified activity
+      include_tasks: "{{ activity }}.yaml"
+      when: activity is defined
+
+- The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
+
+Workflow
+--------------------------------------------------
+Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
+
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+``poc-azure_create-vm-nginx_unit``                              Deploy a VM                                         ``playbooks/poc-azure.yaml``                    ``create-vm-nginx_unit``                        ``my_project``                                  ``localhost``                                   ``my_azure_credential``
+``poc-onboarding_nginx_unit_faas_app_logstream``                Install NGINX Unit + App                            ``playbooks/poc-nginx_vm.yaml``                 ``onboarding_nginx_unit_faas_app_logstream``    ``localhost``                                                                                   ``cred_NGINX``
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+
+==============================================  =============================================
+Extra variable                                  Description
+==============================================  =============================================
+``extra_vm``                                    Dict of VM properties
+``extra_vm.ip``                                 VM IP address
+``extra_vm.name``                               VM name
+``extra_vm.size``                               Azure VM type
+``extra_vm.availability_zone``                  Azure AZ
+``extra_vm.location``                           Azure location
+``extra_vm.admin_username``                     admin username
+``extra_vm.key_data``                           admin user's public key
+``extra_platform_name``                         platform name used for Azure resource group
+``extra_platform_tags``                         Azure VM tags
+``extra_subnet_mgt_on_premise``                 Cross management zone
+``faas_app``                                    Dict of Function as a Service
+``faas_app.name``                               App's name
+``faas_app.repo``                               Logstream repo
+``faas_app.ca_pem``                             Intermediate CA that signed App's keys
+``faas_app.cert_pem``                           App's certificate
+``faas_app.key_pem``                            App's key
+==============================================  =============================================
+
+.. code:: yaml
+
+    extra_logstream_declaration_b64: eyJmNXhjX3RlbmFudCI6IHsiYXBpX2tleSI6ICJYWFhYWFhYWFhYWD0iLCAibmFtZSI6ICJmNS1lbWVhLWVudCIsICJuYW1lc3BhY2VzIjogW3siZXZlbnRfZmlsdGVyIjogeyJzZWNfZXZlbnRfdHlwZSI6ICJ3YWZfc2VjX2V2ZW50In0sICJuYW1lIjogImFsLWRhY29zdGEiLCAiZXZlbnRfc3RhcnRfdGltZSI6IHsieWVhciI6IDIwMjIsICJtb250aCI6IDQsICJkYXkiOiAxMCwgImhvdXIiOiAyMCwgIm1pbnV0ZSI6IDAgfSB9IF0gfSwgImxvZ2NvbGxlY3RvciI6IHsiaHR0cCI6IFt7Imhvc3QiOiAiNTIuMTc3Ljk0LjE1IiwgInBvcnQiOiA4ODg4LCAicGF0aCI6ICIvZGVidWcudGVzdCJ9IF0sICJzeXNsb2ciOiBbeyJpcF9hZGRyZXNzIjogIjUyLjE3Ny45NC4xNSIsICJwb3J0IjogNTE0MCB9IF0gfSB9
+    extra_platform_name: Demo
+    extra_platform_tags: environment=DMO platform=Demo project=LogStream
+    extra_subnet_mgt_on_premise: 10.0.0.0/24
+    extra_vm:
+      admin_username: cyber
+      availability_zone:
+        - 1
+      ip: 10.100.0.54
+      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
+      location: eastus2
+      name: logstream-xc
+      size: Standard_B2s
+    faas_app:
+      ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
+      name: logstream-xc
+      repo: 'https://github.com/nergalex/f5-xc-logstream.git'
+
 Administration Guide
 ####################################################
-
-Configuration
+Environment variable
 =================================================
 
-Environment variable
-**************************************************
 Unit starts Logstream with environment variables
 
 - Local log file
@@ -236,7 +231,7 @@ Unit starts Logstream with environment variables
     - Note: If *declaration* file is absent, LogStream will NOT start its engine but API GW is still running. In this case, use LogStream API to configure it and then to start its engine.
 
 API
-**************************************************
+=================================================
 API allows you to:
 - `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
 - `action` endpoint to start/stop the engine.
