@@ -11,7 +11,7 @@ env:
   LOCAL_DECLARATION: /home/cyber/declaration.json
   FAAS_APP_NAME: logstream-xc
   GITHUB_BASE_REF: master
-  BUILD_PATH: ./build-ce-workaround
+  BUILD_PATH: ./build-ce
   IMAGE_TAG: ce
 
 jobs:
