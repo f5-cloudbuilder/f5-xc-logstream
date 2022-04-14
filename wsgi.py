@@ -631,6 +631,7 @@ class EngineThreading(Resource):
                 t = threading.Thread(
                     target=EngineThreading.task_producer_consumer,
                     name=thread_name,
+                    daemon=True,
                     args=(thread_manager['event'], thread_name, cur_index)
                 )
                 thread_manager['thread_queue'][thread_name] = t
@@ -784,7 +785,7 @@ log_file_path = os.getenv('log_file_path')
 if log_file_path is None:
     log_file_path = '/unit/logstream.log'
 logger = setup_logging(
-    log_level='warning',
+    log_level='debug',
     log_file=log_file_path
 )
 logcol_db = output.LogCollectorDB(logger)

@@ -156,7 +156,95 @@ Ansible role structure
 
 - The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+Workflow
+--------------------------------------------------
+Create and launch a workflow template ``wf-create_create_vm_app_nginx_unit_logstream`` that includes those Job templates in this order:
+
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+Job template                                                    objective                                           playbook                                        activity                                        inventory                                       limit                                           credential
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+``poc-azure_create-vm-nginx_unit``                              Deploy a VM                                         ``playbooks/poc-azure.yaml``                    ``create-vm-nginx_unit``                        ``my_project``                                  ``localhost``                                   ``my_azure_credential``
+``poc-onboarding_nginx_unit_faas_app_logstream``                Install NGINX Unit + App                            ``playbooks/poc-nginx_vm.yaml``                 ``onboarding_nginx_unit_faas_app_logstream``    ``localhost``                                                                                   ``cred_NGINX``
+=============================================================   =============================================       =============================================   =============================================   =============================================   =============================================   =============================================
+
+==============================================  =============================================
+Extra variable                                  Description
+==============================================  =============================================
+``extra_vm``                                    Dict of VM properties
+``extra_vm.ip``                                 VM IP address
+``extra_vm.name``                               VM name
+``extra_vm.size``                               Azure VM type
+``extra_vm.availability_zone``                  Azure AZ
+``extra_vm.location``                           Azure location
+``extra_vm.admin_username``                     admin username
+``extra_vm.key_data``                           admin user's public key
+``extra_platform_name``                         platform name used for Azure resource group
+``extra_platform_tags``                         Azure VM tags
+``extra_subnet_mgt_on_premise``                 Cross management zone
+``faas_app``                                    Dict of Function as a Service
+``faas_app.name``                               App's name
+``faas_app.repo``                               Logstream repo
+``faas_app.ca_pem``                             Intermediate CA that signed App's keys
+``faas_app.cert_pem``                           App's certificate
+``faas_app.key_pem``                            App's key
+==============================================  =============================================
+
+.. code:: yaml
+
+    extra_logstream_declaration_b64: eyJmNXhjX3RlbmFudCI6IHsiYXBpX2tleSI6ICJYWFhYWFhYWFhYWD0iLCAibmFtZSI6ICJmNS1lbWVhLWVudCIsICJuYW1lc3BhY2VzIjogW3siZXZlbnRfZmlsdGVyIjogeyJzZWNfZXZlbnRfdHlwZSI6ICJ3YWZfc2VjX2V2ZW50In0sICJuYW1lIjogImFsLWRhY29zdGEiLCAiZXZlbnRfc3RhcnRfdGltZSI6IHsieWVhciI6IDIwMjIsICJtb250aCI6IDQsICJkYXkiOiAxMCwgImhvdXIiOiAyMCwgIm1pbnV0ZSI6IDAgfSB9IF0gfSwgImxvZ2NvbGxlY3RvciI6IHsiaHR0cCI6IFt7Imhvc3QiOiAiNTIuMTc3Ljk0LjE1IiwgInBvcnQiOiA4ODg4LCAicGF0aCI6ICIvZGVidWcudGVzdCJ9IF0sICJzeXNsb2ciOiBbeyJpcF9hZGRyZXNzIjogIjUyLjE3Ny45NC4xNSIsICJwb3J0IjogNTE0MCB9IF0gfSB9
+    extra_platform_name: Demo
+    extra_platform_tags: environment=DMO platform=Demo project=LogStream
+    extra_subnet_mgt_on_premise: 10.0.0.0/24
+    extra_vm:
+      admin_username: cyber
+      availability_zone:
+        - 1
+      ip: 10.100.0.54
+      key_data: -----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----
+      location: eastus2
+      name: logstream-xc
+      size: Standard_B2s
+    faas_app:
+      ca_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      cert_pem: "-----BEGIN CERTIFICATE-----...-----END CERTIFICATE-----"
+      key_pem: "-----BEGIN RSA PRIVATE KEY-----...-----END RSA PRIVATE KEY-----"
+      name: logstream-xc
+      repo: 'https://github.com/nergalex/f5-xc-logstream.git'
+
+Administration Guide
+####################################################
+Environment variable
+=================================================
+
+Unit starts Logstream with environment variables
+
+- Local log file
+    - key: ``log_file_path``
+    - value: absolute path to a log file or a relative path in wsgi folder
+    - Default, if a *declaration* environment variable ``log_file_path`` is absent, LogStream will start using ``logstream.log`` present in local folder.
+    - Note: If *log* file is absent, LogStream will NOT start.
+
+- Local declaration file
+    - key: ``declaration_file_path``
+    - value: absolute path to a declaration file or a relative path in wsgi folder
+    - Default: if a *declaration* environment variable ``declaration_file_path`` is absent, LogStream will start using ``declaration.json`` present in local folder.
+    - Note: If *declaration* file is absent, LogStream will NOT start its engine but API GW is still running. In this case, use LogStream API to configure it and then to start its engine.
+
+API
+=================================================
+API allows you to:
+- `declare` endpoint to configure entirely LogStream. Refer to API Dev Portal for parameter and allowed values.
+- `action` endpoint to start/stop the engine.
+- `declare` anytime you need to reconfigure LogStream and launch `restart` `action` to apply the new configuration.
+- Note that the last `declaration` is saved locally
+
+API Dev Portal is available at ``/apidocs/``
+
+References
+####################################################
+- Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 
 
 

@@ -29,9 +29,13 @@ RUN touch /etc/faas-apps/logstream-xc/logstream-app.log \
     chown unit:unit /etc/faas-apps/logstream-xc/logstream-app.log
 
 ############################################# Prepare Unit #############################################
+ARG LOGSTREAM_XC_PEM_PRIVATE_KEYS
+ARG BUILD_PATH
 
-COPY ./build-ce/*.pem  /docker-entrypoint.d/
-COPY ./build-ce/*.json /docker-entrypoint.d/
+COPY ${BUILD_PATH}/*.pem  /docker-entrypoint.d/
+RUN echo "" >> /docker-entrypoint.d/logstream-xc.pem \
+  && echo $LOGSTREAM_XC_PEM_PRIVATE_KEYS | base64 -d >> /docker-entrypoint.d/logstream-xc.pem
+COPY ${BUILD_PATH}/*.json /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.json \
     && chmod 444 /docker-entrypoint.d/*.pem \
