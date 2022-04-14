@@ -20,6 +20,24 @@ UI
     - Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
     - Create a ``workload`` by replacing emphasized line bellow
 
+.. code-block:: yaml
+    :emphasize-lines: 8
+
+      Host:                sentence-api1.f5app.dev
+      Ingress Class Name:  sentence-api-nginx-internal
+      Subroutes:
+        Action:
+          Pass:  generator
+        Path:    /
+        Policies:
+          Name:       oidc-policy
+          Namespace:  lab4-sentence-api
+      Upstreams:
+        Name:     generator
+        Port:     80
+        Service:  generator
+
+
 .. code-block:: json
     :emphasize-lines: 4
 
