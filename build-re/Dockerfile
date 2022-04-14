@@ -29,11 +29,13 @@ RUN git clone -b ${GITHUB_BASE_REF} https://github.com/${GITHUB_REPOSITORY}.git 
 
 ############################################# Prepare Unit #############################################
 
-COPY ./*.pem  /docker-entrypoint.d/
+ARG BUILD_PATH
+
+COPY ${BUILD_PATH}/*.pem  /docker-entrypoint.d/
 RUN echo "" >> /docker-entrypoint.d/logstream-xc.pem \
   && echo $LOGSTREAM_XC_PEM_PRIVATE_KEYS | base64 -d >> /docker-entrypoint.d/logstream-xc.pem
-COPY ./*.json /docker-entrypoint.d/
-COPY ./*.sh   /docker-entrypoint.d/
+COPY ${BUILD_PATH}/*.json /docker-entrypoint.d/
+COPY ${BUILD_PATH}/*.sh   /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
     && chown unit:unit /docker-entrypoint.d/*.json \
     && chown unit:unit /docker-entrypoint.d/*.sh \
