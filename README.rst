@@ -841,4 +841,25 @@ View local configuration:
 :kbd:`cat /config/declaration.json`
 
 
+Regional Edge
+********************
+
+- ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
+
+Modify ``declaration.json`` in ``workload``:
+
+- ``workloads`` > ``logstream-xc`` > ``...`` > ``Manage configuration`` > ``Edit Configuration``
+- ``Type of Workload`` > ``Service``  > ``Edit configuration``
+- ``Configuration Parameters`` > ``declaration.json`` > ``...``  > ``Edit``
+- ``File`` > ``Edit configuration``
+- ``Data``: modify in ASCII view or in JSON view
+- ``Apply`` for each opened screens
+- ``Save and Exit`` for each opened screens
+
+Start a new ``POD``:
+
+- ``PODs`` > ``logstream-xc`` > ``...`` > ``Delete``
+
+
+Understand NGINX Unit startup: `here <https://unit.nginx.org/howto/source/#startup-and-shutdown>`_
 

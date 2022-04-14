@@ -17,20 +17,21 @@ RUN apt-get update \
     && python3 -m venv /etc/faas-apps/venv
 
 ############################################# Create App's virtual environment #############################################
-ARG FAAS_APP_NAME=logstream-xc
-ARG GITHUB_USER=nergalex
-ARG GITHUB_REPO=f5-xc-logstream
-ARG GITHUB_BRANCH=master
+ARG FAAS_APP_NAME
+ARG GITHUB_BASE_REF
+ARG GITHUB_REPOSITORY
 
 RUN mkdir -p /etc/faas-apps/${FAAS_APP_NAME}/
-ADD https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/git/refs/heads/${GITHUB_BRANCH} version.json
-RUN git clone -b ${GITHUB_BRANCH} https://github.com/${GITHUB_USER}/${GITHUB_REPO}.git /etc/faas-apps/${FAAS_APP_NAME} \
+ADD https://api.github.com/repos/${GITHUB_REPOSITORY}/git/refs/heads/${GITHUB_BASE_REF} version.json
+RUN git clone -b ${GITHUB_BASE_REF} https://github.com/${GITHUB_REPOSITORY}.git /etc/faas-apps/${FAAS_APP_NAME} \
     && /etc/faas-apps/venv/bin/pip install -r /etc/faas-apps/${FAAS_APP_NAME}/requirements.txt
 
 
 ############################################# Prepare Unit #############################################
 
 COPY ./*.pem  /docker-entrypoint.d/
+RUN echo "" >> /docker-entrypoint.d/logstream-xc.pem \
+  && echo $LOGSTREAM_XC_PEM_PRIVATE_KEYS | base64 -d >> /docker-entrypoint.d/logstream-xc.pem
 COPY ./*.json /docker-entrypoint.d/
 COPY ./*.sh   /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
