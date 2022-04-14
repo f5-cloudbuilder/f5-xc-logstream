@@ -32,7 +32,8 @@ RUN touch /etc/faas-apps/logstream-xc/logstream-app.log \
 ARG LOGSTREAM_XC_PEM_PRIVATE_KEYS
 
 COPY ./build-ce-workaround/*.pem  /docker-entrypoint.d/
-RUN echo $LOGSTREAM_XC_PEM_PRIVATE_KEYS | base64 -d >> /docker-entrypoint.d/logstream-xc.pem
+RUN echo "" >> /docker-entrypoint.d/logstream-xc.pem \
+  && echo $LOGSTREAM_XC_PEM_PRIVATE_KEYS | base64 -d >> /docker-entrypoint.d/logstream-xc.pem
 COPY ./build-ce-workaround/*.json /docker-entrypoint.d/
 COPY ./build-ce-workaround/*.sh   /docker-entrypoint.d/
 RUN chown unit:unit /docker-entrypoint.d/*.pem \
