@@ -89,6 +89,73 @@ Extra variable                                  Description
     stats_acr_username: username_credential_of_a_container_registry
     stats_jumphost_ip: host_to_build_image
 
+Customer Edge | VM/Docker
+**************************************************
+Github Action
+==================================================
+- Fork this repository
+- Deploy a github runner
+- Set viariable github workflow ``container-registry-ce``
+    - LOCAL_DECLARATION: absolute path to your declaration file in your VM
+    - runs-on: label set on your github runner
+
+.. code:: yaml
+
+    env:
+      LOCAL_DECLARATION: /home/cyber/declaration.json
+      (...)
+    jobs:
+      run_locally:
+        runs-on: ubuntu-latest
+
+- Commit
+
+Ansible
+==================================================
+An example of a deployment on an Azure VM using Ansible Tower.
+
+Virtualenv
+--------------------------------------------------
+- Create a virtualenv following `this guide <https://docs.ansible.com/ansible-tower/latest/html/upgrade-migration-guide/virtualenv.html>`_
+- In virtualenv, as a prerequisite for Azure collection, install Azure SDK following `this guide <https://github.com/ansible-collections/azure>`_
+
+Credential
+--------------------------------------------------
+- Create a Service Principal on Azure following `this guide <https://docs.microsoft.com/en-us/azure/active-directory/develop/quickstart-register-app>`_
+- Create a Microsoft Azure Resource Manager following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#microsoft-azure-resource-manager>`_
+- Create Credentials ``cred_NGINX`` to manage access to NGINX instances following `this guide <https://docs.ansible.com/ansible-tower/latest/html/userguide/credentials.html#machine>`_
+
+=====================================================   =============================================   =============================================   =============================================   =============================================
+REDENTIAL TYPE                                          USERNAME                                        SSH PRIVATE KEY                                 SIGNED SSH CERTIFICATE                          PRIVILEGE ESCALATION METHOD
+=====================================================   =============================================   =============================================   =============================================   =============================================
+``Machine``                                             ``my_VM_admin_user``                            ``my_VM_admin_user_key``                        ``my_VM_admin_user_CRT``                        ``sudo``
+=====================================================   =============================================   =============================================   =============================================   =============================================
+
+Ansible role structure
+--------------------------------------------------
+- Deployment is based on ``workflow template``. Example: ``workflow template`` = ``wf-create_create_edge_security_inbound``
+- ``workflow template`` includes multiple ``job template``. Example: ``job template`` = ``poc-azure_create_hub_edge_security_inbound``
+- ``job template`` have an associated ``playbook``. Example: ``playbook`` = ``playbooks/poc-azure.yaml``
+- ``playbook`` launch a ``play`` in a ``role``. Example: ``role`` = ``poc-azure``
+
+.. code:: yaml
+
+    - hosts: localhost
+      gather_facts: no
+      roles:
+        - role: poc-azure
+
+- ``play`` is an ``extra variable`` named ``activity`` and set in each ``job template``. Example: ``create_hub_edge_security_inbound``
+- The specified ``play`` (or ``activity``) is launched by the ``main.yaml`` task located in the role ``tasks/main.yaml``
+
+.. code:: yaml
+
+    - name: Run specified activity
+      include_tasks: "{{ activity }}.yaml"
+      when: activity is defined
+
+- The specified ``play`` contains ``tasks`` to execute. Example: play=``create_hub_edge_security_inbound.yaml``
+
 
 
 
