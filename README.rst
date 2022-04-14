@@ -18,10 +18,11 @@ UI
 ==================================================
 - Deploy Logstream
     - Go to ``Distributed Apps`` > ``Virtual K8S`` > ``myVirtualCluster``
-    - Create a ``workload`` by replacing emphasized lines bellow
+    - Create a ``workload`` by replacing emphasized line bellow
 
 .. code:: json
-    :emphasize-lines: 4,5
+    :emphasize-lines: 4
+
     {
       "metadata": {
         "name": "logstream-xc",
