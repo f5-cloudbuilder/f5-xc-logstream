@@ -9,7 +9,7 @@ env:
   FAAS_APP_NAME: logstream-xc
   GITHUB_BASE_REF: master
   BUILD_PATH: ./build-re
-  IMAGE_TAG: re
+  IMAGE_TAG: re-debug
 jobs:
   build:
     runs-on: ubuntu-latest

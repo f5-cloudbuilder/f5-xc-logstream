@@ -12,7 +12,7 @@ env:
   FAAS_APP_NAME: logstream-xc
   GITHUB_BASE_REF: master
   BUILD_PATH: ./build-ce
-  IMAGE_TAG: ce
+  IMAGE_TAG: ce-debug
 
 jobs:
 
